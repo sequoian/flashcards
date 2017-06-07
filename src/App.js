@@ -82,7 +82,44 @@ class CardPage extends Component {
     this.state = {
       activeCardIndex: 0,
       showingFront: true
-    }
+    };
+    this.nextCard = this.nextCard.bind(this);
+    this.previousCard = this.previousCard.bind(this);
+    this.flipCard = this.flipCard.bind(this);
+  }
+
+  nextCard() {
+    const cards = this.props.set.cards;
+    this.setState((prevState) => {
+      let newIndex = prevState.activeCardIndex + 1;
+      if (newIndex >= cards.length) {
+        newIndex = 0;
+      }
+      return {
+        activeCardIndex: newIndex
+      }
+    });
+  }
+
+  previousCard() {
+    const cards = this.props.set.cards;
+    this.setState((prevState) => {
+      let newIndex = prevState.activeCardIndex - 1;
+      if (newIndex < 0) {
+        newIndex = cards.length - 1;
+      }
+      return {
+        activeCardIndex: newIndex
+      }
+    });
+  }
+
+  flipCard() {
+    this.setState((prevState) => {
+      return {
+        showingFront: !prevState.showingFront
+      }
+    });
   }
 
   render() {
@@ -107,7 +144,11 @@ class CardPage extends Component {
         <Card
           face={face}
         />
-        <CardControls />
+        <CardControls 
+          getNext={this.nextCard}
+          getPrevious={this.previousCard}
+          flipCard={this.flipCard}
+        />
       </div>
     )
   }
