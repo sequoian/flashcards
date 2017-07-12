@@ -96,7 +96,8 @@ class CardPage extends Component {
         newIndex = 0;
       }
       return {
-        activeCardIndex: newIndex
+        activeCardIndex: newIndex,
+        showingFront: true
       }
     });
   }
@@ -109,7 +110,8 @@ class CardPage extends Component {
         newIndex = cards.length - 1;
       }
       return {
-        activeCardIndex: newIndex
+        activeCardIndex: newIndex,
+        showingFront: true
       }
     });
   }
