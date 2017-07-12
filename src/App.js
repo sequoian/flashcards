@@ -173,7 +173,7 @@ const CardInfo = ({setTitle, setLength, cardIndex, cardSide}) => (
 );
 
 const Card = ({face}) => (
-  <div>
+  <div className="card">
     {face}
   </div>
 );
