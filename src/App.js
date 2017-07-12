@@ -46,22 +46,37 @@ class App extends Component {
       flashcards: [],
       activeSetIndex: null
     }
+    this.activateSet = this.activateSet.bind(this);
   }
 
   componentDidMount() {
     this.setState({
       flashcards: c,  // should pull from json file(s)
-      activeSetIndex: 0  // for testing
+    });
+  }
+
+  activateSet(id) {
+    this.setState({
+      activeSetIndex: id
     });
   }
 
   render() {
     const {flashcards, activeSetIndex} = this.state;
     let page = null;
-    if (flashcards[activeSetIndex]) {
+    if (activeSetIndex === null) {
+      page = (
+        <SetList
+          list={flashcards}
+          nav={this.activateSet}
+        />
+      );
+    }
+    else if (flashcards[activeSetIndex]) {
       page = (
         <CardPage 
           set={flashcards[activeSetIndex]}
+          toList={() => this.activateSet(null)}
         />
       );
     }
@@ -75,6 +90,31 @@ class App extends Component {
     );
   }
 }
+
+const SetList = ({list, nav}) => (
+  <ul className="set-list">
+    {list.map((set, idx) => (
+      <SetLink 
+        key={idx} // TODO: change from idx to id
+        set={set}
+        toSet={() => nav(idx)} // TODO: change from idx to id
+      />
+    ))}
+  </ul>
+);
+
+const SetLink = ({set, toSet}) => (
+  <li>
+    <a // TODO: use react router
+      href="#" 
+      onClick={event => {
+        event.preventDefault()
+        toSet()
+      }}>
+        {set.title}
+      </a>
+  </li>
+);
 
 class CardPage extends Component {
   constructor(props) {
@@ -125,7 +165,7 @@ class CardPage extends Component {
   }
 
   render() {
-    const {set} = this.props;
+    const {set, toList} = this.props;
     const {activeCardIndex, showingFront} = this.state
     const activeCard = set.cards[activeCardIndex];
     let face = null;
@@ -137,6 +177,7 @@ class CardPage extends Component {
     }
     return (
       <div>
+        <button onClick={toList}>Back</button>
         <CardInfo
           setTitle={set.title}
           setLength={set.cards.length}
