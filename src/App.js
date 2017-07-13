@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-const c = [
+const testCards = [
   {
     title: 'Regular Expressions',
     cards: [
@@ -38,6 +38,26 @@ const c = [
   },
 ]
 
+function fetchLocally(key) {
+  const data = localStorage.getItem(key);
+  return JSON.parse(data) || [];
+}
+
+function storeLocally(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function testLocalStorage() {
+  const test = 'test';
+  try {
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  }
+  catch(e) {
+    return false;
+  }
+}
 
 class App extends Component {
   constructor(props) {
@@ -50,9 +70,22 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // pull data from local storage
+    // if local storage is empty, use coded cards instead
+    let flashcards = fetchLocally('flashcards');
+    if (flashcards.length < 1) {
+      flashcards = testCards;
+    }
     this.setState({
-      flashcards: c,  // should pull from json file(s)
+      flashcards: flashcards
     });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const {flashcards} = this.state;
+    if (flashcards !== prevState.flashcards) {
+      storeLocally('flashcards', flashcards);
+    }
   }
 
   activateSet(id) {
