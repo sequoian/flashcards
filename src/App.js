@@ -100,7 +100,7 @@ class App extends Component {
       <div>
         <Switch>
           <Route exact path='/' component={DeckListContainer} />
-          <Route path='/cards' component={DeckPage} />
+          <Route path='/cards/:id' component={DeckPageContainer} />
         </Switch>
       </div>
     )  
@@ -143,97 +143,11 @@ const DeckList = ({decks}) => (
   </ul>
 );
 
-/*
-class App extends Component {
+class DeckPageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      flashcards: [],
-      activeSetIndex: null
-    }
-    this.activateSet = this.activateSet.bind(this);
-  }
-
-  componentDidMount() {
-    
-    this.setState({
-      flashcards: flashcards
-    });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const {flashcards} = this.state;
-    if (flashcards !== prevState.flashcards) {
-      storeLocally('flashcards', flashcards);
-    }
-  }
-
-  activateSet(id) {
-    this.setState({
-      activeSetIndex: id
-    });
-  }
-
-  render() {
-    const {flashcards, activeSetIndex} = this.state;
-    let page = null;
-    if (activeSetIndex === null) {
-      page = (
-        <SetList
-          list={flashcards}
-          nav={this.activateSet}
-        />
-      );
-    }
-    else if (flashcards[activeSetIndex]) {
-      page = (
-        <CardPage 
-          set={flashcards[activeSetIndex]}
-          toList={() => this.activateSet(null)}
-        />
-      );
-    }
-    else {
-      page = 'Could not find flashcards.';
-    }
-    return (
-      <div className="App">
-        {page}
-      </div>
-    );
-  }
-}
-
-
-const SetList = ({list, nav}) => (
-  <ul className="set-list">
-    {list.map((set, idx) => (
-      <SetLink 
-        key={idx} // TODO: change from idx to id
-        set={set}
-        toSet={() => nav(idx)} // TODO: change from idx to id
-      />
-    ))}
-  </ul>
-);
-
-const SetLink = ({set, toSet}) => (
-  <li>
-    <a // TODO: use react router
-      href="#" 
-      onClick={event => {
-        event.preventDefault()
-        toSet()
-      }}>
-        {set.title}
-      </a>
-  </li>
-);
-
-class CardPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+      deck: null,
       activeCardIndex: 0,
       showingFront: true
     };
@@ -242,8 +156,17 @@ class CardPage extends Component {
     this.flipCard = this.flipCard.bind(this);
   }
 
+  componentDidMount() {
+    const deck = localAPI.getSet(
+      parseInt(this.props.match.params.id, 10)
+    );
+    this.setState({
+      deck: deck
+    });
+  }
+
   nextCard() {
-    const cards = this.props.set.cards;
+    const cards = this.state.deck.cards;
     this.setState((prevState) => {
       let newIndex = prevState.activeCardIndex + 1;
       if (newIndex >= cards.length) {
@@ -257,7 +180,7 @@ class CardPage extends Component {
   }
 
   previousCard() {
-    const cards = this.props.set.cards;
+    const cards = this.state.deck.cards;
     this.setState((prevState) => {
       let newIndex = prevState.activeCardIndex - 1;
       if (newIndex < 0) {
@@ -279,9 +202,22 @@ class CardPage extends Component {
   }
 
   render() {
-    const {set, toList} = this.props;
-    const {activeCardIndex, showingFront} = this.state
-    const activeCard = set.cards[activeCardIndex];
+    return (
+      <DeckPage
+        deck={this.state.deck}
+        activeCardIndex={this.state.activeCardIndex}
+        showingFront={this.state.showingFront}
+        nextCard={this.nextCard}
+        previousCard={this.previousCard}
+        flipCard={this.flipCard}
+      />
+    )
+  }    
+}
+
+const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, flipCard}) => {
+  if (deck) {
+    const activeCard = deck.cards[activeCardIndex];
     let face = null;
     if (activeCard) {
       face = showingFront ? activeCard.front : activeCard.back;
@@ -291,10 +227,10 @@ class CardPage extends Component {
     }
     return (
       <div>
-        <button onClick={toList}>Back</button>
+        <Link to={`/`}>Back</Link>
         <CardInfo
-          setTitle={set.title}
-          setLength={set.cards.length}
+          deckTitle={deck.title}
+          deckLength={deck.cards.length}
           cardIndex={activeCardIndex}
           cardSide={showingFront}
         />
@@ -302,11 +238,16 @@ class CardPage extends Component {
           face={face}
         />
         <CardControls 
-          getNext={this.nextCard}
-          getPrevious={this.previousCard}
-          flipCard={this.flipCard}
+          getNext={nextCard}
+          getPrevious={previousCard}
+          flipCard={flipCard}
         />
       </div>
+    )
+  }
+  else {
+    return (
+      <div>Deck could not be found</div>
     )
   }
 }
@@ -319,10 +260,10 @@ const CardControls = ({getPrevious, getNext, flipCard}) => (
   </div>
 );
 
-const CardInfo = ({setTitle, setLength, cardIndex, cardSide}) => (
+const CardInfo = ({deckTitle, deckLength, cardIndex, cardSide}) => (
   <div>
-    <h2>{setTitle}</h2>
-    <div>{cardIndex + 1}/{setLength}</div>
+    <h2>{deckTitle}</h2>
+    <div>{cardIndex + 1}/{deckLength}</div>
     <div>{cardSide ? 'Front' : 'Back'}</div>
   </div>
 );
@@ -332,7 +273,5 @@ const Card = ({face}) => (
     {face}
   </div>
 );
-
-*/
 
 export default App;
