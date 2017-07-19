@@ -44,26 +44,30 @@ const defaultCards = [
 
 const localAPI = {
   key: 'flashcards',
+
   getList: function() {
     const cards = this.fetch(this.key);
     // return only the id and title, not the cards
-    return cards.map((set) => {
+    return cards.map((deck) => {
       return {
-        id: set.id,
-        title: set.title
+        id: deck.id,
+        title: deck.title
       }
     })
   },
-  getSet: function(id) {
+
+  getDeck: function(id) {
     const cards = this.fetch(this.key);
-    const thisSet = set => set.id === id;
+    const thisDeck = deck => deck.id === id;
     // return the set that matches the id
-    return cards.find(thisSet);
+    return cards.find(thisDeck);
   },
+
   fetch: function(key) {
     const data = localStorage.getItem(key);
     return JSON.parse(data) || [];
   },
+
   store: function(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
   }
@@ -157,7 +161,7 @@ class DeckPageContainer extends Component {
   }
 
   componentDidMount() {
-    const deck = localAPI.getSet(
+    const deck = localAPI.getDeck(
       parseInt(this.props.match.params.id, 10)
     );
     this.setState({
