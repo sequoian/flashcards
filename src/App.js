@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
+import {Route, Link, Switch} from 'react-router-dom';
 
-const testCards = [
+// used for testing purposes
+const defaultCards = [
   {
+    id: 1,
     title: 'Regular Expressions',
     cards: [
       {
@@ -20,6 +23,7 @@ const testCards = [
     ]
   },
   {
+    id: 2,
     title: 'Vim Commands',
     cards: [
       {
@@ -36,15 +40,33 @@ const testCards = [
       }
     ]
   },
-]
+];
 
-function fetchLocally(key) {
-  const data = localStorage.getItem(key);
-  return JSON.parse(data) || [];
-}
-
-function storeLocally(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
+const localAPI = {
+  key: 'flashcards',
+  getList: function() {
+    const cards = this.fetch(this.key);
+    // return only the id and title, not the cards
+    return cards.map((set) => {
+      return {
+        id: set.id,
+        title: set.title
+      }
+    })
+  },
+  getSet: function(id) {
+    const cards = this.fetch(this.key);
+    const thisSet = set => set.id === id;
+    // return the set that matches the id
+    return cards.find(thisSet);
+  },
+  fetch: function(key) {
+    const data = localStorage.getItem(key);
+    return JSON.parse(data) || [];
+  },
+  store: function(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
 }
 
 function testLocalStorage() {
@@ -59,6 +81,69 @@ function testLocalStorage() {
   }
 }
 
+// for testing purposes
+function hydrateLocalStorage() {
+  localAPI.store('flashcards', defaultCards)
+}
+
+
+class App extends Component {
+  componentDidMount() {
+    // for testing purposes
+    if (localAPI.fetch('flashcards').length < 1 && testLocalStorage()) {
+      hydrateLocalStorage();
+    }
+  }
+  
+  render() {
+    return (
+      <div>
+        <Switch>
+          <Route exact path='/' component={DeckListContainer} />
+          <Route path='/cards' component={DeckPage} />
+        </Switch>
+      </div>
+    )  
+  }
+}
+
+class DeckListContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      decks: []
+    }
+  }
+
+  componentDidMount() {
+    const decks = localAPI.getList();
+    this.setState({
+      decks: decks
+    });
+  }
+
+  render() {
+    return (
+      <DeckList
+        decks={this.state.decks}
+      />
+    );
+  }
+}
+
+const DeckList = ({decks}) => (
+  <ul className="deck-list">
+    {decks.map(deck => (
+      <li key={deck.id}>
+        <Link to={`/cards/${deck.id}`}>
+          {deck.title}
+        </Link>
+      </li>
+      ))}  
+  </ul>
+);
+
+/*
 class App extends Component {
   constructor(props) {
     super(props);
@@ -70,12 +155,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // pull data from local storage
-    // if local storage is empty, use coded cards instead
-    let flashcards = fetchLocally('flashcards');
-    if (flashcards.length < 1) {
-      flashcards = testCards;
-    }
+    
     this.setState({
       flashcards: flashcards
     });
@@ -123,6 +203,7 @@ class App extends Component {
     );
   }
 }
+
 
 const SetList = ({list, nav}) => (
   <ul className="set-list">
@@ -251,5 +332,7 @@ const Card = ({face}) => (
     {face}
   </div>
 );
+
+*/
 
 export default App;
