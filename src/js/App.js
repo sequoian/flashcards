@@ -4,7 +4,8 @@ import {Route, Link, Switch} from 'react-router-dom';
 import localAPI, {hydrateLocalStorage} from './Model';
 import DeckListContainer from './List';
 import DeckPageContainer from './Deck';
-import DeckForm from './New'
+import NewDeck from './NewDeck';
+import EditDeck from './EditDeck';
 
 class App extends Component {
   componentDidMount() {
@@ -20,7 +21,8 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={DeckListContainer} />
           <Route path='/cards/:id' component={DeckPageContainer} />
-          <Route path='/new' component={DeckForm} />
+          <Route path='/new' component={NewDeck} />
+          <Route path='/edit/:id' component={EditDeck} />
         </Switch>
       </div>
     )  
