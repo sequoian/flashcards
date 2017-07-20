@@ -5,14 +5,17 @@ const defaultCards = [
     title: 'Regular Expressions',
     cards: [
       {
+        id: 1,
         front: '\\w',
         back: 'word character'
       },
       {
+        id: 2,
         front: '\\d',
         back: 'digit'
       },
       {
+        id: 3,
         front: '[ ]',
         back: 'character set: match any character in the set'
       },
@@ -23,14 +26,17 @@ const defaultCards = [
     title: 'Vim Commands',
     cards: [
       {
+        id: 1,
         front: 'w',
         back: 'move cursor forward by one word'
       },
       {
+        id: 2,
         front: 'b',
         back: 'move cursor backward by one word'
       },
       {
+        id: 3,
         front: 'A',
         back: 'append text to the end of the current line'
       }
@@ -62,6 +68,23 @@ const localAPI = {
     const cards = fetchLocally(this.key);
     const thisDeck = deck => deck.id === id;
     return cards.find(thisDeck);
+  },
+
+  addDeck: function(data) {
+    const cards = fetchLocally(this.key);
+    data.id = Date.now();
+    const deck = cards.concat(data);
+    storeLocally(this.key, deck);
+  },
+
+  updateDeck: function(id, data) {
+    const cards = fetchLocally(this.key);
+
+  },
+
+  deleteDeck: function(id) {
+    const cards = fetchLocally(this.key);
+
   }
 }
 
@@ -89,7 +112,7 @@ function testLocalStorage() {
 
 // Fills local storage with default cards.  Used for testing purposes
 export function hydrateLocalStorage() {
-  localAPI.store('flashcards', defaultCards)
+  storeLocally('flashcards', defaultCards)
 }
 
 export default localAPI;
