@@ -19,13 +19,24 @@ class EditDeck extends Component {
     });
   }
 
+  updateDeck(id, title, cards) {
+    const deck = {
+      id: id,
+      title: title,
+      cards: cards
+    }
+    localAPI.updateDeck(deck.id, deck);
+  }
+
   render() {
     const {deck} = this.state;
     return (
       deck ? 
         <DeckForm 
+          id={deck.id}
           title={deck.title}
           cards={deck.cards}
+          onSubmit={this.updateDeck}
         /> : 
         <p>Deck not found</p>
     )

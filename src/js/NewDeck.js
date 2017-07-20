@@ -3,8 +3,9 @@ import DeckForm from './DeckForm';
 import localAPI from './Model';
 
 class NewDeck extends Component {
-  addDeck(title, cards) {
+  addDeck(id, title, cards) {
     const deck = {
+      id: id,
       title: title,
       cards: cards
     }

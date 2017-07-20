@@ -4,6 +4,7 @@ class DeckFormContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: props.id,
       title: props.title, 
       cards: props.cards
     }
@@ -14,8 +15,8 @@ class DeckFormContainer extends Component {
   }
 
   onSubmit() {
-    const {title, cards} = this.state;
-    this.props.onSubmit(title, cards)
+    const {id, title, cards} = this.state;
+    this.props.onSubmit(id, title, cards)
   }
 
   handleTitleChange(event) {
@@ -66,6 +67,7 @@ class DeckFormContainer extends Component {
 }
 
 DeckFormContainer.defaultProps = {
+  id: null,
   title: '',
   cards: [{
     id: Date.now(), 

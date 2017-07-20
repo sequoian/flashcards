@@ -42,6 +42,11 @@ const defaultCards = [
       }
     ]
   },
+  {
+    id: 3,
+    title: 'Empty',
+    cards: []
+  }
 ];
 
 const localAPI = {
@@ -79,7 +84,13 @@ const localAPI = {
 
   updateDeck: function(id, data) {
     const cards = fetchLocally(this.key);
-
+    const decks = cards.map(deck => {
+      if (deck.id === id) {
+        return data 
+      }
+      return deck;
+    })
+    storeLocally(this.key, decks)
   },
 
   deleteDeck: function(id) {
