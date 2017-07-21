@@ -49,8 +49,10 @@ class EditDeck extends Component {
   }
 
   deleteDeck() {
-    localAPI.deleteDeck(this.state.deck.id);
-    this.props.history.replace('/');
+    if (window.confirm('Are you sure you want to delete this deck?')) {
+      localAPI.deleteDeck(this.state.deck.id);
+      this.props.history.replace('/');
+    }
   }
 
   render() {
