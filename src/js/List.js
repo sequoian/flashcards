@@ -27,15 +27,18 @@ class DeckListContainer extends Component {
 }
 
 const DeckList = ({decks}) => (
-  <ul className="deck-list">
-    {decks.map(deck => (
-      <li key={deck.id}>
-        <Link to={`/cards/${deck.id}`}>
-          {deck.title}
-        </Link>
-      </li>
-      ))}  
-  </ul>
+  <div>
+    <Link to={'/new'}>New</Link>
+    <ul className="deck-list">
+      {decks.map(deck => (
+        <li key={deck.id}>
+          <Link to={`/cards/${deck.id}`}>
+            {deck.title}
+          </Link>
+        </li>
+        ))}  
+    </ul>
+  </div>
 );
 
 export default DeckListContainer;

@@ -16,6 +16,7 @@ class NewDeck extends Component {
     return (
       <DeckForm 
         onSubmit={this.addDeck}
+        cancelPath={'/'}
       />
     )
   }

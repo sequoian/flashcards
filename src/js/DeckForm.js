@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 
 class DeckFormContainer extends Component {
   constructor(props) {
@@ -76,6 +77,7 @@ class DeckFormContainer extends Component {
         handleTitleChange={this.handleTitleChange}
         handleCardChange={this.handleCardChange}
         removeCard={this.removeCard}
+        cancelPath={this.props.cancelPath}
       />
     )
   }
@@ -91,7 +93,7 @@ DeckFormContainer.defaultProps = {
   }]
 }
 
-const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange}) => (
+const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, cancelPath}) => (
   <form>
     <input 
       type="text" 
@@ -110,7 +112,7 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
     ))}
     <button type="button" onClick={addCard}>Add Card</button>
     <button type="button" onClick={onSubmit}>Submit</button>
-    <button type="button">Cancel</button>
+    <Link to={cancelPath}>Cancel</Link>
   </form>
 )
 

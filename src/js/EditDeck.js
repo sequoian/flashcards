@@ -37,6 +37,7 @@ class EditDeck extends Component {
           title={deck.title}
           cards={deck.cards}
           onSubmit={this.updateDeck}
+          cancelPath={`/cards/${deck.id}`}
         /> : 
         <p>Deck not found</p>
     )

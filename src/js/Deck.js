@@ -87,6 +87,7 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, 
     return (
       <div>
         <Link to={`/`}>Back</Link>
+        <Link to={`/edit/${deck.id}`}>Edit</Link>
         <CardInfo
           deckTitle={deck.title}
           deckLength={deck.cards.length}
