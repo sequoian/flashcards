@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import DeckForm from './DeckForm';
 import localAPI from './Model';
 import {withRouter} from 'react-router-dom';
+import {validateDeck} from './Validation'
 
 class EditDeck extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deck: null
+      deck: null,
+      errors: []
     }
     this.updateDeck = this.updateDeck.bind(this);
     this.deleteDeck = this.deleteDeck.bind(this);
@@ -28,7 +30,20 @@ class EditDeck extends Component {
       title: title,
       cards: cards
     }
+
+    // validate
+    const errors = validateDeck(deck)
+
+    if (errors.length > 0) {
+      this.setState({
+        errors: errors
+      })
+      return false;
+    }
+
+    // update database
     localAPI.updateDeck(deck.id, deck);
+
     // redirect to deck page upon success
     this.props.history.replace(`/cards/${deck.id}`)
   }
@@ -50,6 +65,7 @@ class EditDeck extends Component {
             cards={deck.cards}
             onSubmit={this.updateDeck}
             cancelPath={`/cards/${deck.id}`}
+            validation={this.state.errors}
           />
         </div> : 
         <p>Deck not found</p>

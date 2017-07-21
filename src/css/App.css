@@ -12,3 +12,7 @@
 .set-list {
   list-style: none;
 }
+
+.errors {
+  color: red;
+}

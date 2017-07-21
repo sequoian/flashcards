@@ -78,6 +78,7 @@ class DeckFormContainer extends Component {
         handleCardChange={this.handleCardChange}
         removeCard={this.removeCard}
         cancelPath={this.props.cancelPath}
+        validation={this.props.validation}
       />
     )
   }
@@ -93,8 +94,9 @@ DeckFormContainer.defaultProps = {
   }]
 }
 
-const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, cancelPath}) => (
+const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, cancelPath, validation}) => (
   <form>
+    {validation.length > 0 ? <ValidationErrors validation={validation} /> : null }
     <input 
       type="text" 
       placeholder="Title" 
@@ -114,6 +116,17 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
     <button type="button" onClick={onSubmit}>Submit</button>
     <Link to={cancelPath}>Cancel</Link>
   </form>
+)
+
+const ValidationErrors = ({validation}) => (
+  <div className='errors'>
+    <div>Errors</div>
+    <ul>
+      {validation.map((msg, idx) => (
+        <li key={idx}>{msg}</li>
+      ))}
+    </ul>
+  </div>
 )
 
 const CardInput = ({card, index, handleCardChange, removeCard}) => (

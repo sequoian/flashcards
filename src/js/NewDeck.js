@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import DeckForm from './DeckForm';
 import localAPI from './Model';
 import {withRouter} from 'react-router-dom';
+import {validateDeck} from './Validation'
 
 class NewDeck extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      errors: []
+    }
     this.addDeck = this.addDeck.bind(this);
   }
 
@@ -15,6 +19,17 @@ class NewDeck extends Component {
       title: title,
       cards: cards
     }
+
+    // validate
+    const errors = validateDeck(deck)
+
+    if (errors.length > 0) {
+      this.setState({
+        errors: errors
+      })
+      return false;
+    }
+
     localAPI.addDeck(deck);
     // redirect to new deck upon success
     this.props.history.replace(`/cards/${deck.id}`)
@@ -25,6 +40,7 @@ class NewDeck extends Component {
       <DeckForm 
         onSubmit={this.addDeck}
         cancelPath={'/'}
+        validation={this.state.errors}
       />
     )
   }
