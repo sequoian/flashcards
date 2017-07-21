@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DeckForm from './DeckForm';
 import localAPI from './Model';
+import {withRouter} from 'react-router-dom';
 
 class EditDeck extends Component {
   constructor(props) {
@@ -8,6 +9,7 @@ class EditDeck extends Component {
     this.state = {
       deck: null
     }
+    this.updateDeck = this.updateDeck.bind(this);
   }
 
   componentDidMount() {
@@ -26,6 +28,8 @@ class EditDeck extends Component {
       cards: cards
     }
     localAPI.updateDeck(deck.id, deck);
+    // redirect to deck page upon success
+    this.props.history.replace(`/cards/${deck.id}`)
   }
 
   render() {
@@ -44,4 +48,4 @@ class EditDeck extends Component {
   }
 }
 
-export default EditDeck;
+export default withRouter(EditDeck);
