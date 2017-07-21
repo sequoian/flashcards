@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../css/App.css';
-import {Route, Link, Switch} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import localAPI, {hydrateLocalStorage} from './Model';
 import DeckListContainer from './List';
 import DeckPageContainer from './Deck';

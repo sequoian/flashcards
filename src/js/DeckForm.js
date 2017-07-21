@@ -5,9 +5,9 @@ class DeckFormContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: props.id,
-      title: props.title, 
-      cards: props.cards
+      id: props.id || null,
+      title: props.title || '', 
+      cards: props.cards || [{id: Date.now(), front: '', back: ''}]
     }
     this.addCard = this.addCard.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -60,6 +60,7 @@ class DeckFormContainer extends Component {
         if (card.id !== id) {
           return card;
         }
+        return null;
       })
       return {
         cards: cards
@@ -84,6 +85,7 @@ class DeckFormContainer extends Component {
   }
 }
 
+/*
 DeckFormContainer.defaultProps = {
   id: null,
   title: '',
@@ -93,6 +95,7 @@ DeckFormContainer.defaultProps = {
     back: ''
   }]
 }
+*/
 
 const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, cancelPath, validation}) => (
   <form>

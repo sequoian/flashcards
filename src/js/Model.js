@@ -99,6 +99,7 @@ const localAPI = {
       if (deck.id !== id) {
         return deck
       }
+      return null
     })
     storeLocally(this.key, decks)
   }
@@ -114,6 +115,7 @@ function storeLocally(key, value) {
 }
 
 // Test to see if local storage is available to use.
+/*
 function testLocalStorage() {
   const test = 'test';
   try {
@@ -125,6 +127,7 @@ function testLocalStorage() {
     return false;
   }
 }
+*/
 
 // Fills local storage with default cards.  Used for testing purposes
 export function hydrateLocalStorage() {
