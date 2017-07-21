@@ -76,41 +76,64 @@ class DeckPageContainer extends Component {
 
 const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, flipCard}) => {
   if (deck) {
-    const activeCard = deck.cards[activeCardIndex];
-    let face = null;
-    if (activeCard) {
-      face = showingFront ? activeCard.front : activeCard.back;
+    if (deck.cards.length > 0) {
+      const activeCard = deck.cards[activeCardIndex];
+      let face = null;
+      if (activeCard) {
+        face = showingFront ? activeCard.front : activeCard.back;
+      }
+      else {
+        face = 'Could not find card';
+      }
+      return (
+        <div>
+          <Link to={`/`}>Back</Link>
+          <Link to={`/edit/${deck.id}`}>Edit</Link>
+          <CardInfo
+            deckTitle={deck.title}
+            deckLength={deck.cards.length}
+            cardIndex={activeCardIndex}
+            cardSide={showingFront}
+          />
+          <Card
+            face={face}
+          />
+          <CardControls 
+            getNext={nextCard}
+            getPrevious={previousCard}
+            flipCard={flipCard}
+          />
+        </div>
+      )
     }
     else {
-      face = 'Could not find card';
+      return (
+        <NoCards deck={deck} />
+      )
     }
-    return (
-      <div>
-        <Link to={`/`}>Back</Link>
-        <Link to={`/edit/${deck.id}`}>Edit</Link>
-        <CardInfo
-          deckTitle={deck.title}
-          deckLength={deck.cards.length}
-          cardIndex={activeCardIndex}
-          cardSide={showingFront}
-        />
-        <Card
-          face={face}
-        />
-        <CardControls 
-          getNext={nextCard}
-          getPrevious={previousCard}
-          flipCard={flipCard}
-        />
-      </div>
-    )
   }
   else {
     return (
-      <div>Deck could not be found</div>
+      <NoDeck />
     )
   }
 }
+
+const NoCards = ({deck}) => (
+  <div>
+    <Link to={`/`}>Back</Link>
+    <Link to={`/edit/${deck.id}`}>Edit</Link>
+    <h2>{deck.title}</h2>
+    <div>There are no cards in this deck.  Add some <Link to={`/edit/${deck.id}`}>here</Link>.</div>
+  </div>
+) 
+
+const NoDeck = () => (
+  <div>
+    <Link to={`/`}>Back</Link>
+    <div>This deck could not be found</div>
+  </div>
+)
 
 const CardControls = ({getPrevious, getNext, flipCard}) => (
   <div>
