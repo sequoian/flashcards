@@ -95,7 +95,12 @@ const localAPI = {
 
   deleteDeck: function(id) {
     const cards = fetchLocally(this.key);
-
+    const decks = cards.filter(deck => {
+      if (deck.id !== id) {
+        return deck
+      }
+    })
+    storeLocally(this.key, decks)
   }
 }
 

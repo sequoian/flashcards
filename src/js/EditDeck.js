@@ -10,6 +10,7 @@ class EditDeck extends Component {
       deck: null
     }
     this.updateDeck = this.updateDeck.bind(this);
+    this.deleteDeck = this.deleteDeck.bind(this);
   }
 
   componentDidMount() {
@@ -32,17 +33,25 @@ class EditDeck extends Component {
     this.props.history.replace(`/cards/${deck.id}`)
   }
 
+  deleteDeck() {
+    localAPI.deleteDeck(this.state.deck.id);
+    this.props.history.replace('/');
+  }
+
   render() {
     const {deck} = this.state;
     return (
-      deck ? 
-        <DeckForm 
-          id={deck.id}
-          title={deck.title}
-          cards={deck.cards}
-          onSubmit={this.updateDeck}
-          cancelPath={`/cards/${deck.id}`}
-        /> : 
+      deck ?
+        <div> 
+          <button onClick={this.deleteDeck}>Delete</button>
+          <DeckForm 
+            id={deck.id}
+            title={deck.title}
+            cards={deck.cards}
+            onSubmit={this.updateDeck}
+            cancelPath={`/cards/${deck.id}`}
+          />
+        </div> : 
         <p>Deck not found</p>
     )
   }
