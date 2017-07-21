@@ -12,6 +12,7 @@ class DeckFormContainer extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleCardChange = this.handleCardChange.bind(this);
+    this.removeCard = this.removeCard.bind(this);
   }
 
   onSubmit() {
@@ -51,6 +52,19 @@ class DeckFormContainer extends Component {
       }
     });
   }
+
+  removeCard(id) {
+    this.setState((prevState) => {
+      const cards = prevState.cards.filter(card => {
+        if (card.id !== id) {
+          return card;
+        }
+      })
+      return {
+        cards: cards
+      }
+    })
+  }
   
   render() {
     return (
@@ -61,6 +75,7 @@ class DeckFormContainer extends Component {
         onSubmit={this.onSubmit}
         handleTitleChange={this.handleTitleChange}
         handleCardChange={this.handleCardChange}
+        removeCard={this.removeCard}
       />
     )
   }
@@ -76,7 +91,7 @@ DeckFormContainer.defaultProps = {
   }]
 }
 
-const DeckForm = ({title, cards, addCard, onSubmit, handleTitleChange, handleCardChange}) => (
+const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange}) => (
   <form>
     <input 
       type="text" 
@@ -90,6 +105,7 @@ const DeckForm = ({title, cards, addCard, onSubmit, handleTitleChange, handleCar
         card={card}
         index={idx}
         handleCardChange={handleCardChange}
+        removeCard={removeCard}
       />
     ))}
     <button type="button" onClick={addCard}>Add Card</button>
@@ -98,7 +114,7 @@ const DeckForm = ({title, cards, addCard, onSubmit, handleTitleChange, handleCar
   </form>
 )
 
-const CardInput = ({card, index, handleCardChange}) => (
+const CardInput = ({card, index, handleCardChange, removeCard}) => (
   <div className="card-input">
     <span>{index + 1}</span>
     <input 
@@ -113,7 +129,7 @@ const CardInput = ({card, index, handleCardChange}) => (
       value={card.back}  
       onChange={(e) => handleCardChange(card.id, 'back', e.target.value)} 
     />
-    <button type="button">remove</button>
+    <button type="button" onClick={() => removeCard(card.id)}>remove</button>
   </div>
 )
 
