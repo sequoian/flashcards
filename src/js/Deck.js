@@ -13,6 +13,7 @@ class DeckPageContainer extends Component {
     this.nextCard = this.nextCard.bind(this);
     this.previousCard = this.previousCard.bind(this);
     this.flipCard = this.flipCard.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentDidMount() {
@@ -22,6 +23,12 @@ class DeckPageContainer extends Component {
     this.setState({
       deck: deck
     });
+
+    window.addEventListener('keydown', this.handleKeyDown)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown)
   }
 
   nextCard() {
@@ -60,9 +67,30 @@ class DeckPageContainer extends Component {
     });
   }
 
+  handleKeyDown(event) {
+    switch (event.key) {
+      case 'ArrowUp':
+        this.flipCard();
+        break;
+      case 'ArrowDown':
+        this.flipCard();
+        break;
+      case 'ArrowLeft':
+        this.previousCard();
+        break;
+      case 'ArrowRight':
+        this.nextCard();
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     return (
       <DeckPage
+        onKeyPress={() => console.log('keydown')}
+        onClick={() => console.log('clicked')}
         deck={this.state.deck}
         activeCardIndex={this.state.activeCardIndex}
         showingFront={this.state.showingFront}
