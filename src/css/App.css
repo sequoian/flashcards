@@ -1,4 +1,4 @@
-.App {
+.app {
   margin: 5px;
 }
 
@@ -15,4 +15,14 @@
 
 .errors {
   color: red;
+}
+
+form {
+  margin: 10px 0;
+}
+
+.deleteBtn,
+.cardBtn {
+  display: block;
+  margin: 5px 0;
 }

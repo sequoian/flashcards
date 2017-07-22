@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DeckForm from './DeckForm';
 import localAPI from './Model';
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {validateDeck} from './Validation'
 
 class NewDeck extends Component {
@@ -36,12 +36,17 @@ class NewDeck extends Component {
   }
 
   render() {
+    const cancelPath = '/'
     return (
-      <DeckForm 
-        onSubmit={this.addDeck}
-        cancelPath={'/'}
-        validation={this.state.errors}
-      />
+      <div>
+        <Link to={cancelPath}>Back</Link>
+        <h2>New Deck</h2>
+        <DeckForm 
+          onSubmit={this.addDeck}
+          cancelPath={cancelPath}
+          validation={this.state.errors}
+        />
+      </div>
     )
   }
 }

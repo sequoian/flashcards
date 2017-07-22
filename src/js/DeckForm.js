@@ -115,8 +115,17 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
         removeCard={removeCard}
       />
     ))}
-    <button type="button" onClick={addCard}>Add Card</button>
-    <button type="button" onClick={onSubmit}>Submit</button>
+    <button 
+      type="button" 
+      onClick={addCard}
+      className='cardBtn'>
+      Add Card
+    </button>
+    <button 
+      type="button" 
+      onClick={onSubmit}
+    >Submit
+    </button>
     <Link to={cancelPath}>Cancel</Link>
   </form>
 )

@@ -17,7 +17,7 @@ class App extends Component {
   
   render() {
     return (
-      <div>
+      <div className='app'>
         <Switch>
           <Route exact path='/' component={DeckListContainer} />
           <Route path='/cards/:id' component={DeckPageContainer} />

@@ -28,7 +28,9 @@ class DeckListContainer extends Component {
 
 const DeckList = ({decks}) => (
   <div>
-    <Link to={'/new'}>New</Link>
+    <h2>Flashcards</h2>
+    <Link to={'/new'}>Create New Deck</Link>
+    <h3>My Decks</h3>
     <ul className="deck-list">
       {decks.map(deck => (
         <li key={deck.id}>

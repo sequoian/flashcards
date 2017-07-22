@@ -115,9 +115,9 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, 
       }
       return (
         <div>
-          <Link to={`/`}>Back</Link>
-          <Link to={`/edit/${deck.id}`}>Edit</Link>
+          <Link to={`/`}>Back</Link> 
           <CardInfo
+            deckID={deck.id}
             deckTitle={deck.title}
             deckLength={deck.cards.length}
             cardIndex={activeCardIndex}
@@ -149,9 +149,9 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, 
 
 const NoCards = ({deck}) => (
   <div>
-    <Link to={`/`}>Back</Link>
-    <Link to={`/edit/${deck.id}`}>Edit</Link>
+    <Link to={`/`}>Back</Link>  
     <h2>{deck.title}</h2>
+    <Link to={`/edit/${deck.id}`}>Edit</Link>
     <div>There are no cards in this deck.  Add some <Link to={`/edit/${deck.id}`}>here</Link>.</div>
   </div>
 ) 
@@ -171,9 +171,10 @@ const CardControls = ({getPrevious, getNext, flipCard}) => (
   </div>
 );
 
-const CardInfo = ({deckTitle, deckLength, cardIndex, cardSide}) => (
+const CardInfo = ({deckID, deckTitle, deckLength, cardIndex, cardSide}) => (
   <div>
     <h2>{deckTitle}</h2>
+    <Link to={`/edit/${deckID}`}>Edit</Link>
     <div>{cardIndex + 1}/{deckLength}</div>
     <div>{cardSide ? 'Front' : 'Back'}</div>
   </div>

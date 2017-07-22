@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DeckForm from './DeckForm';
 import localAPI from './Model';
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {validateDeck} from './Validation'
 
 class EditDeck extends Component {
@@ -57,16 +57,19 @@ class EditDeck extends Component {
 
   render() {
     const {deck} = this.state;
+    const cancelPath = deck ? `/cards/${deck.id}` : '/';
     return (
       deck ?
         <div> 
-          <button onClick={this.deleteDeck}>Delete</button>
+          <Link to={cancelPath}>Back</Link>
+          <h2>Edit Deck</h2>
+          <button onClick={this.deleteDeck} className='deleteBtn'>Delete</button>
           <DeckForm 
             id={deck.id}
             title={deck.title}
             cards={deck.cards}
             onSubmit={this.updateDeck}
-            cancelPath={`/cards/${deck.id}`}
+            cancelPath={cancelPath}
             validation={this.state.errors}
           />
         </div> : 
