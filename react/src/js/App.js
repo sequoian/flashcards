@@ -13,20 +13,6 @@ class App extends Component {
     if (localAPI.getAll().length < 1) {
       hydrateLocalStorage();
     }
-
-    // test server api
-    fetch('/api')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(json => {
-        console.log(json.message)
-      }).catch(e => {
-        console.log(e)
-      })
   }
   
   render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import localAPI from './Model'
+//import localAPI from './Model'
 import {Link} from 'react-router-dom';
 
 class DeckListContainer extends Component {
@@ -11,10 +11,29 @@ class DeckListContainer extends Component {
   }
 
   componentDidMount() {
+    /*
     const decks = localAPI.getList();
     this.setState({
       decks: decks
     });
+    */
+
+    // fetch list from database
+    fetch('/api/deck-list')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(json => {
+        //console.log(json)
+        this.setState({
+          decks: json
+        })
+      }).catch(e => {
+        console.log(e)
+      })
   }
 
   render() {

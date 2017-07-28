@@ -16,12 +16,30 @@ class EditDeck extends Component {
   }
 
   componentDidMount() {
+    /*
     const deck = localAPI.getDeck(
       parseInt(this.props.match.params.id, 10)
     );
     this.setState({
       deck: deck
     });
+    */
+
+    // fetch deck from database
+    fetch(`/api/deck/${this.props.match.params.id}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(json => {
+        this.setState({
+          deck: json
+        })
+      }).catch(e => {
+        console.log(e)
+      })
   }
 
   updateDeck(id, title, cards) {
