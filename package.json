@@ -9,6 +9,7 @@
     "url": "git+https://github.com/sequoian/flashcards.git"
   },
   "dependencies": {
+    "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "pg-promise": "^6.3.5"
   }

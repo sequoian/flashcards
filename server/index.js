@@ -1,9 +1,16 @@
 const express = require('express');
 const path = require('path');
 const pgp = require('pg-promise')();
+const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Parse POST data
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 // Priority serve any static files.
 app.use(express.static(path.resolve(__dirname, '../react/build')));
@@ -35,7 +42,7 @@ app.get('/api', function (req, res) {
 
 // deck list
 app.get('/api/deck-list', function (req, res) {
-  const userID = 1;  // TODO: get user ID from cookie or other method
+  const userID = 1;  // TODO: get user ID from cookie or other method for permission
 
   db.query(`SELECT d.id, d.title, u.name AS author FROM 
     decks d INNER JOIN users u ON (d.author = u.id) WHERE d.author = $1`, userID)
@@ -49,6 +56,7 @@ app.get('/api/deck-list', function (req, res) {
 
 // deck data
 app.get('/api/deck/:deckID', function (req, res) {
+  // TODO: check permission with user ID
   const deckID = parseInt(req.params.deckID);
   let result = null;
   db.one(`SELECT id, title FROM decks WHERE id = $1`, deckID)
@@ -63,6 +71,12 @@ app.get('/api/deck/:deckID', function (req, res) {
     .catch((error) => {
       console.log(error)
     })
+})
+
+app.post('/api/deck/:deckID', function (req, res) {
+  const deckID = parseInt(req.params.deckID);
+  console.log(req.body.title)
+  res.send('worked')
 })
 
 // All remaining requests return the React app, so it can handle routing.
