@@ -43,7 +43,12 @@ class EditDeck extends Component {
   }
 
   // API Update
-  updateDeck() {
+  updateDeck(id, title, cards) {
+    const deck = {
+      id: id,
+      title: title,
+      cards: cards
+    }
     fetch(`/api/deck/${this.props.match.params.id}`,
     {
       method: 'POST',
@@ -51,7 +56,7 @@ class EditDeck extends Component {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(this.state.deck)
+      body: JSON.stringify(deck)
     })
       .catch(e => {
         console.log(e);

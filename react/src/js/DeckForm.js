@@ -85,18 +85,6 @@ class DeckFormContainer extends Component {
   }
 }
 
-/*
-DeckFormContainer.defaultProps = {
-  id: null,
-  title: '',
-  cards: [{
-    id: Date.now(), 
-    front: '', 
-    back: ''
-  }]
-}
-*/
-
 const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, cancelPath, validation}) => (
   <form>
     {validation.length > 0 ? <ValidationErrors validation={validation} /> : null }

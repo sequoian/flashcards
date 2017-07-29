@@ -75,7 +75,28 @@ app.get('/api/deck/:deckID', function (req, res) {
 
 app.post('/api/deck/:deckID', function (req, res) {
   const deckID = parseInt(req.params.deckID);
-  console.log(req.body.title)
+
+  //console.log(req.body)
+
+  db.tx(t => {
+    const deck_update = t.none(`
+      UPDATE decks SET title = $[title]
+      WHERE id = $[id]
+      `, req.body); 
+
+    const card_upsert = req.body.cards.map(card => {
+      return t.none(`
+        INSERT INTO cards (id, deck_id, front, back, placement)
+        VALUES ($[id], $[deck_id], $[front], $[back], $[placement])
+        ON CONFLICT (id) DO UPDATE SET
+          front = EXCLUDED.front,
+          back = EXCLUDED.back,
+          placement = EXCLUDED.placement
+      `, card);
+    });
+
+    return t.batch([deck_update, card_upsert])
+  })
   res.send('worked')
 })
 
