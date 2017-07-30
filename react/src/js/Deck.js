@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import localAPI from './Model'
 import {Link} from 'react-router-dom';
 
 class DeckPageContainer extends Component {
@@ -17,15 +16,6 @@ class DeckPageContainer extends Component {
   }
 
   componentDidMount() {
-    /*
-    const deck = localAPI.getDeck(
-      parseInt(this.props.match.params.id, 10)
-    );
-    this.setState({
-      deck: deck
-    });
-    */
-
     // fetch deck from database
     fetch(`/api/deck/${this.props.match.params.id}`)
       .then(response => {

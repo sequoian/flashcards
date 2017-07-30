@@ -28,10 +28,10 @@ class DeckFormContainer extends Component {
     });
   }
 
-  handleCardChange(cardID, side, value) {
+  handleCardChange(key, side, value) {
     this.setState(prevState => {
       const cards = prevState.cards.map(card => {
-        if (card.id === cardID) {
+        if (card.key === key) {
           side === 'front' ? card.front = value : card.back = value;
         }
         return card;
@@ -49,7 +49,7 @@ class DeckFormContainer extends Component {
         front: '',
         back: '',
         delete: false,  // allows app to determine if card should be removed
-        key: Date.now()  // used by react for reconciliation
+        key: Date.now()  // unique id for each new card
       }
       return {
         cards: prevState.cards.concat(newCard)
@@ -57,10 +57,10 @@ class DeckFormContainer extends Component {
     });
   }
 
-  removeCard(id) {
+  removeCard(key) {
     this.setState((prevState) => {
       const cards = prevState.cards.map(card => {
-        if (card.id === id) {
+        if (card.key === key) {
           card.delete = true;
           return card;
         }
@@ -73,7 +73,6 @@ class DeckFormContainer extends Component {
   }
   
   render() {
-    console.log(this.state.cards)
     return (
       <DeckForm 
         title={this.state.title}
@@ -141,15 +140,15 @@ const CardInput = ({card, index, handleCardChange, removeCard}) => (
       type="text" 
       placeholder="Front" 
       value={card.front} 
-      onChange={(e) => handleCardChange(card.id, 'front', e.target.value)}
+      onChange={(e) => handleCardChange(card.key, 'front', e.target.value)}
     />
     <input 
       type="text" 
       placeholder="Back"
       value={card.back}  
-      onChange={(e) => handleCardChange(card.id, 'back', e.target.value)} 
+      onChange={(e) => handleCardChange(card.key, 'back', e.target.value)} 
     />
-    <button type="button" onClick={() => removeCard(card.id)}>remove</button>
+    <button type="button" onClick={() => removeCard(card.key)}>remove</button>
   </div>
 )
 
