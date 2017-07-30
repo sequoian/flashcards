@@ -28,6 +28,7 @@ exports.get_user_decks = function(db, userID) {
   return db.query(`
     SELECT d.id, d.title, u.name AS author FROM 
     decks d INNER JOIN users u ON (d.author = u.id) WHERE d.author = $1
+    ORDER BY d.id ASC
     `, userID)
 }
 
@@ -57,6 +58,8 @@ exports.get_deck = function(db, userID, deckID) {
  * Merge deck and associated cards
  * Inserts new deck or updates existing deck
  * Inserts, updates, or deletes cards to reflect deck.cards
+ * TODO: separate commands into functions for neatness
+ * TODO: if deck is inserted but cards fail, it should roll back and not insert the deck, give user error
  */
 exports.merge_deck = function(db, userID, deck) {
   return db.tx(t => {
@@ -76,36 +79,43 @@ exports.merge_deck = function(db, userID, deck) {
       `, [deck.title, deck.id]);
     }
 
-    // Card Commands
-    const card_commands = deck.cards.map(card => {
-      if (card.delete) {
-        return t.none(`
-          DELETE FROM cards WHERE id = $[id] AND deck_id = $[deck_id]
-        `, card);
-      }
-      else if (card.id === null) {
-        return t.none(`
-          INSERT INTO cards (front, back, placement, deck_id)
-          VALUES ($[front], $[back], $[placement], $[deck_id])
-        `, card);
-      }
-      else {
-        return t.none(`
-          UPDATE cards SET front = $[front], back = $[back], placement = $[placement]
-          WHERE id = $[id] AND deck_id = $[deck_id]
-        `, card)
-      }
-    })
-
-    return deck_command()
-      .then(id => {
+    let deck_id = deck.id;
+    return deck_command()  // merge deck
+      .then(id_obj => {
+        const id = id_obj ? id_obj.id : null;
         if (id) {
           // associate cards with new deck
           deck.cards.forEach(card => {
-            card.deck_id = id
+            card.deck_id = id;
+            deck_id = id;
           });
         }
-        return t.batch(card_commands);
+
+        // Card Commands
+        const card_commands = deck.cards.map(card => {
+          if (card.delete) {
+            return t.none(`
+              DELETE FROM cards WHERE id = $[id] AND deck_id = $[deck_id]
+            `, card);
+          }
+          else if (card.id === null) {
+            return t.none(`
+              INSERT INTO cards (front, back, placement, deck_id)
+              VALUES ($[front], $[back], $[placement], $[deck_id])
+            `, card);
+          }
+          else {
+            return t.none(`
+              UPDATE cards SET front = $[front], back = $[back], placement = $[placement]
+              WHERE id = $[id] AND deck_id = $[deck_id]
+            `, card)
+          }
+        })
+
+        return t.batch(card_commands);  // merge cards
+      })
+      .then(() => {
+        return deck_id;
       })
   })
 }

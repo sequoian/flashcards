@@ -57,7 +57,7 @@ class EditDeck extends Component {
       return false;
     }
     
-    fetch(`/api/deck/${this.props.match.params.id}`,
+    fetch('/api/deck',
     {
       method: 'POST',
       headers: {
@@ -66,9 +66,14 @@ class EditDeck extends Component {
       },
       body: JSON.stringify(deck)
     })
-      .then(status => {
-        // redirect to deck page upon success
-        this.props.history.replace(`/cards/${deck.id}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(json => {
+        this.props.history.replace(`/cards/${json.deck_id}`)
       })
       .catch(e => {
         console.log(e);

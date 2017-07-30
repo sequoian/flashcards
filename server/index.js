@@ -52,7 +52,7 @@ app.get('/api/deck/:deckID', function (req, res) {
 })
 
 // add or edit deck
-app.post('/api/deck/:deckID', function (req, res) {
+app.post('/api/deck', function (req, res) {
   const userID = 1;  // TODO: get user ID from cookie or other method for permission
   const deckID = parseInt(req.params.deckID);  // TODO: is deck id even needed?
 
@@ -68,8 +68,9 @@ app.post('/api/deck/:deckID', function (req, res) {
   })
 
   sql.merge_deck(db, userID, deck)
-    .then(() => {
-      res.sendStatus(200);
+    .then((data) => {
+      console.log(data)
+      res.json({deck_id: data});
     })
     .catch(error => {
       console.log(error)

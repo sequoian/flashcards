@@ -30,9 +30,27 @@ class NewDeck extends Component {
       return false;
     }
 
-    localAPI.addDeck(deck);
-    // redirect to new deck upon success
-    this.props.history.replace(`/cards/${deck.id}`)
+    fetch('/api/deck',
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(deck)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(json => {
+        this.props.history.replace(`/cards/${json.deck_id}`)
+      })
+      .catch(e => {
+        console.log(e);
+      })
   }
 
   render() {
