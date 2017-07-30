@@ -28,8 +28,7 @@ CREATE TABLE cards (
   front     text NOT NULL DEFAULT '',
   back      text NOT NULL DEFAULT '',
   placement integer NOT NULL,
-  deck_id   integer REFERENCES decks ON DELETE CASCADE NOT NULL,
-  UNIQUE (placement, deck_id)
+  deck_id   integer REFERENCES decks ON DELETE CASCADE NOT NULL
 );
 
 CREATE TABLE deck_votes (

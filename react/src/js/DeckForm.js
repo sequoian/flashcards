@@ -15,6 +15,7 @@ class DeckFormContainer extends Component {
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleCardChange = this.handleCardChange.bind(this);
     this.removeCard = this.removeCard.bind(this);
+    this.moveCard = this.moveCard.bind(this);
   }
 
   onSubmit() {
@@ -71,6 +72,30 @@ class DeckFormContainer extends Component {
       }
     })
   }
+
+  moveCard(idx, direction) {
+    const cards = this.state.cards.slice()  // get copy of array
+
+    // calculate swap
+    let new_idx = null;
+    if (direction === 'up') {
+      new_idx = idx > 0 ? idx - 1 : 0;
+    }
+    else {
+      new_idx = idx < cards.length - 1 ? idx + 1 : cards.length - 1
+    }
+
+    // swap
+    const tmp = cards[new_idx];
+    cards[new_idx] = cards[idx];
+    cards[idx] = tmp;
+
+    this.setState({
+      cards: cards
+    });
+
+    //console.log(`idx: ${idx}, new: ${new_idx}`)
+  }
   
   render() {
     return (
@@ -84,12 +109,14 @@ class DeckFormContainer extends Component {
         removeCard={this.removeCard}
         cancelPath={this.props.cancelPath}
         validation={this.props.validation}
+        moveCard={this.moveCard}
       />
     )
   }
 }
 
-const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, cancelPath, validation}) => (
+const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, 
+  cancelPath, validation, moveCard}) => (
   <form>
     {validation.length > 0 ? <ValidationErrors validation={validation} /> : null }
     <input 
@@ -105,6 +132,7 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
         index={idx}
         handleCardChange={handleCardChange}
         removeCard={removeCard}
+        moveCard={moveCard}
       />
     ))}
     <button 
@@ -133,7 +161,7 @@ const ValidationErrors = ({validation}) => (
   </div>
 )
 
-const CardInput = ({card, index, handleCardChange, removeCard}) => (
+const CardInput = ({card, index, handleCardChange, removeCard, moveCard}) => (
   <div className="card-input">
     <span>{index + 1}</span>
     <input 
@@ -148,6 +176,8 @@ const CardInput = ({card, index, handleCardChange, removeCard}) => (
       value={card.back}  
       onChange={(e) => handleCardChange(card.key, 'back', e.target.value)} 
     />
+    <button type="button" onClick={() => moveCard(index, 'up')}>Up</button>
+    <button type="button" onClick={() => moveCard(index, 'down')}>Down</button>
     <button type="button" onClick={() => removeCard(card.key)}>remove</button>
   </div>
 )
