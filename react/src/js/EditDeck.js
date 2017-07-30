@@ -82,8 +82,16 @@ class EditDeck extends Component {
 
   deleteDeck() {
     if (window.confirm('Are you sure you want to delete this deck?')) {
-      localAPI.deleteDeck(this.state.deck.id);
-      this.props.history.replace('/');
+      fetch(`/api/deck/${this.props.match.params.id}`,
+      {
+        method: 'DELETE'
+      })
+        .then(status => {
+          this.props.history.replace('/');
+        })
+        .catch(e => {
+          console.log(e);
+        })
     }
   }
 

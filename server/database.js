@@ -54,6 +54,12 @@ exports.get_deck = function(db, userID, deckID) {
   });
 }
 
+exports.delete_deck = function(db, deckID) {
+  return db.none(`
+    DELETE FROM decks WHERE id = $1
+  `, deckID)
+}
+
 /**
  * Merge deck and associated cards
  * Inserts new deck or updates existing deck

@@ -54,7 +54,6 @@ app.get('/api/deck/:deckID', function (req, res) {
 // add or edit deck
 app.post('/api/deck', function (req, res) {
   const userID = 1;  // TODO: get user ID from cookie or other method for permission
-  const deckID = parseInt(req.params.deckID);  // TODO: is deck id even needed?
 
   // Validation
   // TODO: validate that user is author of deck
@@ -74,6 +73,20 @@ app.post('/api/deck', function (req, res) {
     })
     .catch(error => {
       console.log(error)
+    })
+})
+
+app.delete('/api/deck/:deckID', function (req, res) {
+  const userID = 1;  // TODO: get user ID from cookie or other method for permission
+  const deckID = parseInt(req.params.deckID);
+  // TODO: check that user is author of deck
+
+  sql.delete_deck(db, deckID)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(error);
     })
 })
 
