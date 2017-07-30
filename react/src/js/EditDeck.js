@@ -46,32 +46,6 @@ class EditDeck extends Component {
       title: title,
       cards: cards
     }
-    
-    fetch(`/api/deck/${this.props.match.params.id}`,
-    {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(deck)
-    })
-      .then(data => {
-        console.log(data)
-      })
-      .catch(e => {
-        console.log(e);
-      })
-  }
-
-  /*
-  // Local Update
-  updateDeck(id, title, cards) {
-    const deck = {
-      id: id,
-      title: title,
-      cards: cards
-    }
 
     // validate
     const errors = validateDeck(deck)
@@ -82,14 +56,24 @@ class EditDeck extends Component {
       })
       return false;
     }
-
-    // update database
-    localAPI.updateDeck(deck.id, deck);
-
-    // redirect to deck page upon success
-    this.props.history.replace(`/cards/${deck.id}`)
+    
+    fetch(`/api/deck/${this.props.match.params.id}`,
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(deck)
+    })
+      .then(status => {
+        // redirect to deck page upon success
+        this.props.history.replace(`/cards/${deck.id}`)
+      })
+      .catch(e => {
+        console.log(e);
+      })
   }
-  */
 
   deleteDeck() {
     if (window.confirm('Are you sure you want to delete this deck?')) {

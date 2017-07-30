@@ -64,16 +64,16 @@ exports.merge_deck = function(db, userID, deck) {
     // TODO: get is_public from deck data
     let deck_command = null;
     if (deck.id === null) {
-      deck_command = db.one(`
+      deck_command = () => db.one(`
         INSERT INTO decks (title, author, is_public)
         VALUES ($1, $2, $3) RETURNING id
-      `, deck.title, userID, false) ;
+      `, [deck.title, userID, false]) ;
     }
     else {
-      deck_command = db.none(`
+      deck_command = () => db.none(`
         UPDATE decks SET title = $1, last_updated = CURRENT_TIMESTAMP
         WHERE id = $2
-      `, deck.title, deck.id);
+      `, [deck.title, deck.id]);
     }
 
     // Card Commands
@@ -97,7 +97,7 @@ exports.merge_deck = function(db, userID, deck) {
       }
     })
 
-    deck_command()
+    return deck_command()
       .then(id => {
         if (id) {
           // associate cards with new deck

@@ -51,34 +51,30 @@ app.get('/api/deck/:deckID', function (req, res) {
     })
 })
 
-/*
+// add or edit deck
 app.post('/api/deck/:deckID', function (req, res) {
-  const deckID = parseInt(req.params.deckID);
+  const userID = 1;  // TODO: get user ID from cookie or other method for permission
+  const deckID = parseInt(req.params.deckID);  // TODO: is deck id even needed?
 
-  //console.log(req.body)
+  // Validation
+  // TODO: validate that user is author of deck
+  // TODO: double check frontend validation (keep DRY)
+  const deck = req.body;
 
-  db.tx(t => {
-    const deck_update = t.none(`
-      UPDATE decks SET title = $[title]
-      WHERE id = $[id]
-      `, req.body); 
-
-    const card_upsert = req.body.cards.map(card => {
-      return t.none(`
-        INSERT INTO cards (id, deck_id, front, back, placement)
-        VALUES ($[id], $[deck_id], $[front], $[back], $[placement])
-        ON CONFLICT (id) DO UPDATE SET
-          front = EXCLUDED.front,
-          back = EXCLUDED.back,
-          placement = EXCLUDED.placement
-      `, card);
-    });
-
-    return t.batch([deck_update, card_upsert])
+  // calculate card placement and deck id's
+  deck.cards.forEach((card, idx) => {
+    card.placement = idx;
+    card.deck_id = deck.id;
   })
-  res.send('worked')
+
+  sql.merge_deck(db, userID, deck)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(error)
+    })
 })
-*/
 
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(request, response) {

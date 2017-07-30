@@ -1,5 +1,5 @@
 function hasBlankCard(card) {
-  return card.front === '' && card.back === ''
+  return card.front === '' && card.back === '' && card.delete === false
 }
 
 export function validateDeck(deck) {
