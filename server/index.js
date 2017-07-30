@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const pgp = require('pg-promise')();
 const bodyParser = require('body-parser');
+const sql = require('./database.js')
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,36 +17,16 @@ app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, '../react/build')));
 
 // Connect to database
-let db = null;
+const db = sql.connect_to_db()
 
-if (process.env.NODE_ENV === 'production') {
-  db = pgp(process.env.DATABASE_URL)
-}
-else {
-  const secret = require('./secret.json');
-  const connection = {
-    host: 'localhost',
-    port: 5432,
-    database: 'testdb',
-    user: 'postgres',
-    password: secret.pgpass
-  }
-  db = pgp(connection)
-}
 
-// Answer API requests.
-// test
-app.get('/api', function (req, res) {
-  res.set('Content-Type', 'application/json');
-  res.send('{"message":"Hello from the custom server!"}');
-});
+/** Routes **/
 
-// deck list
+// user deck list
 app.get('/api/deck-list', function (req, res) {
   const userID = 1;  // TODO: get user ID from cookie or other method for permission
 
-  db.query(`SELECT d.id, d.title, u.name AS author FROM 
-    decks d INNER JOIN users u ON (d.author = u.id) WHERE d.author = $1`, userID)
+  sql.get_user_decks(db, userID)
   .then((data) => {
     res.json(data);
   })
@@ -53,6 +34,8 @@ app.get('/api/deck-list', function (req, res) {
     console.log(error)
   })
 })
+
+/*
 
 // deck data
 app.get('/api/deck/:deckID', function (req, res) {
@@ -99,6 +82,7 @@ app.post('/api/deck/:deckID', function (req, res) {
   })
   res.send('worked')
 })
+*/
 
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(request, response) {

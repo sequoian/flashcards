@@ -7,7 +7,7 @@ class DeckFormContainer extends Component {
     this.state = {
       id: props.id || null,
       title: props.title || '', 
-      cards: props.cards || [{id: Date.now(), front: '', back: ''}]
+      cards: props.cards || [{id: null, front: '', back: ''}]
     }
     this.addCard = this.addCard.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -44,9 +44,9 @@ class DeckFormContainer extends Component {
   addCard() {
     this.setState((prevState) => {
       const newCard = {
-        id: Date.now(),
+        id: null,
         front: '',
-        back: ''
+        back: '',
       }
       return {
         cards: prevState.cards.concat(newCard)

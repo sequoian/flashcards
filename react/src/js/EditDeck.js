@@ -49,6 +49,7 @@ class EditDeck extends Component {
       title: title,
       cards: cards
     }
+    
     fetch(`/api/deck/${this.props.match.params.id}`,
     {
       method: 'POST',
