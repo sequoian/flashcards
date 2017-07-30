@@ -59,6 +59,9 @@ class EditDeck extends Component {
       },
       body: JSON.stringify(deck)
     })
+      .then(data => {
+        console.log(data)
+      })
       .catch(e => {
         console.log(e);
       })

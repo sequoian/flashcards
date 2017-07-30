@@ -2,7 +2,7 @@
   "name": "flashcards",
   "version": "1.0.0",
   "scripts": {
-    "start": "node server"
+    "start": "nodemon server"
   },
   "repository": {
     "type": "git",
@@ -12,5 +12,8 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "pg-promise": "^6.3.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }

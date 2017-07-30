@@ -14,7 +14,9 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // Priority serve any static files.
-app.use(express.static(path.resolve(__dirname, '../react/build')));
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.resolve(__dirname, '../react/build')));
+}
 
 // Connect to database
 const db = sql.connect_to_db()
@@ -27,35 +29,29 @@ app.get('/api/deck-list', function (req, res) {
   const userID = 1;  // TODO: get user ID from cookie or other method for permission
 
   sql.get_user_decks(db, userID)
-  .then((data) => {
-    res.json(data);
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-})
-
-/*
-
-// deck data
-app.get('/api/deck/:deckID', function (req, res) {
-  // TODO: check permission with user ID
-  const deckID = parseInt(req.params.deckID);
-  let result = null;
-  db.one(`SELECT id, title FROM decks WHERE id = $1`, deckID)
-    .then((data) => {
-      result = data;
-      return db.query(`SELECT * FROM cards WHERE deck_id = $1`, deckID)
-    })
-    .then((data) => {
-      result.cards = data;
-      res.json(result);
+    .then((query) => {
+      res.json(query);
     })
     .catch((error) => {
       console.log(error)
     })
 })
 
+// deck data
+app.get('/api/deck/:deckID', function (req, res) {
+  const userID = 1;  // TODO: get user ID from cookie or other method for permission
+  const deckID = parseInt(req.params.deckID);
+
+  sql.get_deck(db, userID, deckID)
+    .then((query) => {
+      res.json(query);
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+})
+
+/*
 app.post('/api/deck/:deckID', function (req, res) {
   const deckID = parseInt(req.params.deckID);
 
@@ -89,6 +85,7 @@ app.get('*', function(request, response) {
   response.sendFile(path.resolve(__dirname, '../react/build', 'index.html'));
 });
 
+// Listen for incoming requests
 app.listen(PORT, function () {
   console.log(`Listening on port ${PORT}`);
 });

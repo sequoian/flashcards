@@ -32,6 +32,26 @@ exports.get_user_decks = function(db, userID) {
 }
 
 /**
+ * Return deck with associated cards
+ * TODO: check if user is the author OR if deck is public
+ */
+exports.get_deck = function(db, userID, deckID) {
+  return db.tx(t => {
+    let result = null;
+    return t.one(`SELECT id, title FROM decks WHERE id = $1`, deckID)
+      .then((deck) => {
+        result = deck;
+        return db.query(`SELECT * FROM cards WHERE deck_id = $1`, deckID)
+      })
+      .then((cards) => {
+        result.cards = cards;
+        console.log(result)
+        return result;
+      });
+  });
+}
+
+/**
  * Merge deck and associated cards
  * Inserts new deck or updates existing deck
  * Inserts, updates, or deletes cards to reflect deck.cards
