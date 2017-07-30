@@ -7,7 +7,8 @@ class DeckFormContainer extends Component {
     this.state = {
       id: props.id || null,
       title: props.title || '', 
-      cards: props.cards || [{id: null, front: '', back: ''}]
+      // TODO: make new cards DRY
+      cards: props.cards || [{id: null, front: '', back: '', delete: false, key: Date.now()}]
     }
     this.addCard = this.addCard.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -47,6 +48,8 @@ class DeckFormContainer extends Component {
         id: null,
         front: '',
         back: '',
+        delete: false,  // allows app to determine if card should be removed
+        key: Date.now()  // used by react for reconciliation
       }
       return {
         cards: prevState.cards.concat(newCard)
@@ -56,11 +59,12 @@ class DeckFormContainer extends Component {
 
   removeCard(id) {
     this.setState((prevState) => {
-      const cards = prevState.cards.filter(card => {
-        if (card.id !== id) {
+      const cards = prevState.cards.map(card => {
+        if (card.id === id) {
+          card.delete = true;
           return card;
         }
-        return null;
+        return card;
       })
       return {
         cards: cards
@@ -69,10 +73,11 @@ class DeckFormContainer extends Component {
   }
   
   render() {
+    console.log(this.state.cards)
     return (
       <DeckForm 
         title={this.state.title}
-        cards={this.state.cards}
+        cards={this.state.cards.filter(card => card.delete ? null : card)}
         addCard={this.addCard}
         onSubmit={this.onSubmit}
         handleTitleChange={this.handleTitleChange}
@@ -96,7 +101,7 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
     />
     {cards.map((card, idx) => (
       <CardInput
-        key={card.id}
+        key={card.key}
         card={card}
         index={idx}
         handleCardChange={handleCardChange}

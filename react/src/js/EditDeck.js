@@ -16,15 +16,6 @@ class EditDeck extends Component {
   }
 
   componentDidMount() {
-    /*
-    const deck = localAPI.getDeck(
-      parseInt(this.props.match.params.id, 10)
-    );
-    this.setState({
-      deck: deck
-    });
-    */
-
     // fetch deck from database
     fetch(`/api/deck/${this.props.match.params.id}`)
       .then(response => {
@@ -34,6 +25,12 @@ class EditDeck extends Component {
         return response.json();
       })
       .then(json => {
+        // set delete status and key for cards
+        json.cards.forEach((card, idx) => {
+          card.delete = false;
+          card.key = idx;
+        })
+        
         this.setState({
           deck: json
         })

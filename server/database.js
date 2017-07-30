@@ -41,11 +41,13 @@ exports.get_deck = function(db, userID, deckID) {
     return t.one(`SELECT id, title FROM decks WHERE id = $1`, deckID)
       .then((deck) => {
         result = deck;
-        return db.query(`SELECT * FROM cards WHERE deck_id = $1`, deckID)
+        return db.query(`
+          SELECT id, front, back FROM cards 
+          WHERE deck_id = $1 ORDER BY placement ASC
+        `, deckID)
       })
       .then((cards) => {
         result.cards = cards;
-        console.log(result)
         return result;
       });
   });
