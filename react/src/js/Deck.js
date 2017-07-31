@@ -7,13 +7,15 @@ class DeckPageContainer extends Component {
     this.state = {
       deck: null,
       activeCardIndex: 0,
-      showingFront: true
+      showingFront: true,
+      defaultFront: true
     };
     this.nextCard = this.nextCard.bind(this);
     this.previousCard = this.previousCard.bind(this);
     this.flipCard = this.flipCard.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.shuffleDeck = this.shuffleDeck.bind(this);
+    this.changeDefaultFace = this.changeDefaultFace.bind(this);
   }
 
   componentDidMount() {
@@ -50,7 +52,7 @@ class DeckPageContainer extends Component {
       }
       return {
         activeCardIndex: newIndex,
-        showingFront: true
+        showingFront: prevState.defaultFront ? true : false
       }
     });
   }
@@ -64,7 +66,7 @@ class DeckPageContainer extends Component {
       }
       return {
         activeCardIndex: newIndex,
-        showingFront: true
+        showingFront: prevState.defaultFront ? true : false
       }
     });
   }
@@ -119,6 +121,16 @@ class DeckPageContainer extends Component {
     })
   }
 
+  changeDefaultFace() {
+    this.setState((prevState) => {
+      const face = !prevState.defaultFront
+      return {
+        defaultFront: face,
+        showingFront: face
+      }
+    })
+  }
+
   render() {
     return (
       <DeckPage
@@ -131,12 +143,15 @@ class DeckPageContainer extends Component {
         previousCard={this.previousCard}
         flipCard={this.flipCard}
         shuffle={this.shuffleDeck}
+        defaultFront={this.state.defaultFront}
+        changeDefaultFace={this.changeDefaultFace}
       />
     )
   }    
 }
 
-const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, flipCard, shuffle}) => {
+const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, 
+  flipCard, shuffle, defaultFront, changeDefaultFace}) => {
   if (deck) {
     if (deck.cards.length > 0) {
       const activeCard = deck.cards[activeCardIndex];
@@ -167,6 +182,8 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, 
           />
           <Options
             shuffle={shuffle}
+            defaultFront={defaultFront}
+            changeDefaultFace={changeDefaultFace}
           />
         </div>
       )
@@ -223,11 +240,27 @@ const Card = ({face}) => (
   </div>
 );
 
-const Options = ({shuffle}) => (
+const Options = ({shuffle, defaultFront, changeDefaultFace}) => (
   <div>
+    <h4>Options</h4>
     <ShuffleDisplay 
       shuffle={shuffle}
     />
+    <DefaultFace
+      defaultFront={defaultFront}
+      changeDefaultFace={changeDefaultFace}
+    />
+  </div>
+)
+
+const DefaultFace = ({defaultFront, changeDefaultFace}) => (
+  <div>
+    <button
+      type="button"
+      onClick={changeDefaultFace}
+    >
+      Default Face: {defaultFront ? 'Front' : 'Back'}
+    </button>
   </div>
 )
 
