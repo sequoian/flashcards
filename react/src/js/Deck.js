@@ -13,6 +13,7 @@ class DeckPageContainer extends Component {
     this.previousCard = this.previousCard.bind(this);
     this.flipCard = this.flipCard.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.shuffleDeck = this.shuffleDeck.bind(this);
   }
 
   componentDidMount() {
@@ -95,6 +96,29 @@ class DeckPageContainer extends Component {
     }
   }
 
+  /**
+   * Shuffle deck using the Fisher-Yates Shuffle
+   */
+  shuffleDeck() {
+    const deck = Object.assign({}, this.state.deck);  // copy deck
+    const cards = deck.cards;
+    let current_idx = cards.length;
+    let tmp, random_idx;
+
+    while(current_idx !== 0) {
+      random_idx = Math.floor(Math.random() * current_idx);
+      current_idx -= 1;
+
+      tmp = cards[current_idx];
+      cards[current_idx] = cards[random_idx];
+      cards[random_idx] = tmp;
+    }
+
+    this.setState({
+      deck: deck
+    })
+  }
+
   render() {
     return (
       <DeckPage
@@ -106,12 +130,13 @@ class DeckPageContainer extends Component {
         nextCard={this.nextCard}
         previousCard={this.previousCard}
         flipCard={this.flipCard}
+        shuffle={this.shuffleDeck}
       />
     )
   }    
 }
 
-const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, flipCard}) => {
+const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, flipCard, shuffle}) => {
   if (deck) {
     if (deck.cards.length > 0) {
       const activeCard = deck.cards[activeCardIndex];
@@ -139,6 +164,9 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, 
             getNext={nextCard}
             getPrevious={previousCard}
             flipCard={flipCard}
+          />
+          <Options
+            shuffle={shuffle}
           />
         </div>
       )
@@ -194,5 +222,67 @@ const Card = ({face}) => (
     {face}
   </div>
 );
+
+const Options = ({shuffle}) => (
+  <div>
+    <ShuffleDisplay 
+      shuffle={shuffle}
+    />
+  </div>
+)
+
+class ShuffleDisplay extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: false
+    }
+    this.shuffle = this.shuffle.bind(this)
+  }
+
+  shuffle() {
+    // shuffle deck
+    this.props.shuffle();
+    
+    // activate shuffle message and clear timer if exists
+    this.setState((prevState) => {
+      return {
+        active: true,
+        timer: null
+      }
+    })
+
+    // set timer to deactivate shuffle message
+    const timer = setTimeout(() => {
+      this.setState({
+        active: false,
+        timer: null
+      })
+    }, 1000);
+
+    // keep track of timer
+    this.setState({
+      timer: timer
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <button 
+          type="button" 
+          onClick={this.shuffle}
+        >
+          Shuffle Deck
+        </button>
+        <span
+          className={this.state.active ? 'shuffled-show' : 'shuffled-hide'}
+        >
+          Shuffled
+        </span>
+      </div>
+    ) 
+  }
+}
 
 export default DeckPageContainer;

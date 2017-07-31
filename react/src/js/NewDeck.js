@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import DeckForm from './DeckForm';
-import localAPI from './Model';
 import {Link, withRouter} from 'react-router-dom';
 import {validateDeck} from './Validation'
 

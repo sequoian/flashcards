@@ -93,8 +93,6 @@ class DeckFormContainer extends Component {
     this.setState({
       cards: cards
     });
-
-    //console.log(`idx: ${idx}, new: ${new_idx}`)
   }
   
   render() {

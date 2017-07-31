@@ -26,3 +26,14 @@ form {
   display: block;
   margin: 5px 0;
 }
+
+/* Message for shuffling deck */
+.shuffled-hide {
+  opacity: 0;
+  transition: opacity 1s linear;
+  cursor: default;
+}
+
+.shuffled-show {
+  cursor: default;
+}
