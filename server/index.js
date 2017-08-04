@@ -2,7 +2,9 @@ const express = require('express');
 const path = require('path');
 const pgp = require('pg-promise')();
 const bodyParser = require('body-parser');
-const sql = require('./database.js')
+const sql = require('./database.js');
+const passport = require('passport');
+const passportStrategies = require('./local-login.js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,6 +14,11 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
+
+// user auth initialization
+app.use(passport.initialize());
+const localLoginStrategy = passportStrategies.LoginStrategy;
+passport.use('local', localLoginStrategy);
 
 // Priority serve any static files.
 if (process.env.NODE_ENV === 'production') {
@@ -88,6 +95,26 @@ app.delete('/api/deck/:deckID', function (req, res) {
     .catch(error => {
       console.log(error);
     })
+})
+
+// Login
+app.post('/auth/login', (req, res, next) => {
+  req.hack = {db: db}  // TODO: find a better way to pass db to login strategy
+  return passport.authenticate('local', (err, token, userData) => {
+    if (err) {
+      return res.status(400).json({
+        success: false,
+        message: 'Could not process the form',
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: 'You have successfully logged in',
+      token,
+      user: userData
+    })
+  })(req, res, next)
 })
 
 // All remaining requests return the React app, so it can handle routing.

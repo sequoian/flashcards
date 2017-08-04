@@ -13,6 +13,31 @@ class App extends Component {
     if (localAPI.getAll().length < 1) {
       hydrateLocalStorage();
     }
+
+    fetch('/auth/login',
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: 'placeholderemail',
+        password: 'placeholderpassword'
+      })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(json => {
+        console.log(json);
+      })
+      .catch(e => {
+        console.log(e);
+      })
   }
   
   render() {

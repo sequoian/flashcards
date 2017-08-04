@@ -125,3 +125,9 @@ exports.merge_deck = function(db, userID, deck) {
       })
   })
 }
+
+exports.get_user_by_email = function(db, email) {
+  return db.one(`
+    SELECT id, name, password FROM users WHERE email = $1
+    `, email)
+}

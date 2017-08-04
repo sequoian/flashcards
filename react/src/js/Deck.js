@@ -285,6 +285,7 @@ class ShuffleDisplay extends Component {
       }
     })
 
+    // TODO: guarantee timer is cleared BEFORE new timer is set
     // set timer to deactivate shuffle message
     const timer = setTimeout(() => {
       this.setState({
