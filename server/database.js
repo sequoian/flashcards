@@ -126,8 +126,20 @@ exports.merge_deck = function(db, userID, deck) {
   })
 }
 
+exports.user_exists = function(db, id) {
+  return db.one(`
+    SELECT 1 FROM users WHERE id = $1
+  `, id)
+}
+
+exports.get_user = function(db, id) {
+  return db.one(`
+    SELECT name FROM users WHERE id = $1
+  `, id)
+}
+
 exports.get_user_by_email = function(db, email) {
   return db.one(`
     SELECT id, name, password FROM users WHERE email = $1
-    `, email)
+  `, email)
 }

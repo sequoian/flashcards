@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const sql = require('./database.js');
 const passport = require('passport');
 const passportStrategies = require('./local-login.js');
-
+const authenticateUser = require('./auth-check')
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -27,9 +27,26 @@ if (process.env.NODE_ENV === 'production') {
 
 // Connect to database
 const db = sql.connect_to_db()
+// Make database available to middleware
+app.set('db', db);
 
 
 /** Routes **/
+
+// user name
+app.get('/api/user', [authenticateUser, function (req, res) {
+  const userID = req.decoded_token.sub;
+  sql.get_user(db, userID)
+    .then(user => {
+      return res.json({
+        success: true,
+        user: user.name
+      })
+    })
+    .catch(e => {
+      return res.status(401).end();
+    })
+}])
 
 // user deck list
 app.get('/api/deck-list', function (req, res) {
@@ -99,7 +116,6 @@ app.delete('/api/deck/:deckID', function (req, res) {
 
 // Login
 app.post('/auth/login', (req, res, next) => {
-  req.hack = {db: db}  // TODO: find a better way to pass db to login strategy
   return passport.authenticate('local', (err, token, userData) => {
     if (err) {
       return res.status(400).json({

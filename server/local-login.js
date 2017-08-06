@@ -14,11 +14,9 @@ exports.LoginStrategy = new PassportLocalStrategy({
       email: email.trim(),
       password: password.trim()
     };
-  
-    //console.log(req.hack.db)
 
     // find user by email address
-    sql.get_user_by_email(req.hack.db, userData.email)
+    sql.get_user_by_email(req.app.get('db'), userData.email)
       .then(user => {
         // check if passwords match
         // TODO: using hashing
