@@ -106,7 +106,6 @@ app.post('/api/deck', [authenticateUser, function (req, res) {
 
   sql.merge_deck(db, userID, deck)
     .then((data) => {
-      console.log(data)
       res.json({deck_id: data});
     })
     .catch(error => {

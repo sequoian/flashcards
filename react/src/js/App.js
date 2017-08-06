@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../css/App.css';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, withRouter} from 'react-router-dom';
 import DeckListContainer from './List';
 import DeckPageContainer from './Deck';
 import NewDeck from './NewDeck';
@@ -86,6 +86,7 @@ class App extends Component {
     this.setState({
       user: null
     })
+    this.props.history.replace('/');
   }
   
   render() {
@@ -106,4 +107,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
