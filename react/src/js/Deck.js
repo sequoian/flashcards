@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import Auth from './Auth'
 
 class DeckPageContainer extends Component {
   constructor(props) {
@@ -20,7 +21,12 @@ class DeckPageContainer extends Component {
 
   componentDidMount() {
     // fetch deck from database
-    fetch(`/api/deck/${this.props.match.params.id}`)
+    fetch(`/api/deck/${this.props.match.params.id}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `bearer ${Auth.getToken()}`
+      }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error(`status ${response.status}`);

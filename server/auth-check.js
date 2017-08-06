@@ -13,6 +13,7 @@ module.exports = (req, res, next) => {
   jwt.verify(token, secret.jwt, (err, decoded) => {
     // check if verification failed
     if (err) {
+      console.log('error')
       return res.status(401).end();
     }
 
@@ -21,7 +22,7 @@ module.exports = (req, res, next) => {
     const db = req.app.get('db')
     sql.user_exists(db, userID)
       .then(success => {
-        req.decoded_token = decoded
+        req.decoded_token = decoded;
         return next();
       })
       .catch(failure => {

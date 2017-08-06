@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DeckForm from './DeckForm';
 import {Link, withRouter} from 'react-router-dom';
 import {validateDeck} from './Validation'
+import Auth from './Auth'
 
 class NewDeck extends Component {
   constructor(props) {
@@ -34,7 +35,8 @@ class NewDeck extends Component {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${Auth.getToken()}`
       },
       body: JSON.stringify(deck)
     })

@@ -49,9 +49,8 @@ app.get('/api/user', [authenticateUser, function (req, res) {
 }])
 
 // user deck list
-app.get('/api/deck-list', function (req, res) {
-  const userID = 1;  // TODO: get user ID from cookie or other method for permission
-
+app.get('/api/deck-list', [authenticateUser, function (req, res) {
+  const userID = req.decoded_token.sub;
   sql.get_user_decks(db, userID)
     .then((query) => {
       res.json(query);
@@ -59,11 +58,13 @@ app.get('/api/deck-list', function (req, res) {
     .catch((error) => {
       console.log(error)
     })
-})
+}])
 
 // deck data
-app.get('/api/deck/:deckID', function (req, res) {
-  const userID = 1;  // TODO: get user ID from cookie or other method for permission
+app.route('/api/deck/:deckID')
+.all(authenticateUser)
+.get(function (req, res) {
+  const userID = req.decoded_token.sub;
   const deckID = parseInt(req.params.deckID);
 
   sql.get_deck(db, userID, deckID)
@@ -74,10 +75,23 @@ app.get('/api/deck/:deckID', function (req, res) {
       console.log(error)
     })
 })
+.delete(function (req, res) {
+  const userID = req.decoded_token.sub;
+  const deckID = parseInt(req.params.deckID);
+  // TODO: check that user is author of deck
+
+  sql.delete_deck(db, deckID)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log(error);
+    })
+})
 
 // add or edit deck
-app.post('/api/deck', function (req, res) {
-  const userID = 1;  // TODO: get user ID from cookie or other method for permission
+app.post('/api/deck', [authenticateUser, function (req, res) {
+  const userID = req.decoded_token.sub;
 
   // Validation
   // TODO: validate that user is author of deck
@@ -98,21 +112,7 @@ app.post('/api/deck', function (req, res) {
     .catch(error => {
       console.log(error)
     })
-})
-
-app.delete('/api/deck/:deckID', function (req, res) {
-  const userID = 1;  // TODO: get user ID from cookie or other method for permission
-  const deckID = parseInt(req.params.deckID);
-  // TODO: check that user is author of deck
-
-  sql.delete_deck(db, deckID)
-    .then(() => {
-      res.sendStatus(200);
-    })
-    .catch(error => {
-      console.log(error);
-    })
-})
+}])
 
 // Login
 app.post('/auth/login', (req, res, next) => {

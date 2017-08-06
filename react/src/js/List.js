@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-//import localAPI from './Model'
 import {Link} from 'react-router-dom';
+import Auth from './Auth'
 
 class DeckListContainer extends Component {
   constructor(props) {
@@ -11,15 +11,13 @@ class DeckListContainer extends Component {
   }
 
   componentDidMount() {
-    /*
-    const decks = localAPI.getList();
-    this.setState({
-      decks: decks
-    });
-    */
-
     // fetch list from database
-    fetch('/api/deck-list')
+    fetch('/api/deck-list', {
+      method: 'GET',
+      headers: {
+        'Authorization': `bearer ${Auth.getToken()}`
+      }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error(`status ${response.status}`);

@@ -29,6 +29,7 @@ class App extends Component {
       })
     }
     else {
+      // Log In Test
       fetch('/auth/login',
       {
         method: 'POST',
