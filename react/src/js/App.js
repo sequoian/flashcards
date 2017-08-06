@@ -9,9 +9,24 @@ import Auth from './Auth';
 import Header from './Header'
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      user: null
+    }
+    this.logOut = this.logOut.bind(this);
+  }
+
   componentDidMount() {
     if (Auth.isUserAuthenticated()) {
-      console.log('Authenticated')
+      this.getUser()
+      .then(user => {
+        if (user) {
+          this.setState({
+            user: user
+          })
+        }
+      })
     }
     else {
       fetch('/auth/login',
@@ -34,19 +49,51 @@ class App extends Component {
         })
         .then(json => {
           Auth.authenticateUser(json.token)
-          console.log('Not authenticated. Token set.')
+          this.setState({
+            user: json.user.name
+          })
         })
         .catch(e => {
           console.log(e);
         })
       }
-    
+  }
+
+  getUser() {
+    return fetch('/api/user', {
+      method: 'GET',
+      headers: {
+        'Authorization': `bearer ${Auth.getToken()}`
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(json => {
+        return json.user
+      })
+      .catch(e => {
+        return null
+      })
+  }
+
+  logOut() {
+    Auth.deauthenticatedUser();
+    this.setState({
+      user: null
+    })
   }
   
   render() {
     return (
       <div className='app'>
-        <Header />
+        <Header 
+          user={this.state.user}
+          logout={this.logOut}
+        />
         <Switch>
           <Route exact path='/' component={DeckListContainer} />
           <Route path='/cards/:id' component={DeckPageContainer} />
