@@ -5,12 +5,12 @@
 
 CREATE TABLE users (
   id                SERIAL PRIMARY KEY,
-  name              text NOT NULL,
-  email             text NOT NULL,
+  name              text NOT NULL UNIQUE,
+  email             text NOT NULL UNIQUE,
   password          text NOT NULL,
   is_authenticated  boolean NOT NULL DEFAULT 'false',
   date_joined       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  is_staff          boolean NOT NULL,
+  is_staff          boolean NOT NULL DEFAULT 'false',
   is_banned         boolean NOT NULL DEFAULT 'false'
 );
 

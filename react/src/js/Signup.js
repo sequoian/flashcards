@@ -27,7 +27,41 @@ class SignupContainer extends Component {
   submit() {
     const {name, email, password} = this.state
     const errors = Validation.validateSignup(name, email, password)
-    this.setState({errors: errors})
+
+    if (errors.length > 0) {
+      this.setState({errors: errors})
+      return false
+    }
+    
+    fetch('/auth/signup',
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`)
+        }
+        return response.json()
+      })
+      .then(json => {
+        console.log('signed up!: ' + json)
+        //Auth.authenticateUser(json.token)
+        //this.props.history.replace('/')
+      })
+      .catch(error => {
+        console.log(error)
+        errors.push(['Something went wrong'])
+        this.setState({errors: errors})
+      })
   }
 
   render() {

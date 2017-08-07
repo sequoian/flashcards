@@ -4,7 +4,7 @@ const pgp = require('pg-promise')();
 const bodyParser = require('body-parser');
 const sql = require('./database.js');
 const passport = require('passport');
-const passportStrategies = require('./local-login.js');
+const passportStrategies = require('./passport-strats');
 const authenticateUser = require('./auth-check')
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,7 +18,9 @@ app.use(bodyParser.json());
 // user auth initialization
 app.use(passport.initialize());
 const localLoginStrategy = passportStrategies.LoginStrategy;
-passport.use('local', localLoginStrategy);
+passport.use('local-login', localLoginStrategy);
+const localSignupStrategy = passportStrategies.SignupStrategy;
+passport.use('local-signup', localSignupStrategy);
 
 // Priority serve any static files.
 if (process.env.NODE_ENV === 'production') {
@@ -113,11 +115,30 @@ app.post('/api/deck', [authenticateUser, function (req, res) {
     })
 }])
 
+// Signup
+app.post('/auth/signup', (req, res, next) => {
+  return passport.authenticate('local-signup', (err, id) => {
+    if (err) {
+      console.log(err)
+      return res.status(400).json({
+        success: false,
+        message: err.message
+      })
+    }
+
+    return res.json({
+      success: true,
+      message: 'You have successfully signed up',
+      id: id
+    })
+  })(req, res, next)
+})
+
 // Login
 app.post('/auth/login', (req, res, next) => {
   // TODO: Validate form inputs
 
-  return passport.authenticate('local', (err, token, userData) => {
+  return passport.authenticate('local-login', (err, token, userData) => {
     if (err) {
       console.log(err)
       return res.status(400).json({
