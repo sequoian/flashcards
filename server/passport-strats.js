@@ -56,15 +56,11 @@ exports.SignupStrategy = new PassportLocalStrategy({
   const name = req.body.name.trim()
   const db = req.app.get('db')
 
-  console.log('in it')
   sql.add_user(db, name, email, password)
   .then(id => {
-    console.log(id)
     return done(null, id)
   })
   .catch(e => {
-    console.log(e)
-    const error = new Error('Failed to add user')
-    return done(error);
+    return done(e);
   })
 })

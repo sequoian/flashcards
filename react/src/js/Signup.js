@@ -47,18 +47,24 @@ class SignupContainer extends Component {
         })
       })
       .then(response => {
-        if (!response.ok) {
+        if (!response.ok && response.status !== 400) {
+          console.log(response.status)
           throw new Error(`status ${response.status}`)
         }
         return response.json()
       })
       .then(json => {
-        console.log('signed up!: ' + json)
+        if (json.success) {
+          console.log(json.message)
+        }
+        else {
+          errors.push([json.message])
+          this.setState({errors: errors})
+        }
         //Auth.authenticateUser(json.token)
         //this.props.history.replace('/')
       })
       .catch(error => {
-        console.log(error)
         errors.push(['Something went wrong'])
         this.setState({errors: errors})
       })

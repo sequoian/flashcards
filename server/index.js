@@ -119,10 +119,16 @@ app.post('/api/deck', [authenticateUser, function (req, res) {
 app.post('/auth/signup', (req, res, next) => {
   return passport.authenticate('local-signup', (err, id) => {
     if (err) {
-      console.log(err)
+      let message
+      if (err.code === '23505') {
+        message = 'That username or email already exists'
+      }
+      else {
+        message = 'Failed to add user'
+      }
       return res.status(400).json({
         success: false,
-        message: err.message
+        message: message
       })
     }
 
