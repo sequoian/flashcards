@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DeckForm from './DeckForm';
 import {Link, withRouter} from 'react-router-dom';
-import {validateDeck} from './Validation'
+import Validation from './Validation'
 import Auth from './Auth'
 
 class NewDeck extends Component {
@@ -21,7 +21,7 @@ class NewDeck extends Component {
     }
 
     // validate
-    const errors = validateDeck(deck)
+    const errors = Validation.validateDeck(deck)
 
     if (errors.length > 0) {
       this.setState({

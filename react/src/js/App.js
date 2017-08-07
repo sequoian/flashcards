@@ -29,36 +29,6 @@ class App extends Component {
         }
       })
     }
-    else {
-      // Log In Test
-      fetch('/auth/login',
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: 'placeholderemail',
-          password: 'placeholderpassword'
-        })
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`status ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(json => {
-          Auth.authenticateUser(json.token)
-          this.setState({
-            user: json.user.name
-          })
-        })
-        .catch(e => {
-          console.log(e);
-        })
-      }
   }
 
   getUser() {

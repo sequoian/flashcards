@@ -13,7 +13,6 @@ module.exports = (req, res, next) => {
   jwt.verify(token, secret.jwt, (err, decoded) => {
     // check if verification failed
     if (err) {
-      console.log('error')
       return res.status(401).end();
     }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import ValidationErrors from './ValidationErrors'
 
 class DeckFormContainer extends Component {
   constructor(props) {
@@ -146,17 +147,6 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
     </button>
     <Link to={cancelPath}>Cancel</Link>
   </form>
-)
-
-const ValidationErrors = ({validation}) => (
-  <div className='errors'>
-    <div>Errors</div>
-    <ul>
-      {validation.map((msg, idx) => (
-        <li key={idx}>{msg}</li>
-      ))}
-    </ul>
-  </div>
 )
 
 const CardInput = ({card, index, handleCardChange, removeCard, moveCard}) => (

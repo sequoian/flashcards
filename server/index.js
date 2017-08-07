@@ -115,11 +115,14 @@ app.post('/api/deck', [authenticateUser, function (req, res) {
 
 // Login
 app.post('/auth/login', (req, res, next) => {
+  // TODO: Validate form inputs
+
   return passport.authenticate('local', (err, token, userData) => {
     if (err) {
+      console.log(err)
       return res.status(400).json({
         success: false,
-        message: 'Could not process the form',
+        message: err.message,
       });
     }
 
