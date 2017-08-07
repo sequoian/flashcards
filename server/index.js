@@ -117,6 +117,9 @@ app.post('/api/deck', [authenticateUser, function (req, res) {
 
 // Signup
 app.post('/auth/signup', (req, res, next) => {
+  // TODO: validate form inputs
+
+  // TODO: id not used?
   return passport.authenticate('local-signup', (err, id) => {
     if (err) {
       let message
@@ -132,11 +135,22 @@ app.post('/auth/signup', (req, res, next) => {
       })
     }
 
-    return res.json({
-      success: true,
-      message: 'You have successfully signed up',
-      id: id
-    })
+    // TODO: can i just redirect to login auth instead?
+    return passport.authenticate('local-login', (err, token, userData) => {
+      if (err) {
+        console.log(err)
+        return res.status(400).json({
+          success: false,
+          message: err.message,
+        });
+      }
+
+      return res.json({
+        success: true,
+        message: 'You have successfully signed up and logged in',
+        token: token
+      })
+    })(req, res, next)
   })(req, res, next)
 })
 

@@ -55,14 +55,13 @@ class SignupContainer extends Component {
       })
       .then(json => {
         if (json.success) {
-          console.log(json.message)
+          Auth.authenticateUser(json.token)
+          this.props.history.replace('/')
         }
         else {
           errors.push([json.message])
           this.setState({errors: errors})
         }
-        //Auth.authenticateUser(json.token)
-        //this.props.history.replace('/')
       })
       .catch(error => {
         errors.push(['Something went wrong'])
