@@ -27,11 +27,29 @@ class Validation {
     if (password === '') {
       errors.push('Please enter a password')
     }
+
+    return errors;
+  }
+
+  static validateSignup(name, email, password) {
+    const errors = []
+
+    if (name === '') {
+      errors.push('Please enter a user name')
+    }
+
+    if (email === '') {
+      errors.push('Please enter an email')
+    }
+
+    if (password === '') {
+      errors.push('Please enter a password')
+    }
     if (password.length < 6) {
       errors.push('Password must be at least 6 characters long')
     }
 
-    return errors;
+    return errors;   
   }
 }
 

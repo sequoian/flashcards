@@ -8,6 +8,7 @@ class SignupContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      name: '',
       email: '',
       password: '',
       errors: []
@@ -24,13 +25,16 @@ class SignupContainer extends Component {
   }
 
   submit() {
-    console.log('submitted')
+    const {name, email, password} = this.state
+    const errors = Validation.validateSignup(name, email, password)
+    this.setState({errors: errors})
   }
 
   render() {
-    const {email, password, errors} = this.state
+    const {name, email, password, errors} = this.state
     return (
       <Signup
+        name={name}
         email={email}
         password={password}
         handleChange={this.handleChange}
@@ -41,11 +45,21 @@ class SignupContainer extends Component {
   }
 }
 
-const Signup = ({email, password, handleChange, handleSubmit, errors}) => (
+const Signup = ({name, email, password, handleChange, handleSubmit, errors}) => (
   <div>
     <h2>Sign Up</h2>
     <form>
       {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
+      <label htmlFor="name">
+        User Name
+      </label>
+      <input 
+        type="text" 
+        name="name" 
+        id="name" 
+        value={name}
+        onChange={handleChange} 
+      />
       <label htmlFor="email">
         Email
       </label>
