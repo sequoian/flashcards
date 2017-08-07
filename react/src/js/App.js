@@ -8,6 +8,7 @@ import EditDeck from './EditDeck';
 import Auth from './Auth';
 import Header from './Header'
 import Login from './Login'
+import Signup from './Signup'
 
 class App extends Component {
   constructor(props) {
@@ -73,6 +74,7 @@ class App extends Component {
           <Route path='/new' component={NewDeck} />
           <Route path='/edit/:id' component={EditDeck} />
           <Route path='/login' component={Login} />
+          <Route path='/signup' component={Signup} />
         </Switch>
       </div>
     )  

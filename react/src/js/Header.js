@@ -20,7 +20,7 @@ const UserDisplay = ({user, logout}) => (
 )
 
 const GuestDisplay = () => (
-  <span>Please sign up or <Link to="/login">log in</Link></span>
+  <span>Please <Link to="/signup">sign up</Link> or <Link to="/login">log in</Link></span>
 )
 
 export default Header;
