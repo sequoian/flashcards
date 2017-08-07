@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 const Header = ({user, logout}) => (
   <div className="header">
@@ -19,7 +20,7 @@ const UserDisplay = ({user, logout}) => (
 )
 
 const GuestDisplay = () => (
-  <span>Please log in</span>
+  <span>Please sign up or <Link to="/login">log in</Link></span>
 )
 
 export default Header;
