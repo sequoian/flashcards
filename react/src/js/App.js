@@ -7,6 +7,7 @@ import NewDeck from './NewDeck';
 import EditDeck from './EditDeck';
 import Auth from './Auth';
 import Header from './Header'
+import Login from './Login'
 
 class App extends Component {
   constructor(props) {
@@ -101,6 +102,7 @@ class App extends Component {
           <Route path='/cards/:id' component={DeckPageContainer} />
           <Route path='/new' component={NewDeck} />
           <Route path='/edit/:id' component={EditDeck} />
+          <Route path='/login' component={Login} />
         </Switch>
       </div>
     )  
