@@ -1,6 +1,41 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-const Login = ({email, password, handleChange}) => (
+class LoginContainer extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      email: '',
+      password: ''
+    }
+    this.handleChange = this.handleChange.bind(this)
+    this.login = this.login.bind(this)
+  }
+
+  handleChange(event) {
+    const {name, value} = event.target
+    this.setState({
+      [name]: value
+    })
+  }
+
+  login() {
+    console.log('submitted')
+  }
+
+  render() {
+    const {email, password} = this.state
+    return (
+      <Login
+        email={email}
+        password={password}
+        handleChange={this.handleChange}
+        handleSubmit={this.login}
+      />
+    )
+  }
+}
+
+const Login = ({email, password, handleChange, handleSubmit}) => (
   <form>
     <label htmlFor="email">
       Email
@@ -22,10 +57,13 @@ const Login = ({email, password, handleChange}) => (
       value={password}
       onChange={handleChange} 
     />
-    <button type="button">
+    <button
+      type="button"
+      onClick={handleSubmit}
+    >
       Log in
     </button>
   </form>
 )
 
-export default Login
+export default LoginContainer
