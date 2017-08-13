@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {withRouter} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import ValidationErrors from './ValidationErrors'
 import Auth from './Auth'
 import Validation from './Validation'
@@ -11,6 +11,7 @@ class SignupContainer extends Component {
       name: '',
       email: '',
       password: '',
+      confirm: '',
       errors: []
     }
     this.handleChange = this.handleChange.bind(this)
@@ -25,8 +26,8 @@ class SignupContainer extends Component {
   }
 
   submit() {
-    const {name, email, password} = this.state
-    const errors = Validation.validateSignup(name, email, password)
+    const {name, email, password, confirm} = this.state
+    const errors = Validation.validateSignup(name, email, password, confirm)
 
     if (errors.length > 0) {
       this.setState({errors: errors})
@@ -70,12 +71,13 @@ class SignupContainer extends Component {
   }
 
   render() {
-    const {name, email, password, errors} = this.state
+    const {name, email, password, confirm, errors} = this.state
     return (
       <Signup
         name={name}
         email={email}
         password={password}
+        confirm={confirm}
         handleChange={this.handleChange}
         handleSubmit={this.submit}
         errors={errors}
@@ -84,8 +86,9 @@ class SignupContainer extends Component {
   }
 }
 
-const Signup = ({name, email, password, handleChange, handleSubmit, errors}) => (
+const Signup = ({name, email, password, confirm, handleChange, handleSubmit, errors}) => (
   <div>
+    <Link to={`/`}>Back</Link>
     <h2>Sign Up</h2>
     <form>
       {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
@@ -117,6 +120,16 @@ const Signup = ({name, email, password, handleChange, handleSubmit, errors}) => 
         name="password" 
         id="password" 
         value={password}
+        onChange={handleChange} 
+      />
+      <label htmlFor="confirm">
+        Confirm Password
+      </label>
+      <input 
+        type="password" 
+        name="confirm" 
+        id="confirm" 
+        value={confirm}
         onChange={handleChange} 
       />
       <button

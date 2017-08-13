@@ -31,7 +31,7 @@ class Validation {
     return errors;
   }
 
-  static validateSignup(name, email, password) {
+  static validateSignup(name, email, password, confirm) {
     const errors = []
 
     if (name === '') {
@@ -47,6 +47,10 @@ class Validation {
     }
     if (password.length < 6) {
       errors.push('Password must be at least 6 characters long')
+    }
+
+    if (confirm !== password) {
+      errors.push('Confirmed password does not match password')
     }
 
     return errors;   

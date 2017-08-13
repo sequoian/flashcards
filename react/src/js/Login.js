@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {withRouter} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import ValidationErrors from './ValidationErrors'
 import Auth from './Auth'
 import Validation from './Validation'
@@ -76,35 +76,38 @@ class LoginContainer extends Component {
 }
 
 const Login = ({email, password, handleChange, handleSubmit, errors}) => (
-  <form>
-    {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
-    <label htmlFor="email">
-      Email
-    </label>
-    <input 
-      type="text" 
-      name="email" 
-      id="email" 
-      value={email}
-      onChange={handleChange} 
-    />
-    <label htmlFor="password">
-      Password
-    </label>
-    <input 
-      type="password" 
-      name="password" 
-      id="password" 
-      value={password}
-      onChange={handleChange} 
-    />
-    <button
-      type="button"
-      onClick={handleSubmit}
-    >
-      Log in
-    </button>
-  </form>
+  <div>
+    <Link to={`/`}>Back</Link>
+    <form>
+      {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
+      <label htmlFor="email">
+        Email
+      </label>
+      <input 
+        type="text" 
+        name="email" 
+        id="email" 
+        value={email}
+        onChange={handleChange} 
+      />
+      <label htmlFor="password">
+        Password
+      </label>
+      <input 
+        type="password" 
+        name="password" 
+        id="password" 
+        value={password}
+        onChange={handleChange} 
+      />
+      <button
+        type="button"
+        onClick={handleSubmit}
+      >
+        Log in
+      </button>
+    </form>
+  </div>
 )
 
 export default withRouter(LoginContainer)
