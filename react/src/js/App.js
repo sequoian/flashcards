@@ -9,6 +9,7 @@ import Auth from './Auth';
 import Header from './Header'
 import Login from './Login'
 import Signup from './Signup'
+import UserProfile from './UserProfile'
 
 class App extends Component {
   constructor(props) {
@@ -75,6 +76,7 @@ class App extends Component {
           <Route path='/edit/:id' component={EditDeck} />
           <Route path='/login' component={Login} />
           <Route path='/signup' component={Signup} />
+          <Route path='/user/:id' component={UserProfile} />
         </Switch>
       </div>
     )  

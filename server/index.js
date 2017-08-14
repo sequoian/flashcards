@@ -42,11 +42,27 @@ app.get('/api/user', [authenticateUser, function (req, res) {
     .then(user => {
       return res.json({
         success: true,
-        user: user.name
+        user: {
+          name: user.name,
+          id: user.id,
+          email: user.email
+        }
       })
     })
     .catch(e => {
       return res.status(401).end();
+    })
+}])
+
+app.post('/api/change-password', [authenticateUser, function (req, res) {
+  const userID = req.decoded_token.sub;
+  const newPass = req.body.password
+  sql.change_password(db, newPass, userID)
+    .then(() => {
+      res.sendStatus(200)
+    })
+    .catch(e => {
+      console.log(e)
     })
 }])
 
