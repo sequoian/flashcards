@@ -9,7 +9,7 @@ const Header = ({user, logout}) => (
 
 const UserDisplay = ({user, logout}) => (
   <div>
-    <span><Link to={`/user/${user.id}`}>{user.name}</Link> is logged in</span>
+    <span><Link to={`/profile`}>{user.name}</Link> is logged in</span>
     <button
       type="button"
       onClick={logout}

@@ -90,7 +90,7 @@ const Signup = ({name, email, password, confirm, handleChange, handleSubmit, err
   <div>
     <Link to={`/`}>Back</Link>
     <h2>Sign Up</h2>
-    <form>
+    <form className="user-form">
       {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
       <label htmlFor="name">
         User Name

@@ -76,7 +76,7 @@ class App extends Component {
           <Route path='/edit/:id' component={EditDeck} />
           <Route path='/login' component={Login} />
           <Route path='/signup' component={Signup} />
-          <Route path='/user/:id' component={UserProfile} />
+          <Route path='/profile' component={UserProfile} />
         </Switch>
       </div>
     )  

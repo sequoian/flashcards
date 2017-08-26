@@ -27,6 +27,22 @@ form {
   margin: 5px 0;
 }
 
+
+/* User Form */
+.user-form label {
+  display: block;
+}
+
+.user-form input {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.user-form button {
+  display: block;
+  margin: 10px 0;
+}
+
 /* Message for shuffling deck */
 .shuffled-hide {
   opacity: 0;

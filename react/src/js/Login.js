@@ -78,7 +78,8 @@ class LoginContainer extends Component {
 const Login = ({email, password, handleChange, handleSubmit, errors}) => (
   <div>
     <Link to={`/`}>Back</Link>
-    <form>
+    <h2>Log In</h2>
+    <form className="user-form">
       {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
       <label htmlFor="email">
         Email
