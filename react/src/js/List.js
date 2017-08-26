@@ -35,17 +35,27 @@ class DeckListContainer extends Component {
   }
 
   render() {
-    return (
-      <DeckList
-        decks={this.state.decks}
-      />
-    );
+    if (this.state.decks.length > 0) {
+      return (
+        <DeckList
+          decks={this.state.decks}
+        />
+      );
+    }
+    else {
+      return (
+        <p>
+          You do not have any flashcard decks.  
+          You can create some <Link to="/new">here</Link>.
+        </p>
+      )
+    }
+    
   }
 }
 
 const DeckList = ({decks}) => (
   <div>
-    <h2>Flashcards</h2>
     <Link to={'/new'}>Create New Deck</Link>
     <h3>My Decks</h3>
     <ul className="deck-list">
