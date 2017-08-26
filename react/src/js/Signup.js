@@ -16,6 +16,15 @@ class SignupContainer extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.submit = this.submit.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown)
   }
 
   handleChange(event) {
@@ -68,6 +77,16 @@ class SignupContainer extends Component {
         errors.push(['Something went wrong'])
         this.setState({errors: errors})
       })
+  }
+
+  handleKeyDown(event) {
+    switch (event.key) {
+      case 'Enter':
+        this.submit();
+        break;
+      default:
+        break;
+    }
   }
 
   render() {

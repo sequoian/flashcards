@@ -140,8 +140,6 @@ class DeckPageContainer extends Component {
   render() {
     return (
       <DeckPage
-        onKeyPress={() => console.log('keydown')}
-        onClick={() => console.log('clicked')}
         deck={this.state.deck}
         activeCardIndex={this.state.activeCardIndex}
         showingFront={this.state.showingFront}

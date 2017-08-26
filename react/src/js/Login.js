@@ -14,6 +14,15 @@ class LoginContainer extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.login = this.login.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown)
   }
 
   handleChange(event) {
@@ -59,6 +68,16 @@ class LoginContainer extends Component {
         errors.push(['Incorrect email or password'])
         this.setState({errors: errors})
       })
+  }
+
+  handleKeyDown(event) {
+    switch (event.key) {
+      case 'Enter':
+        this.login();
+        break;
+      default:
+        break;
+    }
   }
 
   render() {
