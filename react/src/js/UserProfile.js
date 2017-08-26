@@ -49,7 +49,7 @@ class UserProfileContainer extends Component {
 }
 
 const UserProfile = ({name, email}) => (
-  <div>
+  <div className="user-form">
     <Link to={'/'}>Back</Link>
     <div>User: {name}</div>
     <div>Email: {email}</div>

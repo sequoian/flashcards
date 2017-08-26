@@ -70,7 +70,7 @@ const ChangePassword = ({password, confirm, errors, handleChange, handleSubmit})
   <form>
     <div>Change password</div>
     {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
-    <label htmlFor="password"></label>
+    <label htmlFor="password">Password</label>
     <input 
       type="password"
       name="password"
@@ -78,7 +78,7 @@ const ChangePassword = ({password, confirm, errors, handleChange, handleSubmit})
       value={password}
       onChange={handleChange}
     />
-    <label htmlFor="confirm"></label>
+    <label htmlFor="confirm">Confirm Password</label>
     <input
       type="password"
       name="confirm"
