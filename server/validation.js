@@ -59,13 +59,23 @@ class Validation {
     }
 
     // validate email
+
+    // function uses regular expressions to make sure email is valid
+    // taken from stack overflow
+    const emailIsValid = function(email) {
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return re.test(email)
+    }
+
     if (typeof(email) !== 'string') {
       errors.email = 'Email must be a string'
     }
     else if (!email || email.trim() === '') {
       errors.email = 'Please enter an email'
     }
-    // TODO: require a valid email
+    else if (!emailIsValid(email)) {
+      errors.email = 'Please enter a valid email address'
+    }
 
     // validate password
     if (typeof(password) !== 'string') {
