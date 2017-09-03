@@ -156,3 +156,28 @@ exports.change_password = function(db, password, id) {
     UPDATE users SET password = $1 WHERE id = $2
   `, [password, id])
 }
+
+exports.nameIsAvailable = function(db, name) {
+  return db.one(`
+    SELECT 1 FROM users WHERE name = $1
+  `, name)
+    .then(success => {
+      return false
+    })
+    .catch(failure => {
+      return true
+    })
+}
+
+exports.emailIsAvailable = function(db, email) {
+  return db.one(`
+    SELECT 1 FROM users WHERE email = $1
+  `, email)
+    .then(success => {
+      return false
+    })
+    .catch(failure => {
+      return true
+    })
+
+}

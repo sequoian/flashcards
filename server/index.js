@@ -6,8 +6,14 @@ const sql = require('./database.js');
 const passport = require('passport');
 const passportStrategies = require('./passport-strats');
 const authenticateUser = require('./auth-check')
+const validation = require('./validation')
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+
+function logError(error) {
+  console.log(error)
+}
 
 // Parse POST data
 app.use(bodyParser.urlencoded({
@@ -133,62 +139,117 @@ app.post('/api/deck', [authenticateUser, function (req, res) {
     })
 }])
 
-// Signup
-app.post('/auth/signup', (req, res, next) => {
-  // TODO: validate form inputs
+/**
+ * Sign Up
+ */
+app.post('/auth/signup',(req, res, next) => {
+  // Trim inputs
+  let {name, email, password, confirm} = req.body
+  req.body.name = name.trim()
+  req.body.email = email.trim()
+  req.body.password = password.trim()
+  req.body.confirm = confirm.trim()
+  next()
+}, (req, res, next) => {
+  // Validate
+  const {name, email, password, confirm} = req.body
 
-  // TODO: id not used?
-  return passport.authenticate('local-signup', (err, id) => {
-    if (err) {
-      let message
-      if (err.code === '23505') {
-        message = 'That username or email already exists'
-      }
-      else {
-        message = 'Failed to add user'
-      }
-      return res.status(400).json({
-        success: false,
-        message: message
-      })
-    }
+  // check form errors
+  let errors = validation.validateSignup(name, email, password, confirm)
 
-    return passport.authenticate('local-login', (err, token, userData) => {
-      if (err) {
-        console.log(err)
+  // check name availablity
+  return sql.nameIsAvailable(db, name)
+    .then(available => {
+      if (!available && !errors.hasOwnProperty('name')) {
+        errors.name = 'That name is already taken'
+      }
+    })
+    // check email availability
+    .then(() => {
+      return sql.emailIsAvailable(db, email)
+    })
+    .then(available => {
+      if (!available && !errors.hasOwnProperty('email')) {
+        errors.email = 'That email is already taken'
+      }
+    })
+    .then(() => {
+      // respond with errors if there are any
+      if (Object.keys(errors).length !== 0) {
         return res.status(400).json({
           success: false,
-          message: err.message,
-        });
+          message: 'Please fix the following errors',
+          errors: errors
+        }).end()
       }
-
-      return res.json({
+      else {
+        return next()
+      }
+    })
+    .catch(e => {
+      logError(e)
+      return res.status(500).end()
+    })
+}, (req, res, next) => {
+  // Register new user
+  return passport.authenticate('local-signup', (error) => {
+    if (error) {
+      logError(error)
+      return res.status(500).end()
+    }
+    return next()
+  })(req, res, next)
+}, (req, res, next) => {
+  // Log in new user
+  return passport.authenticate('local-login', (error, token, userData) => {
+    if (error) {
+      logError(error)
+      return res.status(200).json({
         success: true,
+        login: false,
+        message: 'You have successfully signed up',
+        payload: null
+      });
+    }
+    else {
+      return res.status(200).json({
+        success: true,
+        login: true,
         message: 'You have successfully signed up and logged in',
-        token: token
+        payload: {
+          token: token,
+          user: userData.name
+        }
       })
-    })(req, res, next)
+    }
   })(req, res, next)
 })
 
-// Login
+/**
+ * Log In
+ */
 app.post('/auth/login', (req, res, next) => {
   // TODO: Validate form inputs
 
   return passport.authenticate('local-login', (err, token, userData) => {
-    if (err) {
-      return res.status(400).json({
-        success: false,
-        message: err.message,
-      });
-    }
+    // if (err) {
+    //   return res.status(200).json({
+    //     success: true,
+    //     login: false,
+    //     message: 'You have successfully signed up',
+    //     payload: null
+    //   });
+    // }
 
-    return res.json({
-      success: true,
-      message: 'You have successfully logged in',
-      token,
-      user: userData
-    })
+    // return res.json({
+    //   success: true,
+    //   login: true,
+    //   message: 'You have successfully signed up and logged in',
+    //   payload: {
+    //     token: token,
+    //     user: userData.name
+    //   }
+    // })
   })(req, res, next)
 })
 
@@ -201,3 +262,15 @@ app.get('*', function(request, response) {
 app.listen(PORT, function () {
   console.log(`Listening on port ${PORT}`);
 });
+
+
+sql.nameIsAvailable(db, 'zach '.trim())
+  .then(result => {
+    console.log('name is ' + result)
+  })
+  .then(() => {
+    return sql.emailIsAvailable(db, 'zach303@msn.com')
+  })
+  .then(result => {
+    console.log('email is ' + result)
+  })

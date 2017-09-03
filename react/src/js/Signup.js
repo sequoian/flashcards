@@ -53,7 +53,8 @@ class SignupContainer extends Component {
         body: JSON.stringify({
           name: name,
           email: email,
-          password: password
+          password: password,
+          confirm: confirm
         })
       })
       .then(response => {

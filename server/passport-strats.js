@@ -54,14 +54,14 @@ exports.SignupStrategy = new PassportLocalStrategy({
   session: false,
   passReqToCallback: true
 }, (req, email, password, done) => {
-  const name = req.body.name.trim()
+  const name = req.body.name
   const db = req.app.get('db')
 
   sql.add_user(db, name, email, password)
-  .then(id => {
-    return done(null, id)
-  })
-  .catch(e => {
-    return done(e);
-  })
+    .then(id => {
+      return done(null)
+    })
+    .catch(e => {
+      return done(e);
+    })
 })
