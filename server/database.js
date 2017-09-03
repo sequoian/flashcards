@@ -126,11 +126,17 @@ exports.merge_deck = function(db, userID, deck) {
   })
 }
 
-exports.add_user = function(db, name, email, password) {
-  return db.one(`
+exports.addUser = function(db, name, email, password) {
+  return db.none(`
     INSERT INTO users (name, email, password)
-    VALUES ($1, $2, $3) RETURNING id
+    VALUES ($1, $2, $3)
   `, [name, email, password])
+}
+
+exports.userLogin = function(db, email, password) {
+  return db.one(`
+    SELECT id, name FROM users WHERE email = $1 AND password = $2
+  `, [email, password])
 }
 
 exports.user_exists = function(db, id) {

@@ -59,7 +59,6 @@ class Validation {
     }
 
     // validate email
-
     // function uses regular expressions to make sure email is valid
     // taken from stack overflow
     const emailIsValid = function(email) {
