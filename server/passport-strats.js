@@ -19,6 +19,7 @@ exports.LoginStrategy = new PassportLocalStrategy({
     };
 
     // find user by email address
+    // TODO: 
     sql.get_user_by_email(req.app.get('db'), userData.email)
       .then(user => {
         // check if passwords match

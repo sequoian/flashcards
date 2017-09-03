@@ -57,6 +57,8 @@ app.get('/api/user', [authenticateUser, function (req, res) {
 app.post('/api/change-password', [authenticateUser, function (req, res) {
   const userID = req.decoded_token.sub;
   const newPass = req.body.password
+  // TODO: validate form
+  // TODO: make sure current password matches
   sql.change_password(db, newPass, userID)
     .then(() => {
       res.sendStatus(200)
@@ -151,7 +153,6 @@ app.post('/auth/signup', (req, res, next) => {
       })
     }
 
-    // TODO: can i just redirect to login auth instead?
     return passport.authenticate('local-login', (err, token, userData) => {
       if (err) {
         console.log(err)
@@ -176,7 +177,6 @@ app.post('/auth/login', (req, res, next) => {
 
   return passport.authenticate('local-login', (err, token, userData) => {
     if (err) {
-      console.log(err)
       return res.status(400).json({
         success: false,
         message: err.message,
