@@ -1,15 +1,17 @@
 import React, {Component} from 'react'
-import ValidationErrors from './ValidationErrors'
-import Validation from './Validation'
 import Auth from './Auth'
+import LabeledInput from './LabeledInput'
 
 class ChangePasswordContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      old_password: '',
       password: '',
       confirm: '',
-      errors: []
+      errors: {},
+      error_msg: null,
+      success_msg: null
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -23,15 +25,9 @@ class ChangePasswordContainer extends Component {
   }
 
   handleSubmit() {
-    const {password, confirm} = this.state
-    const errors = Validation.validatePasswordChange(password, confirm)
+    const {password, confirm, old_password} = this.state
 
-    if (errors.length > 0) {
-      this.setState({errors: errors})
-      return false
-    }
-
-    fetch('/api/change-password',
+    fetch('/auth/change-password',
       {
         method: 'POST',
         headers: {
@@ -40,51 +36,91 @@ class ChangePasswordContainer extends Component {
           'Authorization': `bearer ${Auth.getToken()}`
         },
         body: JSON.stringify({
-          password: password
+          old_password: old_password,
+          password: password,
+          confirm: confirm
         })
       })
+      .then(response => {
+        if (response.status > 400) {
+          throw new Error(response.status)
+        }
+        else {
+          return response.json()
+        }
+      })
       .then(json => {
-        console.log('password changed')
+        if (json.success) {
+          this.setState({
+            errors: {},
+            success_msg: json.message,
+            error_msg: null,
+            old_password: '',
+            password: '',
+            confirm: ''
+          })
+        }
+        else {
+          this.setState({
+            errors: json.errors,
+            error_msg: json.message,
+            success_msg: null
+          })
+        }  
       })
       .catch(error => {
-        errors.push(['Something went wrong'])
-        this.setState({errors: errors})
+        this.setState({error_msg: 'Something went wrong on our end.'})
       })
   }
 
   render() {
-    const {password, confirm, errors} = this.state
+    const {old_password, password, confirm, errors, error_msg, success_msg} = this.state
     return (
       <ChangePassword 
+        old_password={old_password}
         password={password}
         confirm={confirm}
         errors={errors}
+        error_msg={error_msg}
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit}
+        success_msg={success_msg}
       />
     )
   }
 }
 
-const ChangePassword = ({password, confirm, errors, handleChange, handleSubmit}) => (
+const ChangePassword = ({old_password, password, confirm, errors, error_msg, handleChange, handleSubmit, success_msg}) => (
   <form>
-    <div>Change password</div>
-    {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
-    <label htmlFor="password">Password</label>
-    <input 
+    <div className="errors">
+      {error_msg}
+    </div>
+    <div className="success">
+      {success_msg}
+    </div>
+    <LabeledInput
+      name="old_password"
       type="password"
+      label="Old Password"
+      value={old_password}
+      onChange={handleChange}
+      error={errors.old_password}
+    />
+    <LabeledInput
       name="password"
-      id="password"
+      type="password"
+      label="New Password"
       value={password}
       onChange={handleChange}
+      error={errors.password}
     />
-    <label htmlFor="confirm">Confirm Password</label>
-    <input
-      type="password"
+    <LabeledInput
       name="confirm"
-      id="confirm"
+      type="password"
+      label="Confirm Password"
       value={confirm}
       onChange={handleChange}
+      error={errors.confirm}
     />
     <button
       type="button"

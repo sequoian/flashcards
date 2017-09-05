@@ -139,6 +139,12 @@ exports.userLogin = function(db, email, password) {
   `, [email, password])
 }
 
+exports.changePassword = function(db, id, old_password, new_password) {
+  return db.result(`
+    UPDATE users SET password = $1 where id = $2 AND password = $3
+  `, [new_password, id, old_password])
+}
+
 exports.user_exists = function(db, id) {
   return db.one(`
     SELECT 1 FROM users WHERE id = $1

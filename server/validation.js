@@ -103,7 +103,7 @@ class Validation {
       errors.old_password = 'Old Password must be a string'
     }
     else if (!old_password || old_password.trim() === '') {
-      errors.old_password = 'Please enter you old password'
+      errors.old_password = 'Please enter your old password'
     }
 
     // validate new password

@@ -5,7 +5,7 @@ const validation = require('../validation')
 const logError = require('../log-error')
 
 const trimInputs = function(req, res, next) {
-  let {email, password} = req.body
+  const {email, password} = req.body
   req.body.email = email.trim()
   req.body.password = password.trim()
   next()

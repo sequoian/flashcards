@@ -7,7 +7,7 @@ const logError = require('../log-error')
 
 
 const trimInputs = function(req, res, next) {
-  let {name, email, password, confirm} = req.body
+  const {name, email, password, confirm} = req.body
   req.body.name = name.trim()
   req.body.email = email.trim()
   req.body.password = password.trim()

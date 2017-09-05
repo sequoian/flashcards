@@ -56,19 +56,7 @@ app.get('/api/user', [authenticateUser, function (req, res) {
     })
 }])
 
-app.post('/api/change-password', [authenticateUser, function (req, res) {
-  const userID = req.decoded_token.sub;
-  const newPass = req.body.password
-  // TODO: validate form
-  // TODO: make sure current password matches
-  sql.change_password(db, newPass, userID)
-    .then(() => {
-      res.sendStatus(200)
-    })
-    .catch(e => {
-      console.log(e)
-    })
-}])
+
 
 // user deck list
 app.get('/api/deck-list', [authenticateUser, function (req, res) {
@@ -138,8 +126,10 @@ app.post('/api/deck', [authenticateUser, function (req, res) {
 
 const signup_routes = require('./routes/signup')
 const login_routes = require('./routes/login')
+const passchange_routes = require('./routes/passchange')
 app.use('/auth', signup_routes)
 app.use('/auth', login_routes)
+app.use('/auth', passchange_routes)
 
 
 
@@ -153,3 +143,25 @@ app.get('*', function(request, response) {
 app.listen(PORT, function () {
   console.log(`Listening on port ${PORT}`);
 });
+
+
+// const bcrypt = require('bcrypt')
+// const salt_rounds = 10
+// const password = 'password'
+
+// bcrypt.genSalt(salt_rounds, (error, salt) => {
+//   console.log(salt)
+//   bcrypt.hash(password, salt, (error, hash) => {
+//     console.log(hash)
+//     bcrypt.compare(password, hash, (error, result) => {
+//       console.log('1: ' + result)
+//     })
+//     bcrypt.compare('vader', hash, (error, result) => {
+//       console.log('2: ' + result)
+//     })
+//   })
+// })
+
+
+
+
