@@ -29,18 +29,15 @@ form {
 
 
 /* User Form */
-.user-form label {
+
+.labeled-input label {
   display: block;
+  font-weight: bold;
 }
 
-.user-form input {
+.labeled-input input {
   display: block;
   margin-bottom: 10px;
-}
-
-.user-form button {
-  display: block;
-  margin: 10px 0;
 }
 
 /* Message for shuffling deck */

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import {Link, withRouter} from 'react-router-dom'
-import ValidationErrors from './ValidationErrors'
 import Auth from './Auth'
 import Validation from './Validation'
+import LabeledInput from './LabeledInput'
 
 class LoginContainer extends Component {
   constructor(props) {
@@ -10,7 +10,8 @@ class LoginContainer extends Component {
     this.state = {
       email: '',
       password: '',
-      errors: []
+      errors: {},
+      error_msg: null
     }
     this.handleChange = this.handleChange.bind(this)
     this.login = this.login.bind(this)
@@ -34,12 +35,6 @@ class LoginContainer extends Component {
 
   login() {
     const {email, password} = this.state
-    const errors = Validation.validateLogin(email, password)
-
-    if (errors.length > 0) {
-      this.setState({errors: errors})
-      return false
-    }
 
     fetch('/auth/login',
       {
@@ -54,19 +49,33 @@ class LoginContainer extends Component {
         })
       })
       .then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`)
+        if (response.status > 400) {
+          throw new Error(response.status)
         }
-        return response.json()
+        else {
+          return response.json()
+        }
       })
       .then(json => {
-        Auth.authenticateUser(json.token)
-        this.props.history.replace('/')
+        if (json.success) {
+          Auth.authenticateUser(json.payload.token)
+          this.props.history.replace('/')
+        }
+        else if (json.errors) {
+          this.setState({
+            errors: json.errors,
+            error_msg: json.message
+          })
+        }
+        else {
+          this.setState({
+            errors: {},
+            error_msg: json.message
+          })
+        }  
       })
       .catch(error => {
-        console.log(error)
-        errors.push(['Incorrect email or password'])
-        this.setState({errors: errors})
+        this.setState({error_msg: 'Something went wrong on our end.'})
       })
   }
 
@@ -81,7 +90,7 @@ class LoginContainer extends Component {
   }
 
   render() {
-    const {email, password, errors} = this.state
+    const {email, password, errors, error_msg} = this.state
     return (
       <Login
         email={email}
@@ -89,36 +98,35 @@ class LoginContainer extends Component {
         handleChange={this.handleChange}
         handleSubmit={this.login}
         errors={errors}
+        error_msg={error_msg}
       />
     )
   }
 }
 
-const Login = ({email, password, handleChange, handleSubmit, errors}) => (
+const Login = ({email, password, handleChange, handleSubmit, errors, error_msg}) => (
   <div>
     <Link to={`/`}>Back</Link>
     <h2>Log In</h2>
-    <form className="user-form">
-      {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
-      <label htmlFor="email">
-        Email
-      </label>
-      <input 
-        type="text" 
-        name="email" 
-        id="email" 
+    <form>
+      <div className="errors">
+        {error_msg}
+      </div>
+      <LabeledInput
+        name="email"
+        type="text"
+        label="Email"
         value={email}
-        onChange={handleChange} 
+        onChange={handleChange}
+        error={errors.email}
       />
-      <label htmlFor="password">
-        Password
-      </label>
-      <input 
-        type="password" 
-        name="password" 
-        id="password" 
+      <LabeledInput
+        name="password"
+        type="password"
+        label="Password"
         value={password}
-        onChange={handleChange} 
+        onChange={handleChange}
+        error={errors.password}
       />
       <button
         type="button"
