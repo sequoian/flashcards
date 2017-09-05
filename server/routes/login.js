@@ -6,9 +6,14 @@ const logError = require('../log-error')
 
 const trimInputs = function(req, res, next) {
   const {email, password} = req.body
-  req.body.email = email.trim()
-  req.body.password = password.trim()
-  next()
+  try {
+    req.body.email = email.trim()
+    req.body.password = password.trim()
+    next()
+  }
+  catch (error) {
+    res.status(400).end()
+  }
 }
 
 const validateForm = function(req, res, next) {

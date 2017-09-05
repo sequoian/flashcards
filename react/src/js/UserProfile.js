@@ -54,6 +54,7 @@ const UserProfile = ({name, email}) => (
     <div>User: {name}</div>
     <div>Email: {email}</div>
     <hr />
+    <h3>Change Password</h3>
     <ChangePassword />
   </div>
 )

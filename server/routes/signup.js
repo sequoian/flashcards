@@ -8,11 +8,16 @@ const logError = require('../log-error')
 
 const trimInputs = function(req, res, next) {
   const {name, email, password, confirm} = req.body
-  req.body.name = name.trim()
-  req.body.email = email.trim()
-  req.body.password = password.trim()
-  req.body.confirm = confirm.trim()
-  next()
+  try {
+    req.body.name = name.trim()
+    req.body.email = email.trim()
+    req.body.password = password.trim()
+    req.body.confirm = confirm.trim()
+    next()
+  }
+  catch (error) {
+    res.status(400).end()
+  }
 }
 
 const validateForm = function(req, res, next) {
