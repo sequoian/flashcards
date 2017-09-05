@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import {Link, withRouter} from 'react-router-dom'
-import ValidationErrors from './ValidationErrors'
 import Auth from './Auth'
-import Validation from './Validation'
+import LabeledInput from './LabeledInput'
 
 class SignupContainer extends Component {
   constructor(props) {
@@ -12,7 +11,8 @@ class SignupContainer extends Component {
       email: '',
       password: '',
       confirm: '',
-      errors: []
+      errors: [],
+      error_msg: null
     }
     this.handleChange = this.handleChange.bind(this)
     this.submit = this.submit.bind(this)
@@ -36,12 +36,6 @@ class SignupContainer extends Component {
 
   submit() {
     const {name, email, password, confirm} = this.state
-    const errors = Validation.validateSignup(name, email, password, confirm)
-
-    if (errors.length > 0) {
-      this.setState({errors: errors})
-      return false
-    }
     
     fetch('/auth/signup',
       {
@@ -58,25 +52,29 @@ class SignupContainer extends Component {
         })
       })
       .then(response => {
-        if (!response.ok && response.status !== 400) {
-          console.log(response.status)
-          throw new Error(`status ${response.status}`)
+        if (response.status > 400) {
+          throw new Error(response.status)
         }
-        return response.json()
+        else {
+          return response.json()
+        }
       })
       .then(json => {
         if (json.success) {
-          Auth.authenticateUser(json.token)
+          if (json.login) {
+            Auth.authenticateUser(json.payload.token)
+          }    
           this.props.history.replace('/')
         }
         else {
-          errors.push([json.message])
-          this.setState({errors: errors})
-        }
+          this.setState({
+            errors: json.errors,
+            error_msg: json.message
+          })
+        }  
       })
       .catch(error => {
-        errors.push(['Something went wrong'])
-        this.setState({errors: errors})
+        this.setState({error_msg: 'Something went wrong on our end.'})
       })
   }
 
@@ -91,7 +89,7 @@ class SignupContainer extends Component {
   }
 
   render() {
-    const {name, email, password, confirm, errors} = this.state
+    const {name, email, password, confirm, errors, error_msg} = this.state
     return (
       <Signup
         name={name}
@@ -101,56 +99,51 @@ class SignupContainer extends Component {
         handleChange={this.handleChange}
         handleSubmit={this.submit}
         errors={errors}
+        error_msg={error_msg}
       />
     )
   }
 }
 
-const Signup = ({name, email, password, confirm, handleChange, handleSubmit, errors}) => (
+const Signup = ({name, email, password, confirm, handleChange, handleSubmit, errors, error_msg}) => (
   <div>
     <Link to={`/`}>Back</Link>
     <h2>Sign Up</h2>
-    <form className="user-form">
-      {errors.length > 0 ? <ValidationErrors errors={errors} /> : null }
-      <label htmlFor="name">
-        User Name
-      </label>
-      <input 
-        type="text" 
-        name="name" 
-        id="name" 
+    <form>
+      <div className="errors">
+        {error_msg}
+      </div>
+      <LabeledInput
+        name="name"
+        type="text"
+        label="Name"
         value={name}
-        onChange={handleChange} 
+        onChange={handleChange}
+        error={errors.name}
       />
-      <label htmlFor="email">
-        Email
-      </label>
-      <input 
-        type="text" 
-        name="email" 
-        id="email" 
+      <LabeledInput
+        name="email"
+        type="text"
+        label="Email"
         value={email}
-        onChange={handleChange} 
+        onChange={handleChange}
+        error={errors.email}
       />
-      <label htmlFor="password">
-        Password
-      </label>
-      <input 
-        type="password" 
-        name="password" 
-        id="password" 
+      <LabeledInput
+        name="password"
+        type="password"
+        label="Password"
         value={password}
-        onChange={handleChange} 
+        onChange={handleChange}
+        error={errors.password}
       />
-      <label htmlFor="confirm">
-        Confirm Password
-      </label>
-      <input 
-        type="password" 
-        name="confirm" 
-        id="confirm" 
+      <LabeledInput
+        name="confirm"
+        type="password"
+        label="Confirm Password"
         value={confirm}
-        onChange={handleChange} 
+        onChange={handleChange}
+        error={errors.confirm}
       />
       <button
         type="button"

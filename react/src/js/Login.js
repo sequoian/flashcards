@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {Link, withRouter} from 'react-router-dom'
 import Auth from './Auth'
-import Validation from './Validation'
 import LabeledInput from './LabeledInput'
 
 class LoginContainer extends Component {
