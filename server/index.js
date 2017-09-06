@@ -99,37 +99,17 @@ app.route('/api/deck/:deckID')
     })
 })
 
-// add or edit deck
-app.post('/api/deck', [authenticateUser, function (req, res) {
-  const userID = req.decoded_token.sub;
 
-  // Validation
-  // TODO: validate that user is author of deck
-  // TODO: double check frontend validation (keep DRY)
-  const deck = req.body;
-
-  // calculate card placement and deck id's
-  deck.cards.forEach((card, idx) => {
-    card.placement = idx;
-    card.deck_id = deck.id;
-  })
-
-  sql.merge_deck(db, userID, deck)
-    .then((data) => {
-      res.json({deck_id: data});
-    })
-    .catch(error => {
-      console.log(error)
-    })
-}])
 
 
 const signup_routes = require('./routes/signup')
 const login_routes = require('./routes/login')
 const passchange_routes = require('./routes/passchange')
+const deck_merge_routes = require('./routes/deck-merge')
 app.use('/auth', signup_routes)
 app.use('/auth', login_routes)
 app.use('/auth', passchange_routes)
+app.use('/api', deck_merge_routes)
 
 
 

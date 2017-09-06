@@ -36,7 +36,7 @@ exports.get_user_decks = function(db, userID) {
  * Return deck with associated cards
  * TODO: check if user is the author OR if deck is public
  */
-exports.get_deck = function(db, userID, deckID) {
+exports.getDeck = function(db, userID, deckID) {
   return db.tx(t => {
     let result = null;
     return t.one(`SELECT id, title FROM decks WHERE id = $1`, deckID)
@@ -126,6 +126,44 @@ exports.merge_deck = function(db, userID, deck) {
   })
 }
 
+exports.updateDeck = function(db, deck) {
+  return db.tx(t => {
+    // update decks table
+    return t.none(`
+      UPDATE decks SET title = $1, last_updated = CURRENT_TIMESTAMP
+      WHERE id = $2
+    `, [deck.title, deck.id])
+      .then(() => {
+        // update cards table
+        const card_commands = deck.cards.map(card => {
+          if (card.delete) {
+            return t.none(`
+              DELETE FROM cards WHERE id = $[id] AND deck_id = $[deck_id]
+            `, card)
+          }
+          else if (!card.id) {
+            return t.none(`
+              INSERT INTO cards (front, back, placement, deck_id)
+              VALUES ($[front], $[back], $[placement], $[deck_id])
+            `, card);
+          }
+          else {
+            return t.none(`
+              UPDATE cards SET front = $[front], back = $[back], placement = $[placement]
+              WHERE id = $[id] AND deck_id = $[deck_id]
+            `, card)
+          }
+        })
+
+        return t.batch(card_commands)
+      })
+  })
+}
+
+exports.addDeck = function(db, deck, user_id) {
+
+}
+
 exports.addUser = function(db, name, email, password) {
   return db.none(`
     INSERT INTO users (name, email, password)
@@ -191,5 +229,16 @@ exports.emailIsAvailable = function(db, email) {
     .catch(failure => {
       return true
     })
+}
 
+exports.hasDeckPermission = function(db, user_id, deck_id) {
+  return db.one(`
+    SELECT 1 FROM decks WHERE id = $1 AND author = $2
+  `, [deck_id, user_id])
+    .then(success => {
+      return true
+    })
+    .catch(failure => {
+      return false
+    })
 }

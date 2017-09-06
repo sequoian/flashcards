@@ -70,7 +70,7 @@ class EditDeck extends Component {
         'Content-Type': 'application/json',
         'Authorization': `bearer ${Auth.getToken()}`
       },
-      body: JSON.stringify(deck)
+      body: JSON.stringify({deck: deck})
     })
       .then(response => {
         if (!response.ok) {
