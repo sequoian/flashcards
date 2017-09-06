@@ -133,16 +133,22 @@ exports.addUser = function(db, name, email, password) {
   `, [name, email, password])
 }
 
-exports.userLogin = function(db, email, password) {
+exports.userLogin = function(db, email) {
   return db.one(`
-    SELECT id, name FROM users WHERE email = $1 AND password = $2
-  `, [email, password])
+    SELECT id, name, password FROM users WHERE email = $1
+  `, email)
 }
 
-exports.changePassword = function(db, id, old_password, new_password) {
-  return db.result(`
-    UPDATE users SET password = $1 where id = $2 AND password = $3
-  `, [new_password, id, old_password])
+exports.getPassword = function(db, id) {
+  return db.one(`
+    SELECT password FROM users WHERE id = $1
+  `, id)
+}
+
+exports.changePassword = function(db, id, new_password) {
+  return db.none(`
+    UPDATE users SET password = $1 WHERE id = $2
+  `, [new_password, id])
 }
 
 exports.user_exists = function(db, id) {
@@ -161,12 +167,6 @@ exports.get_user_by_email = function(db, email) {
   return db.one(`
     SELECT id, name, password FROM users WHERE email = $1
   `, email)
-}
-
-exports.change_password = function(db, password, id) {
-  return db.none(`
-    UPDATE users SET password = $1 WHERE id = $2
-  `, [password, id])
 }
 
 exports.nameIsAvailable = function(db, name) {

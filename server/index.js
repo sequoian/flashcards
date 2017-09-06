@@ -143,25 +143,3 @@ app.get('*', function(request, response) {
 app.listen(PORT, function () {
   console.log(`Listening on port ${PORT}`);
 });
-
-
-// const bcrypt = require('bcrypt')
-// const salt_rounds = 10
-// const password = 'password'
-
-// bcrypt.genSalt(salt_rounds, (error, salt) => {
-//   console.log(salt)
-//   bcrypt.hash(password, salt, (error, hash) => {
-//     console.log(hash)
-//     bcrypt.compare(password, hash, (error, result) => {
-//       console.log('1: ' + result)
-//     })
-//     bcrypt.compare('vader', hash, (error, result) => {
-//       console.log('2: ' + result)
-//     })
-//   })
-// })
-
-
-
-

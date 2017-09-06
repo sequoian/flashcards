@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-import ValidationErrors from './ValidationErrors'
 
 class DeckFormContainer extends Component {
   constructor(props) {
@@ -117,7 +116,6 @@ class DeckFormContainer extends Component {
 const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, 
   cancelPath, validation, moveCard}) => (
   <form>
-    {validation.length > 0 ? <ValidationErrors errors={validation} /> : null }
     <input 
       type="text" 
       placeholder="Title" 

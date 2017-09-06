@@ -4,6 +4,8 @@ const authenticateUser = require('../auth-check')
 const validation = require('../validation')
 const sql = require('../database')
 const logError = require('../log-error')
+const bcrypt = require('bcrypt')
+const salt_rounds = 10
 
 const trimInputs = function(req, res, next) {
   const {old_password, password, confirm} = req.body
@@ -39,28 +41,51 @@ const changePassword = function(req, res, next) {
   const db = req.app.get('db')
   const user_id = req.decoded_token.sub
   const {old_password, password} = req.body
-  
-  sql.changePassword(db, user_id, old_password, password) 
-    .then(result => {
-      if (result.rowCount > 0) {
-        res.status(200).json({
-          success: true,
-          message: 'Password successfully changed',
-        })
-      }
-      else {
-        // if no rows were changed, the update query did not match a user
-        // assume it was the old password at fault
-        res.status(400).json({
-          success: false,
-          message: 'Old password does not match the one in our records',
-          errors: {}
-        })
-      }
+
+  sql.getPassword(db, user_id)
+    .then(user => {
+      bcrypt.compare(old_password, user.password, (error, result) => {
+        if (error) {
+          logError(error)
+          return res.status(500).end()
+        }
+        else if (!result) {
+          return res.status(400).json({
+            success: false,
+            message: 'Old password does not match the one in our records',
+            errors: {}
+          })
+        }
+        else {
+          bcrypt.genSalt(salt_rounds, (error, salt) => {
+            if (error) {
+              return res.status(500).end()
+            }
+
+            bcrypt.hash(password, salt, (error, hash) => {
+              if (error) {
+                return done(error)
+              }
+
+              sql.changePassword(db, user_id, hash)
+                .then(() => {
+                  return res.status(200).json({
+                    success: true,
+                    message: 'Password successfully changed',
+                  })
+                })
+                .catch(e => {
+                  logError(e)
+                  return res.status(500).end()
+                })
+            })
+          })          
+        }
+      })
     })
-    .catch(e => {
-      logError(e)
-      res.status(500).end()
+    .catch(error => {
+      logError(error)
+      return res.status(500).end()
     })
 }
 
