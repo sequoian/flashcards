@@ -77,7 +77,7 @@ app.route('/api/deck/:deckID')
   const userID = req.decoded_token.sub;
   const deckID = parseInt(req.params.deckID);
 
-  sql.get_deck(db, userID, deckID)
+  sql.getDeck(db, userID, deckID)
     .then((query) => {
       res.json(query);
     })

@@ -51,18 +51,8 @@ class EditDeck extends Component {
       title: title,
       cards: cards
     }
-
-    // validate
-    const errors = Validation.validateDeck(deck)
-
-    if (errors.length > 0) {
-      this.setState({
-        errors: errors
-      })
-      return false;
-    }
     
-    fetch('/api/deck',
+    fetch('/api/update-deck',
     {
       method: 'POST',
       headers: {
@@ -79,7 +69,7 @@ class EditDeck extends Component {
         return response.json();
       })
       .then(json => {
-        this.props.history.replace(`/cards/${json.deck_id}`)
+        this.props.history.replace(`/cards/${json.id}`)
       })
       .catch(e => {
         console.log(e);

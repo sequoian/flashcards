@@ -161,7 +161,38 @@ exports.updateDeck = function(db, deck) {
 }
 
 exports.addDeck = function(db, deck, user_id) {
+  let deck_id = null
+  return db.tx(t => {
+    // add deck
+    return t.one(`
+      INSERT INTO decks (title, author, is_public)
+      VALUES ($1, $2, $3) RETURNING id
+    `, [deck.title, user_id, false])
+      .then(result => {   
+        deck_id = result.id
+        
+        // assign cards to new deck
+        deck.cards.forEach(card => {
+          card.deck_id = deck_id  
+        })
 
+        // add cards
+        const card_commands = deck.cards.map(card => {
+          if (!card.delete) {
+            return t.none(`
+              INSERT INTO cards (front, back, placement, deck_id)
+              VALUES ($[front], $[back], $[placement], $[deck_id])
+            `, card)
+          }
+        })
+
+        return t.batch(card_commands)
+      })
+      .then(() => {
+        // finally, return id of new deck
+        return deck_id  
+      })
+  })
 }
 
 exports.addUser = function(db, name, email, password) {

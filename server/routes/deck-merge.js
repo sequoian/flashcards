@@ -63,7 +63,8 @@ const checkPermission = function(req, res, next) {
 }
 
 const finalizeCards = function(req, res, next) {
-  req.body.deck.cards.forEach((card, idx) => {
+  const deck = req.body.deck
+  deck.cards.forEach((card, idx) => {
     card.placement = idx
     card.deck_id = deck.id
   })
@@ -92,27 +93,27 @@ const createDeck = function(req, res, next) {
   const db = req.app.get('db')
   const user_id = req.decoded_token.sub
   const deck = req.body.deck
+
+  sql.addDeck(db, deck, user_id)
+    .then(id => {
+      res.status(200).json({
+        success: true,
+        message: 'Deck successfully added',
+        id: id
+      })
+    })
+    .catch(e => {
+      logError(e)
+      res.status(500).end()
+    })
 }
 
-app.post('/api/deck', [authenticateUser, function (req, res) {
-  const userID = req.decoded_token.sub;
+router.post('/update-deck', [authenticateUser, trimInputs, validateForm, 
+  checkPermission, finalizeCards, updateDeck
+])
 
-  // Validation
-  // TODO: validate that user is author of deck
-  // TODO: double check frontend validation (keep DRY)
-  const deck = req.body;
+router.post('/add-deck', [authenticateUser, trimInputs, validateForm, 
+  finalizeCards, createDeck
+])
 
-  // calculate card placement and deck id's
-  deck.cards.forEach((card, idx) => {
-    card.placement = idx;
-    card.deck_id = deck.id;
-  })
-
-  sql.merge_deck(db, userID, deck)
-    .then((data) => {
-      res.json({deck_id: data});
-    })
-    .catch(error => {
-      console.log(error)
-    })
-}])
+module.exports = router
