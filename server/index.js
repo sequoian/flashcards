@@ -56,8 +56,6 @@ app.get('/api/user', [authenticateUser, function (req, res) {
     })
 }])
 
-
-
 // user deck list
 app.get('/api/deck-list', [authenticateUser, function (req, res) {
   const userID = req.decoded_token.sub;
@@ -70,48 +68,16 @@ app.get('/api/deck-list', [authenticateUser, function (req, res) {
     })
 }])
 
-// deck data
-app.route('/api/deck/:deckID')
-.all(authenticateUser)
-.get(function (req, res) {
-  const userID = req.decoded_token.sub;
-  const deckID = parseInt(req.params.deckID);
-
-  sql.getDeck(db, userID, deckID)
-    .then((query) => {
-      res.json(query);
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-})
-.delete(function (req, res) {
-  const userID = req.decoded_token.sub;
-  const deckID = parseInt(req.params.deckID);
-  // TODO: check that user is author of deck
-
-  sql.delete_deck(db, deckID)
-    .then(() => {
-      res.sendStatus(200);
-    })
-    .catch(error => {
-      console.log(error);
-    })
-})
-
-
-
-
 const signup_routes = require('./routes/signup')
 const login_routes = require('./routes/login')
 const passchange_routes = require('./routes/passchange')
+const deck_routes = require('./routes/deck')
 const deck_merge_routes = require('./routes/deck-merge')
 app.use('/auth', signup_routes)
 app.use('/auth', login_routes)
 app.use('/auth', passchange_routes)
+app.use('/api', deck_routes)
 app.use('/api', deck_merge_routes)
-
-
 
 
 // All remaining requests return the React app, so it can handle routing.

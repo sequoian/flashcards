@@ -64,11 +64,8 @@ class EditDeck extends Component {
       body: JSON.stringify({deck: deck})
     })
       .then(response => {
-        if (response.status === 403) {
-          this.setState({error_msg: 'You do not have permission to do that'})
-        }
-        else if (response.status > 400) {
-          throw new Error()
+        if (response.status > 400) {
+          throw new Error(response.status)
         }
         else {
           return response.json()
@@ -86,7 +83,12 @@ class EditDeck extends Component {
         }
       })
       .catch(e => {
-        this.setState({error_msg: 'Something went wrong on our end.'})
+        if (e.message === '403') {
+          this.setState({error_msg: 'You do not have permission to do that'})
+        }
+        else {
+          this.setState({error_msg: 'Something went wrong on our end.'})
+        }       
       })
   }
 
@@ -99,11 +101,24 @@ class EditDeck extends Component {
         'Authorization': `bearer ${Auth.getToken()}`
       }
       })
-        .then(status => {
+        .then(response => {
+          if (response.status > 400) {
+            throw new Error(response.status)
+          }
+          else {
+            return response.json
+          }
+        })
+        .then(json => {
           this.props.history.replace('/');
         })
         .catch(e => {
-          console.log(e);
+          if (e.message === '403') {
+            alert("You do not have permission to do that")
+          }
+          else {
+            this.setState({error_msg: 'Something went wrong on our end.'})
+          }
         })
     }
   }

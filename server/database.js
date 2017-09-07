@@ -36,28 +36,28 @@ exports.get_user_decks = function(db, userID) {
  * Return deck with associated cards
  * TODO: check if user is the author OR if deck is public
  */
-exports.getDeck = function(db, userID, deckID) {
+exports.getDeck = function(db, deck_id) {
   return db.tx(t => {
-    let result = null;
-    return t.one(`SELECT id, title FROM decks WHERE id = $1`, deckID)
+    let result = null
+    return t.one(`SELECT id, title FROM decks WHERE id = $1`, deck_id)
       .then((deck) => {
-        result = deck;
-        return db.query(`
+        result = deck
+        return t.query(`
           SELECT id, front, back FROM cards 
           WHERE deck_id = $1 ORDER BY placement ASC
-        `, deckID)
+        `, deck_id)
       })
       .then((cards) => {
-        result.cards = cards;
-        return result;
-      });
-  });
+        result.cards = cards
+        return result
+      })
+  })
 }
 
-exports.delete_deck = function(db, deckID) {
+exports.deleteDeck = function(db, deck_id) {
   return db.none(`
     DELETE FROM decks WHERE id = $1
-  `, deckID)
+  `, deck_id)
 }
 
 exports.updateDeck = function(db, deck) {
