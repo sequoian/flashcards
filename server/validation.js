@@ -12,10 +12,10 @@ class Validation {
 
     // make sure there are no blank sides in the cards
     const card_errors = {}
-    deck.cards.forEach((card, idx) => {
+    deck.cards.forEach(card => {
       const card_is_blank = (card.front.trim() === '' || card.back.trim() === '') && !card.delete
       if (card_is_blank) {
-        card_errors[idx] = 'Card contains a blank side'
+        card_errors[card.key] = 'Card contains a blank side'
       }
     })
     if (Object.keys(card_errors).length !== 0) {

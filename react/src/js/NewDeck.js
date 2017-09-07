@@ -32,16 +32,27 @@ class NewDeck extends Component {
       body: JSON.stringify({deck: deck})
     })
       .then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
+        if (response.status > 400) {
+          throw new Error()
         }
-        return response.json();
+        else {
+          return response.json()
+        }
+        
       })
       .then(json => {
-        this.props.history.replace(`/cards/${json.id}`)
+        if (json.success) {
+          this.props.history.replace(`/cards/${json.id}`)
+        }
+        else {
+          this.setState({
+            errors: json.errors,
+            error_msg: json.message
+          })
+        }
       })
       .catch(e => {
-        console.log(e);
+        this.setState({error_msg: 'Something went wrong on our end.'})
       })
   }
 
@@ -55,6 +66,7 @@ class NewDeck extends Component {
           onSubmit={this.addDeck}
           cancelPath={cancelPath}
           errors={this.state.errors}
+          error_msg={this.state.error_msg}
         />
       </div>
     )

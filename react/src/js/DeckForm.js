@@ -137,7 +137,7 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
         handleCardChange={handleCardChange}
         removeCard={removeCard}
         moveCard={moveCard}
-        error={errors.cards ? errors.cards[idx] : null}
+        error={errors.cards ? errors.cards[card.key] : null}
       />
     ))}
     <button 
