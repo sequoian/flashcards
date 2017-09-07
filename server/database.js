@@ -1,7 +1,7 @@
 const pgp = require('pg-promise')();
 const secret = require('./secret.json');
 
-exports.connect_to_db = function() {
+exports.connectToDatabase = function() {
   if (process.env.NODE_ENV === 'production') {
     // connect to heroku database
     return pgp(process.env.DATABASE_URL);
@@ -19,23 +19,14 @@ exports.connect_to_db = function() {
   }
 }
 
-/**
- * Return list of decks that are associated with the user
- * Gets decks where the user is the author
- * TODO: get decks that the user has saved/favorited
- */
-exports.get_user_decks = function(db, userID) {
+exports.getUserDecks = function(db, user_id) {
   return db.query(`
     SELECT d.id, d.title, u.name AS author FROM 
     decks d INNER JOIN users u ON (d.author = u.id) WHERE d.author = $1
     ORDER BY d.id ASC
-    `, userID)
+    `, user_id)
 }
 
-/**
- * Return deck with associated cards
- * TODO: check if user is the author OR if deck is public
- */
 exports.getDeck = function(db, deck_id) {
   return db.tx(t => {
     let result = null

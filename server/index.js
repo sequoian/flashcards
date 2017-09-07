@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Connect to database
-const db = sql.connect_to_db()
+const db = sql.connectToDatabase()
 // Make database available to middleware
 app.set('db', db);
 
@@ -56,28 +56,20 @@ app.get('/api/user', [authenticateUser, function (req, res) {
     })
 }])
 
-// user deck list
-app.get('/api/deck-list', [authenticateUser, function (req, res) {
-  const userID = req.decoded_token.sub;
-  sql.get_user_decks(db, userID)
-    .then((query) => {
-      res.json(query);
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-}])
+
 
 const signup_routes = require('./routes/signup')
 const login_routes = require('./routes/login')
 const passchange_routes = require('./routes/passchange')
 const deck_routes = require('./routes/deck')
 const deck_merge_routes = require('./routes/deck-merge')
+const deck_list_routes = require('./routes/deck-list')
 app.use('/auth', signup_routes)
 app.use('/auth', login_routes)
 app.use('/auth', passchange_routes)
 app.use('/api', deck_routes)
 app.use('/api', deck_merge_routes)
+app.use('/api', deck_list_routes)
 
 
 // All remaining requests return the React app, so it can handle routing.

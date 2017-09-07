@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const authenticateUser = require('../auth-check')
-const validation = require('../validation')
 const sql = require('../database')
 const logError = require('../log-error')
 
