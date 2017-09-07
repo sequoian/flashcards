@@ -1,12 +1,9 @@
 const express = require('express');
 const path = require('path');
-const pgp = require('pg-promise')();
 const bodyParser = require('body-parser');
 const sql = require('./database.js');
 const passport = require('passport');
 const passportStrategies = require('./passport-strats');
-const authenticateUser = require('./auth-check')
-const validation = require('./validation')
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -36,40 +33,20 @@ app.set('db', db);
 
 
 /** Routes **/
-
-// user name
-app.get('/api/user', [authenticateUser, function (req, res) {
-  const userID = req.decoded_token.sub;
-  sql.get_user(db, userID)
-    .then(user => {
-      return res.json({
-        success: true,
-        user: {
-          name: user.name,
-          id: user.id,
-          email: user.email
-        }
-      })
-    })
-    .catch(e => {
-      return res.status(401).end();
-    })
-}])
-
-
-
 const signup_routes = require('./routes/signup')
 const login_routes = require('./routes/login')
 const passchange_routes = require('./routes/passchange')
 const deck_routes = require('./routes/deck')
 const deck_merge_routes = require('./routes/deck-merge')
 const deck_list_routes = require('./routes/deck-list')
+const user_routes = require('./routes/user')
 app.use('/auth', signup_routes)
 app.use('/auth', login_routes)
 app.use('/auth', passchange_routes)
 app.use('/api', deck_routes)
 app.use('/api', deck_merge_routes)
 app.use('/api', deck_list_routes)
+app.use('/api', user_routes)
 
 
 // All remaining requests return the React app, so it can handle routing.

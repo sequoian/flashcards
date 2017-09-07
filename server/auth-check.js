@@ -17,9 +17,10 @@ module.exports = (req, res, next) => {
     }
 
     // check if user exists
-    const userID = decoded.sub;
+    const user_id = decoded.sub;
     const db = req.app.get('db')
-    sql.user_exists(db, userID)
+    
+    sql.getUser(db, user_id)
       .then(success => {
         req.decoded_token = decoded;
         return next();
