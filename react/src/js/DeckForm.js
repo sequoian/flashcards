@@ -106,16 +106,23 @@ class DeckFormContainer extends Component {
         handleCardChange={this.handleCardChange}
         removeCard={this.removeCard}
         cancelPath={this.props.cancelPath}
-        validation={this.props.validation}
         moveCard={this.moveCard}
+        errors={this.props.errors}
+        error_msg={this.props.error_msg}
       />
     )
   }
 }
 
 const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, 
-  cancelPath, validation, moveCard}) => (
+  cancelPath, moveCard, errors, error_msg}) => (
   <form>
+    <div className="errors">
+      {error_msg}
+    </div>
+    <div className="errors">
+      {errors.title}
+    </div>
     <input 
       type="text" 
       placeholder="Title" 
@@ -130,6 +137,7 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
         handleCardChange={handleCardChange}
         removeCard={removeCard}
         moveCard={moveCard}
+        error={errors.cards ? errors.cards[idx] : null}
       />
     ))}
     <button 
@@ -147,8 +155,11 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
   </form>
 )
 
-const CardInput = ({card, index, handleCardChange, removeCard, moveCard}) => (
+const CardInput = ({card, index, handleCardChange, removeCard, moveCard, error}) => (
   <div className="card-input">
+    <div className="errors">
+      {error}
+    </div>
     <span>{index + 1}</span>
     <input 
       type="text" 
@@ -165,6 +176,7 @@ const CardInput = ({card, index, handleCardChange, removeCard, moveCard}) => (
     <button type="button" onClick={() => moveCard(index, 'up')}>Up</button>
     <button type="button" onClick={() => moveCard(index, 'down')}>Down</button>
     <button type="button" onClick={() => removeCard(card.key)}>remove</button>
+    
   </div>
 )
 

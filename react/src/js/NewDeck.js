@@ -8,7 +8,8 @@ class NewDeck extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      errors: []
+      errors: {},
+      error_msg: null
     }
     this.addDeck = this.addDeck.bind(this);
   }
@@ -53,7 +54,7 @@ class NewDeck extends Component {
         <DeckForm 
           onSubmit={this.addDeck}
           cancelPath={cancelPath}
-          validation={this.state.errors}
+          errors={this.state.errors}
         />
       </div>
     )

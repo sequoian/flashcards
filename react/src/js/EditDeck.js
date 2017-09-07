@@ -9,7 +9,8 @@ class EditDeck extends Component {
     super(props);
     this.state = {
       deck: null,
-      errors: []
+      errors: {},
+      error_msg: null
     }
     this.updateDeck = this.updateDeck.bind(this);
     this.deleteDeck = this.deleteDeck.bind(this);
@@ -63,16 +64,29 @@ class EditDeck extends Component {
       body: JSON.stringify({deck: deck})
     })
       .then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
+        if (response.status === 403) {
+          this.setState({error_msg: 'You do not have permission to do that'})
         }
-        return response.json();
+        else if (response.status > 400) {
+          throw new Error()
+        }
+        else {
+          return response.json()
+        }  
       })
       .then(json => {
-        this.props.history.replace(`/cards/${json.id}`)
+        if (json.success) {
+          this.props.history.replace(`/cards/${json.id}`)
+        }
+        else {
+          this.setState({
+            errors: json.errors,
+            error_msg: json.message
+          })
+        }
       })
       .catch(e => {
-        console.log(e);
+        this.setState({error_msg: 'Something went wrong on our end.'})
       })
   }
 
@@ -109,7 +123,8 @@ class EditDeck extends Component {
             cards={deck.cards}
             onSubmit={this.updateDeck}
             cancelPath={cancelPath}
-            validation={this.state.errors}
+            errors={this.state.errors}
+            error_msg={this.state.error_msg}
           />
         </div> : 
         <p>Deck not found</p>
