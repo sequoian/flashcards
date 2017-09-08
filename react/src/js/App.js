@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../css/App.css';
 import {Route, Switch, withRouter} from 'react-router-dom';
-import DeckListContainer from './List';
+import Home from './Home'
 import DeckPageContainer from './Deck';
 import NewDeck from './NewDeck';
 import EditDeck from './EditDeck';
@@ -78,10 +78,7 @@ class App extends Component {
           logout={this.logOut}
         />
         <Switch>
-          <Route 
-            exact path='/' 
-            render={() => <DeckListContainer user={user} />} 
-          />
+          <Route exact path='/' component={Home} />
           <Route path='/cards/:id' component={DeckPageContainer} />
           <Route path='/new' component={NewDeck} />
           <Route path='/edit/:id' component={EditDeck} />
