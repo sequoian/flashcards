@@ -70,6 +70,7 @@ class App extends Component {
   }
   
   render() {
+    const {user} = this.state
     return (
       <div className='app'>
         <Header 
@@ -77,7 +78,10 @@ class App extends Component {
           logout={this.logOut}
         />
         <Switch>
-          <Route exact path='/' component={DeckListContainer} />
+          <Route 
+            exact path='/' 
+            render={() => <DeckListContainer user={user} />} 
+          />
           <Route path='/cards/:id' component={DeckPageContainer} />
           <Route path='/new' component={NewDeck} />
           <Route path='/edit/:id' component={EditDeck} />
@@ -91,7 +95,7 @@ class App extends Component {
           />
           <Route 
             path='/profile' 
-            render={() => <UserProfile user={this.state.user} />} />
+            render={() => <UserProfile user={user} />} />
         </Switch>
       </div>
     )  

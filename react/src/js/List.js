@@ -37,10 +37,10 @@ class DeckListContainer extends Component {
     this.getUserList()
   }
 
-  componentDidUpdate() {
-    console.log('updated')
-    if (this.state.decks.length > 0 && !Auth.isUserAuthenticated()) {
-      console.log('need to refresh list')
+  componentWillReceiveProps(nextProps) {
+    // if user logs out, set remove decks from list
+    if (this.props.user && !nextProps.user) {
+      this.setState({decks: []})
     }
   }
 
