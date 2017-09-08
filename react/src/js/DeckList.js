@@ -42,7 +42,8 @@ class DeckListContainer extends Component {
         
       }).catch(e => {
         let msg
-        if (e === '401') {
+        const error = e.message
+        if (error === '401') {
           msg = 'You need to be logged in to view your flashcard decks'
         }
         else {

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import Auth from './Auth'
+import Card from './Card'
+import Options from './DeckOptions'
 
 class DeckPageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       deck: null,
+      error: null,
       activeCardIndex: 0,
       showingFront: true,
       defaultFront: true
@@ -29,16 +32,30 @@ class DeckPageContainer extends Component {
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error(`status ${response.status}`);
+          throw new Error(response.status)
         }
-        return response.json();
+        else {
+          return response.json()
+        }
       })
       .then(json => {
         this.setState({
           deck: json
         })
       }).catch(e => {
-        console.log(e)
+        let msg
+        const error = e.message
+
+        if (error === '403') {
+          msg = 'You do not have permission to view this deck'
+        }
+        else if (error === '404') {
+          msg = 'This deck could not be found'
+        }
+        else {
+          msg = 'Something went wrong on our end and we could not retrieve the deck'
+        }
+        this.setState({error: msg})
       })
 
     window.addEventListener('keydown', this.handleKeyDown)
@@ -137,7 +154,7 @@ class DeckPageContainer extends Component {
   }
 
   render() {
-    return (
+    const deckPage = !this.state.deck ? null : (
       <DeckPage
         deck={this.state.deck}
         activeCardIndex={this.state.activeCardIndex}
@@ -150,38 +167,38 @@ class DeckPageContainer extends Component {
         changeDefaultFace={this.changeDefaultFace}
       />
     )
+    return (
+      <div>
+        <Link to={`/`}>Back</Link>
+        <div>{this.state.error}</div>
+        {deckPage}
+      </div>
+    )
   }    
 }
 
 const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard, 
   flipCard, shuffle, defaultFront, changeDefaultFace}) => {
-  if (deck) {
+    const header = (
+      <DeckHeader
+        title={deck.title}
+        id={deck.id}
+      />
+    )
+
     if (deck.cards.length > 0) {
-      const activeCard = deck.cards[activeCardIndex];
-      let face = null;
-      if (activeCard) {
-        face = showingFront ? activeCard.front : activeCard.back;
-      }
-      else {
-        face = 'Could not find card';
-      }
+      const activeCard = deck.cards[activeCardIndex]
       return (
         <div>
-          <Link to={`/`}>Back</Link> 
-          <CardInfo
-            deckID={deck.id}
-            deckTitle={deck.title}
-            deckLength={deck.cards.length}
-            cardIndex={activeCardIndex}
-            cardSide={showingFront}
-          />
+          {header}
           <Card
-            face={face}
-          />
-          <CardControls 
-            getNext={nextCard}
-            getPrevious={previousCard}
+            activeCard={deck.cards.length > 0 ? deck.cards[activeCardIndex] : null}
+            activeCardIndex={activeCardIndex}
+            showingFront={showingFront}
+            nextCard={nextCard}
+            previousCard={previousCard}
             flipCard={flipCard}
+            deckLength={deck.cards.length}
           />
           <Options
             shuffle={shuffle}
@@ -193,133 +210,19 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard,
     }
     else {
       return (
-        <NoCards deck={deck} />
+        <div>
+          {header}
+          There are no cards in your deck.
+        </div>
       )
     }
-  }
-  else {
-    return (
-      <NoDeck />
-    )
-  }
 }
 
-const NoCards = ({deck}) => (
+const DeckHeader = ({title, id}) => (
   <div>
-    <Link to={`/`}>Back</Link>  
-    <h2>{deck.title}</h2>
-    <Link to={`/edit/${deck.id}`}>Edit</Link>
-    <div>There are no cards in this deck.  Add some <Link to={`/edit/${deck.id}`}>here</Link>.</div>
-  </div>
-) 
-
-const NoDeck = () => (
-  <div>
-    <Link to={`/`}>Back</Link>
-    <div>This deck could not be found</div>
+    <h2>{title}</h2>
+    <Link to={`/edit/${id}`}>Edit</Link>
   </div>
 )
 
-const CardControls = ({getPrevious, getNext, flipCard}) => (
-  <div>
-    <button onClick={getPrevious}>Previous</button>
-    <button onClick={flipCard}>Flip</button>
-    <button onClick={getNext}>Next</button>
-  </div>
-);
-
-const CardInfo = ({deckID, deckTitle, deckLength, cardIndex, cardSide}) => (
-  <div>
-    <h2>{deckTitle}</h2>
-    <Link to={`/edit/${deckID}`}>Edit</Link>
-    <div>{cardIndex + 1}/{deckLength}</div>
-    <div>{cardSide ? 'Front' : 'Back'}</div>
-  </div>
-);
-
-const Card = ({face}) => (
-  <div className="card">
-    {face}
-  </div>
-);
-
-const Options = ({shuffle, defaultFront, changeDefaultFace}) => (
-  <div>
-    <h4>Options</h4>
-    <ShuffleDisplay 
-      shuffle={shuffle}
-    />
-    <DefaultFace
-      defaultFront={defaultFront}
-      changeDefaultFace={changeDefaultFace}
-    />
-  </div>
-)
-
-const DefaultFace = ({defaultFront, changeDefaultFace}) => (
-  <div>
-    <button
-      type="button"
-      onClick={changeDefaultFace}
-    >
-      Default Face: {defaultFront ? 'Front' : 'Back'}
-    </button>
-  </div>
-)
-
-class ShuffleDisplay extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: false
-    }
-    this.shuffle = this.shuffle.bind(this)
-  }
-
-  shuffle() {
-    // shuffle deck
-    this.props.shuffle();
-    
-    // activate shuffle message and clear timer if exists
-    this.setState((prevState) => {
-      return {
-        active: true,
-        timer: null
-      }
-    })
-
-    // TODO: guarantee timer is cleared BEFORE new timer is set
-    // set timer to deactivate shuffle message
-    const timer = setTimeout(() => {
-      this.setState({
-        active: false,
-        timer: null
-      })
-    }, 1000);
-
-    // keep track of timer
-    this.setState({
-      timer: timer
-    })
-  }
-
-  render() {
-    return (
-      <div>
-        <button 
-          type="button" 
-          onClick={this.shuffle}
-        >
-          Shuffle Deck
-        </button>
-        <span
-          className={this.state.active ? 'shuffled-show' : 'shuffled-hide'}
-        >
-          Shuffled
-        </span>
-      </div>
-    ) 
-  }
-}
-
-export default DeckPageContainer;
+export default DeckPageContainer
