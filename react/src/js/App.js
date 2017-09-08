@@ -18,11 +18,17 @@ class App extends Component {
       user: null
     }
     this.logOut = this.logOut.bind(this);
+    this.logIn = this.logIn.bind(this)
   }
 
   componentDidMount() {
     if (Auth.isUserAuthenticated()) {
-      this.getUser()
+      this.logIn()
+    }
+  }
+
+  logIn() {
+    this.getUser()
       .then(user => {
         if (user) {
           this.setState({
@@ -30,7 +36,6 @@ class App extends Component {
           })
         }
       })
-    }
   }
 
   getUser() {
@@ -41,10 +46,12 @@ class App extends Component {
       }
     })
       .then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
+        if (response.status > 400) {
+          throw new Error(response.status);
         }
-        return response.json();
+        else {
+          return response.json()
+        }    
       })
       .then(json => {
         return json.user
@@ -74,9 +81,17 @@ class App extends Component {
           <Route path='/cards/:id' component={DeckPageContainer} />
           <Route path='/new' component={NewDeck} />
           <Route path='/edit/:id' component={EditDeck} />
-          <Route path='/login' component={Login} />
-          <Route path='/signup' component={Signup} />
-          <Route path='/profile' component={UserProfile} />
+          <Route 
+            path='/login' 
+            render={() => <Login loginUser={this.logIn} />} 
+          />
+          <Route 
+            path='/signup' 
+            render={() => <Signup loginUser={this.logIn} />} 
+          />
+          <Route 
+            path='/profile' 
+            render={() => <UserProfile user={this.state.user} />} />
         </Switch>
       </div>
     )  

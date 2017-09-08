@@ -10,7 +10,7 @@ class DeckListContainer extends Component {
     }
   }
 
-  componentDidMount() {
+  getUserList() {
     // fetch list from database
     fetch('/api/deck-list', {
       method: 'GET',
@@ -25,13 +25,23 @@ class DeckListContainer extends Component {
         return response.json();
       })
       .then(json => {
-        //console.log(json)
         this.setState({
           decks: json
         })
       }).catch(e => {
         console.log(e)
       })
+  }
+
+  componentDidMount() {
+    this.getUserList()
+  }
+
+  componentDidUpdate() {
+    console.log('updated')
+    if (this.state.decks.length > 0 && !Auth.isUserAuthenticated()) {
+      console.log('need to refresh list')
+    }
   }
 
   render() {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import DeckForm from './DeckForm';
 import {Link, withRouter} from 'react-router-dom';
-import Validation from './Validation'
 import Auth from './Auth'
 
 class NewDeck extends Component {

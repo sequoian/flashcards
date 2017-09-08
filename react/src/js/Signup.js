@@ -63,6 +63,7 @@ class SignupContainer extends Component {
         if (json.success) {
           if (json.login) {
             Auth.authenticateUser(json.payload.token)
+            this.props.loginUser()
           }    
           this.props.history.replace('/')
         }

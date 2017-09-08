@@ -58,6 +58,7 @@ class LoginContainer extends Component {
       .then(json => {
         if (json.success) {
           Auth.authenticateUser(json.payload.token)
+          this.props.loginUser()
           this.props.history.replace('/')
         }
         else if (json.errors) {

@@ -28,7 +28,7 @@ const deleteDeck = function(req, res, next) {
   const db = req.app.get('db')
   const deck_id = parseInt(req.params.deckID)
 
-  sql.deletDeck(db, deck_id)
+  sql.deleteDeck(db, deck_id)
     .then(() => {
       res.status(200).json({
         success: true,

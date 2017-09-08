@@ -1,40 +1,15 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import ChangePassword from './ChangePassword'
-import Auth from './Auth'
 
 class UserProfileContainer extends Component {
   constructor(props) {
     super(props)
+    const user = this.props.user
     this.state = {
-      name: '',
-      email: ''
+      name: user ? user.name : null,
+      email: user ? user.email : null
     }
-  }
-
-  componentDidMount() {
-    fetch('/api/user', {
-      method: 'GET',
-      headers: {
-        'Authorization': `bearer ${Auth.getToken()}`
-      }
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(json => {
-        console.log(json)
-        this.setState({
-          name: json.user.name,
-          email: json.user.email
-        })
-      })
-      .catch(e => {
-        console.log(e)
-      })
   }
 
   render() {
