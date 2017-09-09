@@ -187,7 +187,6 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard,
     )
 
     if (deck.cards.length > 0) {
-      const activeCard = deck.cards[activeCardIndex]
       return (
         <div>
           {header}

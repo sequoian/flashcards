@@ -9,7 +9,8 @@ class EditDeck extends Component {
     this.state = {
       deck: null,
       errors: {},
-      error_msg: null
+      error_msg: null,
+      fetch_result: null
     }
     this.updateDeck = this.updateDeck.bind(this);
     this.deleteDeck = this.deleteDeck.bind(this);
@@ -25,9 +26,11 @@ class EditDeck extends Component {
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error(`status ${response.status}`);
+          throw new Error(response.status)
         }
-        return response.json();
+        else {
+          return response.json()
+        }
       })
       .then(json => {
         // set delete status and key for cards
@@ -40,7 +43,19 @@ class EditDeck extends Component {
           deck: json
         })
       }).catch(e => {
-        console.log(e)
+        let msg 
+        const error = e.message
+
+        if (error === '403') {
+          msg = 'You do not have permission to view this deck'
+        }
+        else if (error === '404') {
+          msg = 'This deck could not be found'
+        }
+        else {
+          msg = 'Something went wrong on our end and we could not retrieve the deck'
+        }
+        this.setState({fetch_result: msg})
       })
   }
 
@@ -123,13 +138,14 @@ class EditDeck extends Component {
   }
 
   render() {
-    const {deck} = this.state;
-    const cancelPath = deck ? `/cards/${deck.id}` : '/';
+    const {deck, fetch_result} = this.state;
+    const cancelPath = deck ? `/cards/${deck.id}` : '/'
     return (
-      deck ?
-        <div> 
-          <Link to={cancelPath}>Back</Link>
-          <h2>Edit Deck</h2>
+      <div>
+        <Link to={cancelPath}>Back</Link>
+        <h2>Edit Deck</h2>
+        {deck ?
+        <div>
           <button onClick={this.deleteDeck} className='deleteBtn'>Delete</button>
           <DeckForm 
             id={deck.id}
@@ -140,8 +156,10 @@ class EditDeck extends Component {
             errors={this.state.errors}
             error_msg={this.state.error_msg}
           />
-        </div> : 
-        <p>Deck not found</p>
+        </div>
+        : fetch_result
+      }
+      </div>
     )
   }
 }
