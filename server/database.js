@@ -58,9 +58,9 @@ exports.updateDeck = function(db, deck) {
   return db.tx(t => {
     // update decks table
     return t.none(`
-      UPDATE decks SET title = $1, last_updated = CURRENT_TIMESTAMP
+      UPDATE decks SET title = $1, last_updated = CURRENT_TIMESTAMP, is_public = $3
       WHERE id = $2
-    `, [deck.title, deck.id])
+    `, [deck.title, deck.id, deck.is_public])
       .then(() => {
         // update cards table
         const card_commands = deck.cards.map(card => {
@@ -95,7 +95,7 @@ exports.addDeck = function(db, deck, user_id) {
     return t.one(`
       INSERT INTO decks (title, author, is_public)
       VALUES ($1, $2, $3) RETURNING id
-    `, [deck.title, user_id, false])
+    `, [deck.title, user_id, deck.is_public])
       .then(result => {   
         deck_id = result.id
         

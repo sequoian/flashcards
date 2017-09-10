@@ -41,7 +41,7 @@ const UserProfile = ({name, email, joined}) => (
     
     <div>User: {name}</div>
     <div>Email: {email}</div>
-    <div>Joined: {formatDate(joined)}</div>
+    <div>Member since {formatDate(joined)}</div>
     <hr />
     <h3>Change Password</h3>
     <ChangePassword />

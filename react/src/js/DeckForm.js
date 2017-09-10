@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import LabeledInput from './LabeledInput'
 
 class DeckFormContainer extends Component {
   constructor(props) {
@@ -7,6 +8,7 @@ class DeckFormContainer extends Component {
     this.state = {
       id: props.id || null,
       title: props.title || '', 
+      is_public: props.is_public || false,
       // TODO: make new cards DRY
       cards: props.cards || [{id: null, front: '', back: '', delete: false, key: Date.now()}]
     }
@@ -14,19 +16,26 @@ class DeckFormContainer extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleCardChange = this.handleCardChange.bind(this);
+    this.handlePublicChange = this.handlePublicChange.bind(this)
     this.removeCard = this.removeCard.bind(this);
     this.moveCard = this.moveCard.bind(this);
   }
 
   onSubmit() {
-    const {id, title, cards} = this.state;
-    this.props.onSubmit(id, title, cards)
+    const {id, title, cards, is_public} = this.state;
+    this.props.onSubmit(id, title, cards, is_public)
   }
 
   handleTitleChange(event) {
     this.setState({
       title: event.target.value
     });
+  }
+
+  handlePublicChange(event) {
+    this.setState({
+      is_public: !this.state.is_public
+    })
   }
 
   handleCardChange(key, side, value) {
@@ -99,6 +108,7 @@ class DeckFormContainer extends Component {
     return (
       <DeckForm 
         title={this.state.title}
+        is_public={this.state.is_public}
         cards={this.state.cards.filter(card => card.delete ? null : card)}
         addCard={this.addCard}
         onSubmit={this.onSubmit}
@@ -109,13 +119,14 @@ class DeckFormContainer extends Component {
         moveCard={this.moveCard}
         errors={this.props.errors}
         error_msg={this.props.error_msg}
+        handlePublicChange={this.handlePublicChange}
       />
     )
   }
 }
 
-const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, 
-  cancelPath, moveCard, errors, error_msg}) => (
+const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, 
+  cancelPath, moveCard, errors, error_msg, handlePublicChange}) => (
   <form>
     <div className="errors">
       {error_msg}
@@ -129,6 +140,19 @@ const DeckForm = ({title, cards, addCard, onSubmit, removeCard, handleTitleChang
       value={title}
       onChange={handleTitleChange} 
     />
+    <div>
+      <input
+        type="checkbox"
+        id="is-public"
+        name="is-public"
+        value={is_public}
+        checked={is_public}
+        onChange={handlePublicChange}
+      />
+      <label htmlFor="is-public">
+        Deck is public
+      </label>
+    </div>
     {cards.map((card, idx) => (
       <CardInput
         key={card.key}

@@ -13,11 +13,12 @@ class NewDeck extends Component {
     this.addDeck = this.addDeck.bind(this);
   }
 
-  addDeck(id, title, cards) {
+  addDeck(id, title, cards, is_public) {
     const deck = {
       id: id,
       title: title,
-      cards: cards
+      cards: cards,
+      is_public: is_public
     }
 
     fetch('/api/add-deck',

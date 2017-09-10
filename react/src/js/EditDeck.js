@@ -60,11 +60,12 @@ class EditDeck extends Component {
   }
 
   // API Update
-  updateDeck(id, title, cards) {
+  updateDeck(id, title, cards, is_public) {
     const deck = {
       id: id,
       title: title,
-      cards: cards
+      cards: cards,
+      is_public: is_public
     }
     
     fetch('/api/update-deck',
@@ -153,6 +154,7 @@ class EditDeck extends Component {
           <DeckForm 
             id={deck.id}
             title={deck.title}
+            is_public={deck.is_public}
             cards={deck.cards}
             onSubmit={this.updateDeck}
             cancelPath={cancelPath}
