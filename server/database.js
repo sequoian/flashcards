@@ -189,3 +189,20 @@ exports.hasDeckPermission = function(db, user_id, deck_id) {
       return false
     })
 }
+
+// exports.deckIsPublic = function(db, deck_id) {
+//   return db.one(`
+//     SELECT is_public FROM decks WHERE id = $1
+//   `, deck_id)
+//     .then(deck => {
+//       if (deck.is_public) {
+//         return true
+//       }
+//       else {
+//         return false
+//       }
+//     })
+//     .catch(error => {
+//       return null
+//     })
+// }

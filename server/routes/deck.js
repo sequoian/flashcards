@@ -41,27 +41,48 @@ const deleteDeck = function(req, res, next) {
     })
 }
 
+// a variation on auth check
 const decodeUser = function(req, res, next) {
-  // TODO: create function
-  // A variation of authenticateUser, to be used instead on GET
-  // instead of returning 401, simply set user to null
-  next()
-}
+  req.decoded_token.sub = null
 
-const checkGetPermission = function(req, res, next) {
-  // TODO: create function
-  // if user is author, allow
-  // if not a user, or user is not author, allow only if deck is public
-  next()
+  if(!req.headers.authorization) {
+    return next()
+  }
+  else {
+    const token = req.headers.authorization.split(' ')[1];
+    jwt.verify(token, secret.jwt, (err, decoded) => {
+      if (err) {
+        return next()
+      }
+  
+      const user_id = decoded.sub;
+      const db = req.app.get('db')
+      
+      sql.getUser(db, user_id)
+        .then(success => {
+          req.decoded_token.sub = decoded.sub;
+          return next()
+        })
+        .catch(failure => {
+          return next()
+        })
+    })
+  }
 }
 
 const getDeck = function(req, res, next) {
   const db = req.app.get('db')
   const deck_id = parseInt(req.params.deckID)
+  const user_id = req.decoded_token.sub
 
   sql.getDeck(db, deck_id)
-    .then((query) => {
-      res.status(200).json(query)
+    .then(deck => {
+      if (deck.is_public || deck.author_id === user_id) {
+        res.status(200).json(deck)
+      }
+      else {
+        return res.status(403).end()
+      }
     })
     .catch((error) => {
       if (error.name === 'QueryResultError') {
@@ -74,7 +95,7 @@ const getDeck = function(req, res, next) {
     })
 }
 
-router.get('/deck/:deckID', [authenticateUser, checkGetPermission, getDeck])
+router.get('/deck/:deckID', [authenticateUser, getDeck])
 
 router.delete('/deck/:deckID', [authenticateUser, checkDeletePermission, deleteDeck])
 
