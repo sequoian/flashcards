@@ -30,7 +30,10 @@ exports.getUserDecks = function(db, user_id) {
 exports.getDeck = function(db, deck_id) {
   return db.tx(t => {
     let result = null
-    return t.one(`SELECT id, title FROM decks WHERE id = $1`, deck_id)
+    return t.one(`
+      SELECT d.id, d.title, d.date_created, d.last_updated, d.is_public, u.name AS author, d.author AS author_id
+      FROM decks d INNER JOIN users u ON (d.author = u.id) WHERE d.id = $1
+    `, deck_id)
       .then((deck) => {
         result = deck
         return t.query(`
@@ -147,7 +150,7 @@ exports.changePassword = function(db, id, new_password) {
 
 exports.getUser = function(db, id) {
   return db.one(`
-    SELECT id, name, email FROM users WHERE id = $1
+    SELECT id, name, email, date_joined FROM users WHERE id = $1
   `, id)
 }
 

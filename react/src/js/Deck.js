@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import Auth from './Auth'
 import Card from './Card'
 import Options from './DeckOptions'
+import {formatDate} from './Utility'
 
 class DeckPageContainer extends Component {
   constructor(props) {
@@ -183,6 +184,10 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard,
       <DeckHeader
         title={deck.title}
         id={deck.id}
+        author={deck.author}
+        date_created={deck.date_created}
+        last_edited={deck.last_updated}
+        is_public={deck.is_public}
       />
     )
 
@@ -217,10 +222,14 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard,
     }
 }
 
-const DeckHeader = ({title, id}) => (
+const DeckHeader = ({title, id, author, date_created, last_edited, is_public}) => (
   <div>
     <h2>{title}</h2>
     <Link to={`/edit/${id}`}>Edit</Link>
+    <div>Author: {author}</div>
+    <div>Created: {formatDate(date_created)}</div>
+    {last_edited ? <div>Last Edited: {formatDate(last_edited)}</div> : null}
+    <div>{is_public ? 'Public' : 'Private'}</div>
   </div>
 )
 

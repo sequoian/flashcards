@@ -14,7 +14,8 @@ const getUser = function(req, res, next) {
         user: {
           name: user.name,
           id: user.id,
-          email: user.email
+          email: user.email,
+          joined: user.date_joined
         }
       })
     })
