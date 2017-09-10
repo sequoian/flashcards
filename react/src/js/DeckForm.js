@@ -150,7 +150,7 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
         onChange={handlePublicChange}
       />
       <label htmlFor="is-public">
-        Deck is public
+        deck is public?
       </label>
     </div>
     {cards.map((card, idx) => (

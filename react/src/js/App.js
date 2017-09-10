@@ -39,7 +39,7 @@ class App extends Component {
   }
 
   getUser() {
-    return fetch('/api/user', {
+    return fetch('/api/profile', {
       method: 'GET',
       headers: {
         'Authorization': `bearer ${Auth.getToken()}`

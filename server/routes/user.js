@@ -4,7 +4,7 @@ const authenticateUser = require('../auth-check')
 const sql = require('../database')
 const logError = require('../log-error')
 
-const getUser = function(req, res, next) {
+const getProfile = function(req, res, next) {
   const db = req.app.get('db')
   const user_id = req.decoded_token.sub
 
@@ -25,6 +25,24 @@ const getUser = function(req, res, next) {
     })
 }
 
-router.get('/user', [authenticateUser, getUser])
+const getUser = function(req, res, next) {
+  const db = req.app.get('db')
+  const user_id = parseInt(req.params.userID)
+
+  sql.getUser(db, user_id)
+    .then(user => {
+      res.status(200).json({
+        name: user.name,
+        joined: user.date_joined
+      })
+    })
+    .catch(e => {
+      logError(e)
+      res.status(500).end()
+    })
+}
+
+router.get('/profile', [authenticateUser, getProfile])
+router.get('/user/:userID', [getUser])
 
 module.exports = router
