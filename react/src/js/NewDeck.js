@@ -51,7 +51,12 @@ class NewDeck extends Component {
         }
       })
       .catch(e => {
-        this.setState({error_msg: 'Something went wrong on our end.'})
+        if (e.message === '401') {
+          this.setState({error_msg: 'You must be logged in to do that'})
+        }
+        else {
+          this.setState({error_msg: 'Something went wrong on our end.'})
+        }
       })
   }
 

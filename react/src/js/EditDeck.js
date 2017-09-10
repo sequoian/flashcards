@@ -127,7 +127,10 @@ class EditDeck extends Component {
           this.props.history.replace('/');
         })
         .catch(e => {
-          if (e.message === '403') {
+          if (e.message === '401') {
+            alert('You must be logged in to do that')
+          }
+          else if (e.message === '403') {
             alert("You do not have permission to do that")
           }
           else {

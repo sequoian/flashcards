@@ -69,7 +69,13 @@ class ChangePasswordContainer extends Component {
         }  
       })
       .catch(error => {
-        this.setState({error_msg: 'Something went wrong on our end.'})
+        if (error.message === '401') {
+          this.setState({error_msg: 'You must be logged in to do that'})
+        }
+        else {
+          this.setState({error_msg: 'Something went wrong on our end.'})
+        }
+        
       })
   }
 
