@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import Auth from './Auth'
 import Card from './Card'
 import Options from './DeckOptions'
+import Vote from './Vote'
 import {formatDate} from './Utility'
 
 class DeckPageContainer extends Component {
@@ -195,6 +196,7 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard,
       return (
         <div>
           {header}
+          <Vote />
           <Card
             activeCard={deck.cards.length > 0 ? deck.cards[activeCardIndex] : null}
             activeCardIndex={activeCardIndex}

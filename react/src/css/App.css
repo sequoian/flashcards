@@ -67,3 +67,13 @@ form {
 .shuffled-show {
   cursor: default;
 }
+
+/* vote button */
+
+.vote-btn {
+  background-color: lightgray;
+}
+
+.voted {
+  background-color: yellow;
+}
