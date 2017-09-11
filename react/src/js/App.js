@@ -10,6 +10,7 @@ import Header from './Header'
 import Login from './Login'
 import Signup from './Signup'
 import UserProfile from './UserProfile'
+import UserPage from './UserPage'
 
 class App extends Component {
   constructor(props) {
@@ -92,7 +93,9 @@ class App extends Component {
           />
           <Route 
             path='/profile' 
-            render={() => <UserProfile user={user} />} />
+            render={() => <UserProfile user={user} />} 
+          />
+          <Route path='/user/:id' component={UserPage} />
         </Switch>
       </div>
     )  

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
-import LabeledInput from './LabeledInput'
 
 class DeckFormContainer extends Component {
   constructor(props) {

@@ -24,7 +24,7 @@ exports.getUserDecks = function(db, user_id) {
     SELECT d.id, d.title, u.name AS author FROM 
     decks d INNER JOIN users u ON (d.author = u.id) WHERE d.author = $1
     ORDER BY d.id ASC
-    `, user_id)
+  `, user_id)
 }
 
 exports.getDeck = function(db, deck_id) {
@@ -190,19 +190,11 @@ exports.hasDeckPermission = function(db, user_id, deck_id) {
     })
 }
 
-// exports.deckIsPublic = function(db, deck_id) {
-//   return db.one(`
-//     SELECT is_public FROM decks WHERE id = $1
-//   `, deck_id)
-//     .then(deck => {
-//       if (deck.is_public) {
-//         return true
-//       }
-//       else {
-//         return false
-//       }
-//     })
-//     .catch(error => {
-//       return null
-//     })
-// }
+exports.getUserPublicDecks = function(db, user_id) {
+  return db.query(`
+    SELECT d.id, d.title, u.name AS author FROM 
+    decks d INNER JOIN users u ON (d.author = u.id) 
+    WHERE d.author = $1 AND d.is_public = true
+    ORDER BY d.id ASC
+  `, user_id)
+}

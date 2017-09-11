@@ -31,14 +31,30 @@ const getUser = function(req, res, next) {
 
   sql.getUser(db, user_id)
     .then(user => {
-      res.status(200).json({
-        name: user.name,
-        joined: user.date_joined
-      })
+      sql.getUserPublicDecks(db, user_id)
+        .then(decks => {
+          res.status(200).json({
+            user: {
+              name: user.name,
+              joined: user.date_joined
+            },
+            decks: decks
+          })
+        })
+        .catch(e => {
+          logError(e)
+          res.status(500).end()
+        })
+      
     })
     .catch(e => {
-      logError(e)
-      res.status(500).end()
+      if (e.name === 'QueryResultError') {
+        res.status(404).end()
+      }
+      else {
+        logError(error)
+        res.status(500).end()
+      } 
     })
 }
 
