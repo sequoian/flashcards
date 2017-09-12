@@ -40,6 +40,7 @@ const deck_routes = require('./routes/deck')
 const deck_merge_routes = require('./routes/deck-merge')
 const deck_list_routes = require('./routes/deck-list')
 const user_routes = require('./routes/user')
+const vote_routes = require('./routes/vote')
 app.use('/auth', signup_routes)
 app.use('/auth', login_routes)
 app.use('/auth', passchange_routes)
@@ -47,6 +48,7 @@ app.use('/api', deck_routes)
 app.use('/api', deck_merge_routes)
 app.use('/api', deck_list_routes)
 app.use('/api', user_routes)
+app.use('/api', vote_routes)
 
 
 // All remaining requests return the React app, so it can handle routing.

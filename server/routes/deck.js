@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const authenticateUser = require('../auth-check')
+const decodeUser = require('../decode-user')
 const sql = require('../database')
 const logError = require('../log-error')
 
@@ -41,35 +42,6 @@ const deleteDeck = function(req, res, next) {
     })
 }
 
-// a variation on auth check
-const decodeUser = function(req, res, next) {
-  req.decoded_token.sub = null
-
-  if(!req.headers.authorization) {
-    return next()
-  }
-  else {
-    const token = req.headers.authorization.split(' ')[1];
-    jwt.verify(token, secret.jwt, (err, decoded) => {
-      if (err) {
-        return next()
-      }
-  
-      const user_id = decoded.sub;
-      const db = req.app.get('db')
-      
-      sql.getUser(db, user_id)
-        .then(success => {
-          req.decoded_token.sub = decoded.sub;
-          return next()
-        })
-        .catch(failure => {
-          return next()
-        })
-    })
-  }
-}
-
 const getDeck = function(req, res, next) {
   const db = req.app.get('db')
   const deck_id = parseInt(req.params.deckID)
@@ -95,7 +67,7 @@ const getDeck = function(req, res, next) {
     })
 }
 
-router.get('/deck/:deckID', [authenticateUser, getDeck])
+router.get('/deck/:deckID', [decodeUser, getDeck])
 
 router.delete('/deck/:deckID', [authenticateUser, checkDeletePermission, deleteDeck])
 

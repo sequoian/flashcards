@@ -98,7 +98,10 @@ class EditDeck extends Component {
         }
       })
       .catch(e => {
-        if (e.message === '403') {
+        if (e.message === '401') {
+          this.setState({error_msg: 'You must be logged in to do that'})
+        }
+        else if (e.message === '403') {
           this.setState({error_msg: 'You do not have permission to do that'})
         }
         else {

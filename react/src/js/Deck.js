@@ -196,7 +196,9 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard,
       return (
         <div>
           {header}
-          <Vote />
+          <Vote 
+            deck_id={deck.id}
+          />
           <Card
             activeCard={deck.cards.length > 0 ? deck.cards[activeCardIndex] : null}
             activeCardIndex={activeCardIndex}

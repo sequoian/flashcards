@@ -33,7 +33,7 @@ class NewDeck extends Component {
     })
       .then(response => {
         if (response.status > 400) {
-          throw new Error()
+          throw new Error(response.status)
         }
         else {
           return response.json()

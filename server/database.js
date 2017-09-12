@@ -198,3 +198,16 @@ exports.getUserPublicDecks = function(db, user_id) {
     ORDER BY d.id ASC
   `, user_id)
 }
+
+exports.getDeckVotes = function(db, deck_id) {
+  return db.query(`
+    SELECT vote FROM deck_votes WHERE deck_id = $1
+  `, deck_id)
+}
+
+exports.getUserVote = function(db, deck_id, user_id) {
+  return db.oneOrNone(`
+    SELECT vote FROM deck_votes 
+    WHERE deck_id = $1 AND user_id = $2 AND vote != 0
+  `, [deck_id, user_id])
+}
