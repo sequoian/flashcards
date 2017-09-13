@@ -236,3 +236,21 @@ exports.deckIsPublic = function(db, deck_id) {
       }
     })
 }
+
+exports.getPublicDecks = function(db, sorting) {
+  let order_by
+  if (sorting === 'score desc') order_by = 'ORDER BY score DESC';
+  else if (sorting === 'score asc') order_by = 'ORDER BY score ASC';
+  else if (sorting === 'date desc') order_by = 'ORDER BY d.date_created DESC';
+  else order_by = 'ORDER BY d.date_created ASC';
+
+  return db.query(`
+    SELECT d.id, 
+      d.title, 
+      u.name AS author, 
+      d.author AS author_id,
+      (SELECT SUM(vote) FROM deck_votes WHERE deck_id = d.id) AS score
+    FROM decks d INNER JOIN users u ON (d.author = u.id) WHERE d.is_public = true
+    ${order_by} 
+  `)
+}
