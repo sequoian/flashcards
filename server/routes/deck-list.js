@@ -18,6 +18,21 @@ const getUserDecks = function(req, res, next) {
     })
 }
 
+const getPublicDecks = function(req, res, next) {
+  const db = req.app.get('db')
+  const sorting = req.params.sorting
+
+  sql.getPublicDecks(db, sorting)
+    .then(decks => {
+      res.status(200).json(decks)
+    })
+    .catch(error => {
+      logError(error)
+      res.status(500).end()
+    })
+}
+
 router.get('/deck-list', [authenticateUser, getUserDecks])
+router.get('/public-decks/:sorting', getPublicDecks)
 
 module.exports = router
