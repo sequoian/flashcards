@@ -8,9 +8,7 @@ CREATE TABLE users (
   name              text NOT NULL UNIQUE,
   email             text NOT NULL UNIQUE,
   password          text NOT NULL,
-  date_joined       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  is_staff          boolean NOT NULL DEFAULT 'false',
-  is_banned         boolean NOT NULL DEFAULT 'false'
+  date_joined       timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE decks (

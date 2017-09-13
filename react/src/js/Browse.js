@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import {formatDate} from './Utility'
 import Auth from './Auth'
 
@@ -7,9 +7,14 @@ import Auth from './Auth'
 class BrowseContainer extends Component {
   constructor(props) {
     super(props)
+
+    // get url params
+    const params = new URLSearchParams(this.props.location.search)
+    const sort = params.get('sort')
+
     this.state = {
       decks: [],
-      sorting: 'date_desc',
+      sorting: sort || 'date_desc',
       error: null
     }
     this.changeSorting = this.changeSorting.bind(this)
@@ -20,6 +25,16 @@ class BrowseContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const params = new URLSearchParams(this.props.location.search)
+    const sort = params.get('sort')
+    // prevents the url being forced out of sync with sorting state
+    if (sort !== this.state.sorting) {
+      this.props.history.push({
+        pathname: this.props.location.pathname,
+        search: `?sort=${this.state.sorting}`
+      })
+    }
+
     if (this.state.sorting !== prevState.sorting) {
       this.getPublicDecks()
     }
@@ -52,6 +67,10 @@ class BrowseContainer extends Component {
     this.setState({
       sorting: event.target.value
     })
+    this.props.history.push({
+      pathname: this.props.location.pathname,
+      search: `?sort=${event.target.value}`
+    })
   }
 
   render() {
@@ -65,6 +84,7 @@ class BrowseContainer extends Component {
           />
           <DeckList
             decks={decks}
+            error={error}
           />
         </BrowsePage>
       </div>
@@ -80,16 +100,19 @@ const BrowsePage = ({children}) => (
   </div>
 )
 
-const DeckList = ({decks}) => (
-  <ul className="deck-list">
-    {decks.map(deck => (
-      <li key={deck.id}>
-        <DeckListItem
-          deck={deck}
-        />
-      </li>
-      ))}  
-  </ul>
+const DeckList = ({decks, error}) => (
+  <div>
+    <div className="errors">{error}</div>
+    <ul className="deck-list">
+      {decks.map(deck => (
+        <li key={deck.id}>
+          <DeckListItem
+            deck={deck}
+          />
+        </li>
+        ))}  
+    </ul>
+  </div>
 )
 
 const DeckListItem = ({deck}) => (
@@ -128,4 +151,4 @@ const Sorting = ({sorting, handleChange}) => (
   </div>
 )
 
-export default BrowseContainer
+export default withRouter(BrowseContainer)
