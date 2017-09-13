@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {formatDate} from './Utility'
+import Auth from './Auth'
 
 
 class BrowseContainer extends Component {
@@ -57,17 +58,27 @@ class BrowseContainer extends Component {
     const {decks, sorting, error} = this.state
     return (
       <div>
-        <Sorting
-          sorting={sorting}
-          handleChange={this.changeSorting}
-        />
-        <DeckList
-          decks={decks}
-        />
+        <BrowsePage>
+          <Sorting
+            sorting={sorting}
+            handleChange={this.changeSorting}
+          />
+          <DeckList
+            decks={decks}
+          />
+        </BrowsePage>
       </div>
     )
   }
 }
+
+const BrowsePage = ({children}) => (
+  <div>
+    {Auth.isUserAuthenticated() ? <Link to='/'>Back</Link> : null}
+    <h2>Browse Public Decks</h2>
+    {children}
+  </div>
+)
 
 const DeckList = ({decks}) => (
   <ul className="deck-list">
