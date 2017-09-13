@@ -11,6 +11,7 @@ import Login from './Login'
 import Signup from './Signup'
 import UserProfile from './UserProfile'
 import UserPage from './UserPage'
+import Browse from './Browse'
 
 class App extends Component {
   constructor(props) {
@@ -96,6 +97,7 @@ class App extends Component {
             render={() => <UserProfile user={user} />} 
           />
           <Route path='/user/:id' component={UserPage} />
+          <Route path='/browse' component={Browse} />
         </Switch>
       </div>
     )  

@@ -249,7 +249,8 @@ exports.getPublicDecks = function(db, sorting) {
       d.title, 
       u.name AS author, 
       d.author AS author_id,
-      (SELECT SUM(vote) FROM deck_votes WHERE deck_id = d.id) AS score
+      d.date_created,
+      (SELECT COALESCE(SUM(vote), 0) FROM deck_votes WHERE deck_id = d.id) AS score
     FROM decks d INNER JOIN users u ON (d.author = u.id) 
     WHERE d.is_public = true ${order_by} 
   `)
