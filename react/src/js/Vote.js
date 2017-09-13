@@ -42,16 +42,51 @@ class VoteContainer extends Component {
   }
 
   vote(choice) {
-    if (choice === 'up') {
-      this.setState({
-        user_vote: this.state.user_vote === 'up' ? null : 'up'
+    const vote = choice === 'up' ? 1 : -1
+
+    fetch(`/api/cast-vote/${this.props.deck_id}`, 
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${Auth.getToken()}`
+      },
+      body: JSON.stringify({vote: vote})
+    })
+      .then(response => {
+        if (response.status > 400) {
+          throw new Error(response.status)
+        }
+        else {
+          return response.json()
+        }
       })
-    }
-    else {
-      this.setState({
-        user_vote: this.state.user_vote === 'down' ? null : 'down'
+      .then(json => {
+        const user_vote = json.user_vote === 1 ? 'up' : 'down'
+        this.setState({
+          upvotes: json.upvotes,
+          downvotes: json.downvotes,
+          user_vote: user_vote,
+          error: null
+        })
       })
-    }
+      .catch(error => {
+        const status = error.message
+        let msg
+
+        if (status === '401') {
+          msg = 'You must be logged in to vote'
+        }
+        else if (status === '403') {
+          msg = 'Voting is only allowed on public decks'
+        }
+        else {
+          msg = 'Something went wrong and we could not submit your vote'
+        }
+
+        this.setState({error: msg})
+      })
   }
 
   render() {
