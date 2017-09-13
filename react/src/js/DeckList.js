@@ -74,6 +74,8 @@ class DeckListContainer extends Component {
 const DeckList = ({decks, error}) => (
   <div>
     <Link to={'/new'}>Create New Deck</Link>
+    <br />
+    <Link to={'/browse'}>Browse Public Decks</Link>
     <h3>My Flashcard Decks</h3>
     <div>{error}</div>
     <ul className="deck-list">
