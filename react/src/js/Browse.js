@@ -25,16 +25,6 @@ class BrowseContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const params = new URLSearchParams(this.props.location.search)
-    const sort = params.get('sort')
-    // prevents the url being forced out of sync with sorting state
-    if (sort !== this.state.sorting) {
-      this.props.history.push({
-        pathname: this.props.location.pathname,
-        search: `?sort=${this.state.sorting}`
-      })
-    }
-
     if (this.state.sorting !== prevState.sorting) {
       this.getPublicDecks()
     }
