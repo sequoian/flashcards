@@ -94,7 +94,6 @@ class BrowseContainer extends Component {
 
 const BrowsePage = ({children}) => (
   <div>
-    {Auth.isUserAuthenticated() ? <Link to='/'>Back</Link> : null}
     <h2>Browse Public Decks</h2>
     {children}
   </div>

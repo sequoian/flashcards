@@ -18,8 +18,7 @@ class UserProfileContainer extends Component {
     if (this.props.user) {
       const {name, email, joined} = this.props.user
       return (
-        <div>
-          <Link to={'/'}>Back</Link>  
+        <div> 
           <UserProfile 
             name={name}
             email={email}
@@ -30,7 +29,7 @@ class UserProfileContainer extends Component {
     }
     else {
       return (
-        <Link to={'/'}>Back</Link>
+        <div>You must be logged in to view your profile</div>
       )
     } 
   }

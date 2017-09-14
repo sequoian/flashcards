@@ -149,7 +149,6 @@ class EditDeck extends Component {
     const cancelPath = deck ? `/cards/${deck.id}` : '/'
     return (
       <div>
-        <Link to={cancelPath}>Back</Link>
         <h2>Edit Deck</h2>
         {deck ?
         <div>

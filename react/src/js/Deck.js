@@ -171,7 +171,6 @@ class DeckPageContainer extends Component {
     )
     return (
       <div>
-        <Link to={`/`}>Back</Link>
         <div>{this.state.error}</div>
         {deckPage}
       </div>

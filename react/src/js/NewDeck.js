@@ -65,7 +65,6 @@ class NewDeck extends Component {
     const cancelPath = '/'
     return (
       <div>
-        <Link to={cancelPath}>Back</Link>
         <h2>New Deck</h2>
         <DeckForm 
           onSubmit={this.addDeck}
