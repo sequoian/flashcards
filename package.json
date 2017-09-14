@@ -2,13 +2,19 @@
   "name": "flashcards",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon server",
-    "test": "mocha"
+    "start": "node server",
+    "dev": "nodemon server",
+    "test": "mocha",
+    "heroku-postbuild": "cd react/ && npm install --only=dev && npm install && npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sequoian/flashcards.git"
   },
+  "cacheDirectories": [
+    "node_modules",
+    "react/node_modules"
+  ],
   "dependencies": {
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
