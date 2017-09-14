@@ -7,12 +7,14 @@ module.exports = (req, res, next) => {
   req.decoded_token = {}
   req.decoded_token.sub = null
 
+  const jwt_key = process.env.NODE_ENV === 'production' ? process.env.JWT_KEY : secret.jwt
+
   if(!req.headers.authorization) {
     return next()
   }
   else {
     const token = req.headers.authorization.split(' ')[1];
-    jwt.verify(token, secret.jwt, (err, decoded) => {
+    jwt.verify(token, jwt_key, (err, decoded) => {
       if (err) {
         return next()
       }

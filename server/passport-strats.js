@@ -23,8 +23,9 @@ exports.LoginStrategy = new PassportLocalStrategy({
         }
         
         if (result) {
+          const jwt_key = process.env.NODE_ENV === 'production' ? process.env.JWT_KEY : secret.jwt
           const payload = {sub: user.id}
-          const token = jwt.sign(payload, secret.jwt)
+          const token = jwt.sign(payload, jwt_key)
           const data = {name: user.name}
           
           return done(null, token, data)

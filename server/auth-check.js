@@ -10,7 +10,8 @@ module.exports = (req, res, next) => {
 
   // verify token is legit
   const token = req.headers.authorization.split(' ')[1];
-  jwt.verify(token, secret.jwt, (err, decoded) => {
+  const jwt_key = process.env.NODE_ENV === 'production' ? process.env.JWT_KEY : secret.jwt
+  jwt.verify(token, jwt_key, (err, decoded) => {
     // check if verification failed
     if (err) {
       return res.status(401).end();
