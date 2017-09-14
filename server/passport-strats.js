@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const PassportLocalStrategy = require('passport-local').Strategy;
-const secret = require('./secret.json');
 const sql = require('./database')
 const bcrypt = require('bcrypt')
 const salt_rounds = 10
@@ -23,7 +22,15 @@ exports.LoginStrategy = new PassportLocalStrategy({
         }
         
         if (result) {
-          const jwt_key = process.env.NODE_ENV === 'production' ? process.env.JWT_KEY : secret.jwt
+          let jwt_key
+          if (process.env.NODE_ENV === 'production') {
+            jwt_key = process.env.JWT_KEY
+          }
+          else {
+            const secret = require('./secret.json');
+            jwt_key = secret.jwt
+          }
+
           const payload = {sub: user.id}
           const token = jwt.sign(payload, jwt_key)
           const data = {name: user.name}

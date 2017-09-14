@@ -1,13 +1,19 @@
 const sql = require('./database')
 const jwt = require('jsonwebtoken')
-const secret = require('./secret.json')
 
 // a variation on auth check
 module.exports = (req, res, next) => {
   req.decoded_token = {}
   req.decoded_token.sub = null
 
-  const jwt_key = process.env.NODE_ENV === 'production' ? process.env.JWT_KEY : secret.jwt
+  let jwt_key
+  if (process.env.NODE_ENV === 'production') {
+    jwt_key = process.env.JWT_KEY
+  }
+  else {
+    const secret = require('./secret.json');
+    jwt_key = secret.jwt
+  }
 
   if(!req.headers.authorization) {
     return next()

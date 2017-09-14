@@ -1,5 +1,4 @@
 const pgp = require('pg-promise')();
-const secret = require('./secret.json');
 
 exports.connectToDatabase = function() {
   if (process.env.NODE_ENV === 'production') {
@@ -8,6 +7,7 @@ exports.connectToDatabase = function() {
   }
   else {
     // connect to local database
+    const secret = require('./secret.json');
     const connection = {
       host: 'localhost',
       port: 5432,

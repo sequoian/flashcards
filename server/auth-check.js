@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secret = require('./secret.json');
+
 const sql = require('./database')
 
 module.exports = (req, res, next) => {
@@ -10,7 +10,16 @@ module.exports = (req, res, next) => {
 
   // verify token is legit
   const token = req.headers.authorization.split(' ')[1];
-  const jwt_key = process.env.NODE_ENV === 'production' ? process.env.JWT_KEY : secret.jwt
+
+  let jwt_key
+  if (process.env.NODE_ENV === 'production') {
+    jwt_key = process.env.JWT_KEY
+  }
+  else {
+    const secret = require('./secret.json');
+    jwt_key = secret.jwt
+  }
+
   jwt.verify(token, jwt_key, (err, decoded) => {
     // check if verification failed
     if (err) {
