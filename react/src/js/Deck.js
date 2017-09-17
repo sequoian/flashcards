@@ -5,6 +5,7 @@ import Card from './Card'
 import Options from './DeckOptions'
 import Vote from './Vote'
 import {formatDate} from './Utility'
+import {BackLink} from './HistoryLink'
 
 class DeckPageContainer extends Component {
   constructor(props) {
@@ -194,6 +195,7 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard,
     if (deck.cards.length > 0) {
       return (
         <div>
+          <BackLink fallbackPath='/'>Back</BackLink>
           {header}
           <Vote 
             deck_id={deck.id}
@@ -218,6 +220,7 @@ const DeckPage = ({deck, activeCardIndex, showingFront, nextCard, previousCard,
     else {
       return (
         <div>
+          <BackLink />
           {header}
           There are no cards in your deck.
         </div>

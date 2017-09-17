@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 import {formatDate} from './Utility'
+import HistoryLink from './HistoryLink'
 
 
 class BrowseContainer extends Component {
@@ -108,9 +109,9 @@ const DeckList = ({decks, error}) => (
 const DeckListItem = ({deck}) => (
   <div>
     <div>
-      <Link to={`/cards/${deck.id}`}>
+      <HistoryLink to={`/cards/${deck.id}`}>
         {deck.title}
-      </Link>
+      </HistoryLink>
     </div>
     <div>
       By <Link to={`/user/${deck.author_id}`}>
