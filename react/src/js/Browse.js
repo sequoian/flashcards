@@ -7,13 +7,9 @@ class BrowseContainer extends Component {
   constructor(props) {
     super(props)
 
-    // get url params
-    const params = new URLSearchParams(this.props.location.search)
-    const sort = params.get('sort')
-
     this.state = {
       decks: [],
-      sorting: sort || 'date_desc',
+      sorting: 'date_desc',
       error: null
     }
     this.changeSorting = this.changeSorting.bind(this)
@@ -55,10 +51,6 @@ class BrowseContainer extends Component {
   changeSorting(event) {
     this.setState({
       sorting: event.target.value
-    })
-    this.props.history.push({
-      pathname: this.props.location.pathname,
-      search: `?sort=${event.target.value}`
     })
   }
 
