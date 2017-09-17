@@ -9,7 +9,7 @@ class BrowseContainer extends Component {
 
     this.state = {
       decks: [],
-      sorting: 'date_desc',
+      sorting: this.getSorting() || 'date_desc',
       error: null
     }
     this.changeSorting = this.changeSorting.bind(this)
@@ -49,9 +49,19 @@ class BrowseContainer extends Component {
   }
 
   changeSorting(event) {
+    const value = event.target.value
+    this.storeSorting(value)
     this.setState({
-      sorting: event.target.value
+      sorting: value
     })
+  }
+
+  getSorting() {
+    return sessionStorage.getItem('sorting')
+  }
+
+  storeSorting(value) {
+    sessionStorage.setItem('sorting', value)
   }
 
   render() {
