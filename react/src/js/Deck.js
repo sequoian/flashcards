@@ -40,7 +40,7 @@ const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
       is_public={deck.is_public}
       deck_length={deck.cards.length}
       date_created={deck.date_created}
-      last_edited={deck.last_edited}
+      last_edited={deck.last_updated}
     />
   </div>
 )

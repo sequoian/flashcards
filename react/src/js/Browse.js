@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
-import {formatDate} from './Utility'
+import {formatDateRelative} from './Utility'
 
 
 class BrowseContainer extends Component {
@@ -117,11 +117,12 @@ const DeckListItem = ({deck}) => (
         {deck.author}
       </Link>
     </div>
+
     <div>
-      Score: {deck.score}
+      Created {formatDateRelative(deck.date_created)}
     </div>
     <div>
-      Created {formatDate(deck.date_created)}
+      {deck.score} points
     </div>
   </div>
 )

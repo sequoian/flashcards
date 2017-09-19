@@ -1,7 +1,11 @@
+import moment from 'moment'
+
 function formatDate(date) {
-  const options = {month: 'long', day: 'numeric', year: 'numeric'}
-  date = new Date(date)
-  return date.toLocaleString('en-US', options)
+  return moment(date).format('MMMM DD, YYYY')
 }
 
-export {formatDate}
+function formatDateRelative(date) {
+  return moment(date).fromNow()
+}
+
+export {formatDate, formatDateRelative}
