@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../css/App.css';
 import {Route, Switch, withRouter} from 'react-router-dom';
 import Home from './Home'
-import DeckPageContainer from './Deck';
+import DeckPage from './DeckPage';
 import NewDeck from './NewDeck';
 import EditDeck from './EditDeck';
 import Auth from './Auth';
@@ -81,7 +81,7 @@ class App extends Component {
         />
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route path='/cards/:id' component={DeckPageContainer} />
+          <Route path='/cards/:id' component={DeckPage} />
           <Route path='/new' component={NewDeck} />
           <Route path='/edit/:id' component={EditDeck} />
           <Route 

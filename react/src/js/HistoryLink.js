@@ -37,7 +37,7 @@ const BackLink = withRouter(({fallback, value, location}) => {
     path = '/'
   }
 
-  const text = value ? value : '< Back'
+  const text = value ? value : 'Back'
 
   return <Link to={path}>{text}</Link>
 })
