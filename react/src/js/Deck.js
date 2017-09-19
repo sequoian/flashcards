@@ -11,6 +11,7 @@ const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
       author={deck.author}
       author_id={deck.author_id}
     />
+    <EnterEdit />
 
     {deck.cards.length > 0 
       ?
@@ -55,6 +56,10 @@ const Header = ({title, author, author_id}) => (
 
 const EnterFlashcards = withRouter(({match}) => {
   return <HistoryLink to={`${match.url}/flashcards`}>Start</HistoryLink>
+})
+
+const EnterEdit = withRouter(({match}) => {
+  return <HistoryLink to={`${match.url}/edit`}>Edit</HistoryLink>
 })
 
 const Options = ({children}) => (

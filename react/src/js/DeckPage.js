@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Deck from './Deck'
 import Flashcards from './Flashcards'
+import EditDeck from './EditDeck'
 import Auth from './Auth'
 import {Route, Switch, Link, withRouter} from 'react-router-dom'
 import {BackLink} from './HistoryLink'
@@ -17,9 +18,14 @@ class DeckPage extends Component {
     }
     this.changeFacing = this.changeFacing.bind(this)
     this.changeShuffle = this.changeShuffle.bind(this)
+    this.updateDeck = this.updateDeck.bind(this)
   }
 
   componentDidMount() {
+    this.fetchDeck()
+  }
+
+  fetchDeck() {
     fetch(`/api/deck/${this.props.match.params.id}`, {
       method: 'GET',
       headers: {
@@ -67,38 +73,48 @@ class DeckPage extends Component {
     })
   }
 
+  updateDeck() {
+    this.fetchDeck()
+  }
+
   renderDeck() {
     const {deck, error, shuffle, facing} = this.state
     if (deck) {
       return (
-        <div>
-          <BackLink />
-          <Deck
-            deck={deck}
-            shuffle={shuffle}
-            facing={facing}
-            enterFlashcards={this.enterFlashcards}
-            changeFacing={this.changeFacing}
-            changeShuffle={this.changeShuffle}
-          />  
-        </div>
+        <Deck
+          deck={deck}
+          shuffle={shuffle}
+          facing={facing}
+          enterFlashcards={this.enterFlashcards}
+          changeFacing={this.changeFacing}
+          changeShuffle={this.changeShuffle}
+        />  
       )
     }
     else if (error) {
-      return (
-        <div>
-          <BackLink />
-          <Error error={error} />
-        </div>
-      )
+      return <Error error={error} />
     }
     else {
-      return <BackLink />
+      return null
     }
   }
 
   renderEdit() {
-
+    const {deck, error} = this.state
+    if (deck) {
+      return (
+        <EditDeck 
+          deck={deck} 
+          updateDeck={this.updateDeck} 
+        />
+      )
+    }
+    else if (error) {
+      return <Error error={error} />
+    }
+    else {
+      return null
+    }
   }
 
   renderFlashcards() {
@@ -125,18 +141,20 @@ class DeckPage extends Component {
   render() {
     const {match} = this.props
     return (
-      <div>
-        <Switch>
-          <Route
-            exact path={`${match.url}`}
-            render={() => this.renderDeck()}
-          />
-          <Route
-            path={`${match.url}/flashcards`}
-            render={() => this.renderFlashcards()}
-          />
-        </Switch>
-      </div>
+      <Switch>
+        <Route
+          exact path={`${match.url}`}
+          render={() => this.renderDeck()}
+        />
+        <Route
+          path={`${match.url}/flashcards`}
+          render={() => this.renderFlashcards()}
+        />
+        <Route
+          path={`${match.url}/edit`}
+          render={() => this.renderEdit()}
+        />
+      </Switch>
     )
   }    
 }

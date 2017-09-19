@@ -83,7 +83,6 @@ class App extends Component {
           <Route exact path='/' component={Home} />
           <Route path='/cards/:id' component={DeckPage} />
           <Route path='/new' component={NewDeck} />
-          <Route path='/edit/:id' component={EditDeck} />
           <Route 
             path='/login' 
             render={() => <Login loginUser={this.logIn} />} 
