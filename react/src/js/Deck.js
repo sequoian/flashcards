@@ -87,6 +87,7 @@ const ShuffleOption = ({shuffle, handleChange}) => (
 
 const FacingOption = ({facing, handleChange}) => (
   <div>
+    <div>Default Card Face</div>
     <label>
       <input
         type="radio"

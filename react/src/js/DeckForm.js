@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {BackLinkHistory} from './HistoryLink'
+import LabeledInput from './LabeledInput'
 
 class DeckFormContainer extends Component {
   constructor(props) {
@@ -147,14 +148,13 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
     <div className="errors">
       {error_msg}
     </div>
-    <div className="errors">
-      {errors.title}
-    </div>
-    <input 
-      type="text" 
-      placeholder="Title" 
+    <LabeledInput
+      type="text"
       value={title}
-      onChange={handleTitleChange} 
+      name="title"
+      label="Title"
+      onChange={handleTitleChange}
+      error={errors.title}
     />
     <div>
       <input
@@ -166,9 +166,11 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
         onChange={handlePublicChange}
       />
       <label htmlFor="is-public">
-        deck is public?
+        deck is public (other users can access it, and it will appear on the Browse page)
       </label>
     </div>
+    <hr />
+    <div>Cards</div>
     {cards.map((card, idx) => (
       <CardInput
         key={card.key}
