@@ -42,6 +42,30 @@ const BackLink = withRouter(({fallback, value, location}) => {
   return <Link to={path}>{text}</Link>
 })
 
+/**
+ * Like BackLink, but moves browser history back instead of pushing on a new history state
+ * Requires "to" param
+ */
+const BackLinkHistory = withRouter(({to, value, location, history}) => {
+  const text = value ? value : 'Back'
+  if (location.state && location.state.hasOwnProperty('from')) {
+    return (
+    <Link 
+      to={to}
+      onClick={event => {
+        event.preventDefault()
+        history.goBack()
+      }}
+    >
+      {text}
+    </Link>
+    )
+  }
+  else {
+    return <Link to={to}>{text}</Link>
+  }
+})
+
 export default HistoryLink
 
-export {BackLink}
+export {BackLink, BackLinkHistory}

@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
 import Vote from './Vote'
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
+import HistoryLink from './HistoryLink'
 import {formatDate} from './Utility'
 
-const Deck = ({deck, shuffle, facing, enterFlashcards, changeFacing, changeShuffle}) => (
+const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
   <div>
     <Header
       title={deck.title}
@@ -14,9 +15,7 @@ const Deck = ({deck, shuffle, facing, enterFlashcards, changeFacing, changeShuff
     {deck.cards.length > 0 
       ?
       <div>
-        <EnterFlashcards 
-          enterFlashcards={enterFlashcards}
-        />
+        <EnterFlashcards />
         <Options>
           <ShuffleOption 
             shuffle={shuffle}
@@ -54,14 +53,9 @@ const Header = ({title, author, author_id}) => (
   </div>
 )
 
-const EnterFlashcards = ({enterFlashcards}) => (
-  <button 
-    type="button" 
-    onClick={enterFlashcards}
-  >
-    Start
-  </button>
-)
+const EnterFlashcards = withRouter(({match}) => {
+  return <HistoryLink to={`${match.url}/flashcards`}>Start</HistoryLink>
+})
 
 const Options = ({children}) => (
   <form>

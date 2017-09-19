@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+import {Link, withRouter} from 'react-router-dom'
+import {BackLinkHistory} from './HistoryLink'
 
 class Flashcards extends Component {
   constructor(props) {
@@ -104,7 +106,6 @@ class Flashcards extends Component {
       <div>
         <Header
           title={deck.title}
-          exit={this.props.exit}
         />
         <CardInfo
           deck_length={deck.cards.length}
@@ -124,17 +125,18 @@ class Flashcards extends Component {
   }
 }
 
-const Header = ({title, exit}) => (
-  <div>
-    <h2>{title}</h2>
-    <button 
-      type="button"
-      onClick={exit}
-    >
-      Back
-    </button>
-  </div>
-)
+const Header = withRouter(({title, match}) => {
+  const id = match.url.split('/')[2]
+  return (
+    <div>
+      <h2>{title}</h2>
+      <BackLinkHistory 
+        to={`/cards/${id}`}
+        value="Back"  
+      />
+    </div>
+  )
+})
 
 const CardInfo = ({index, deck_length, side}) => (
   <div>

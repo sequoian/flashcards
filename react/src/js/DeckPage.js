@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Deck from './Deck'
 import Flashcards from './Flashcards'
 import Auth from './Auth'
-import {Link} from 'react-router-dom'
+import {Route, Switch, Link, withRouter} from 'react-router-dom'
 import {BackLink} from './HistoryLink'
 
 class DeckPage extends Component {
@@ -17,8 +17,6 @@ class DeckPage extends Component {
     }
     this.changeFacing = this.changeFacing.bind(this)
     this.changeShuffle = this.changeShuffle.bind(this)
-    this.enterFlashcards = this.enterFlashcards.bind(this)
-    this.enterDeck = this.enterDeck.bind(this)
   }
 
   componentDidMount() {
@@ -69,24 +67,6 @@ class DeckPage extends Component {
     })
   }
 
-  enterDeck() {
-    this.setState({
-      page: 'deck'
-    })
-  }
-
-  enterFlashcards() {
-    this.setState({
-      page: 'flashcards'
-    })
-  }
-
-  enterEdit() {
-    this.setState({
-      page: 'edit'
-    })
-  }
-
   renderDeck() {
     const {deck, error, shuffle, facing} = this.state
     if (deck) {
@@ -122,30 +102,42 @@ class DeckPage extends Component {
   }
 
   renderFlashcards() {
-    const {deck, shuffle, facing} = this.state
+    const {deck, shuffle, facing, error} = this.state
     const default_front = facing === 'front'
-
-    return (
-      <Flashcards
-        deck={deck}
-        shuffle={shuffle}
-        defaultFront={default_front}
-        exit={this.enterDeck}
-      />
-    )
+    
+    if (deck) {
+      return (
+        <Flashcards
+          deck={deck}
+          shuffle={shuffle}
+          defaultFront={default_front}
+        />
+      )
+    }
+    else if (error) {
+      return <Error error={error} />
+    }
+    else {
+      return null
+    }
   }
 
   render() {
-    const page = this.state.page
-    if (page === 'flashcards') {
-      return this.renderFlashcards()
-    }
-    else if (page === 'edit') {
-      return this.renderEdit()
-    }
-    else {
-      return this.renderDeck()
-    }
+    const {match} = this.props
+    return (
+      <div>
+        <Switch>
+          <Route
+            exact path={`${match.url}`}
+            render={() => this.renderDeck()}
+          />
+          <Route
+            path={`${match.url}/flashcards`}
+            render={() => this.renderFlashcards()}
+          />
+        </Switch>
+      </div>
+    )
   }    
 }
 
@@ -153,4 +145,4 @@ const Error = ({error}) => (
   <div>{error}</div>
 )
 
-export default DeckPage
+export default withRouter(DeckPage)
