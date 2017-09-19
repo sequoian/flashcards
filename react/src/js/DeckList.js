@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import Auth from './Auth'
-import HistoryLink from './HistoryLink'
 
 class DeckListContainer extends Component {
   constructor(props) {
@@ -82,9 +81,9 @@ const DeckList = ({decks, error}) => (
     <ul className="deck-list">
       {decks.map(deck => (
         <li key={deck.id}>
-          <HistoryLink to={`/cards/${deck.id}`}>
+          <Link to={`/cards/${deck.id}`}>
             {deck.title}
-          </HistoryLink>
+          </Link>
         </li>
         ))}  
     </ul>

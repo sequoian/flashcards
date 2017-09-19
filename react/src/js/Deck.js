@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import Vote from './Vote'
 import {Link, withRouter} from 'react-router-dom'
 import HistoryLink from './HistoryLink'

@@ -4,7 +4,6 @@ import {Route, Switch, withRouter} from 'react-router-dom';
 import Home from './Home'
 import DeckPage from './DeckPage';
 import NewDeck from './NewDeck';
-import EditDeck from './EditDeck';
 import Auth from './Auth';
 import Header from './Header'
 import Login from './Login'

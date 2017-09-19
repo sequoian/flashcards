@@ -139,14 +139,19 @@ const VoteControls = ({user_vote, upvote, downvote}) => (
   </div>
 )
 
-const PointDisplay = ({upvotes, downvotes}) => (
-  <div>
-    <div>Score: {upvotes - downvotes}</div>
+const PointDisplay = ({upvotes, downvotes}) => {
+  const percentage = Math.floor(upvotes / (upvotes + downvotes) * 100)
+  return (
     <div>
-      {Math.floor(upvotes / (upvotes + downvotes) * 100)} % positive
-      of {upvotes + downvotes} votes
+      <div>Score: {upvotes - downvotes}</div>
+      <div>
+        {!isNaN(percentage) ?
+        `${percentage} % positive of ${upvotes + downvotes} votes`
+        : 'No votes'
+        }
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default Vote

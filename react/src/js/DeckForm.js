@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {Link} from 'react-router-dom'
 import {BackLinkHistory} from './HistoryLink'
 
 class DeckFormContainer extends Component {
@@ -21,7 +20,19 @@ class DeckFormContainer extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.cards) {
+    if (this.props.cards) {
+      this.setState(prevState => {
+        const cards = prevState.cards.map(card => {
+          card.delete = false
+          card.key = card.id
+          return card
+        })
+        return {
+          cards: cards
+        }
+      })
+    }
+    else {
       this.addCard()
     }
   }

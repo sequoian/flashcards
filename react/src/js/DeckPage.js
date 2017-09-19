@@ -3,8 +3,7 @@ import Deck from './Deck'
 import Flashcards from './Flashcards'
 import EditDeck from './EditDeck'
 import Auth from './Auth'
-import {Route, Switch, Link, withRouter} from 'react-router-dom'
-import {BackLink} from './HistoryLink'
+import {Route, Switch, withRouter} from 'react-router-dom'
 
 class DeckPage extends Component {
   constructor(props) {

@@ -43,9 +43,15 @@ class EditDeck extends Component {
         }  
       })
       .then(json => {
+        const {history, location} = this.props
         if (json.success) {
           this.props.updateDeck()
-          this.props.history.replace(`/cards/${json.id}`)
+          if (location.state && location.state.hasOwnProperty('from')) {
+            history.goBack()
+          }
+          else {
+            history.push(`/cards/${json.id}`)
+          }
         }
         else {
           this.setState({
