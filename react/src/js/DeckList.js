@@ -81,7 +81,7 @@ const DeckList = ({decks, error}) => (
     <ul className="deck-list">
       {decks.map(deck => (
         <li key={deck.id}>
-          <Link to={`/cards/${deck.id}`}>
+          <Link to={`/deck/${deck.id}`}>
             {deck.title}
           </Link>
         </li>

@@ -80,7 +80,7 @@ class App extends Component {
         />
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route path='/cards/:id' component={DeckPage} />
+          <Route path='/deck/:id' component={DeckPage} />
           <Route path='/new' component={NewDeck} />
           <Route 
             path='/login' 

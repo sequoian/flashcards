@@ -131,7 +131,7 @@ const Header = withRouter(({title, match}) => {
     <div>
       <h2>{title}</h2>
       <BackLinkHistory 
-        to={`/cards/${id}`}
+        to={`/deck/${id}`}
         value="Back"  
       />
     </div>

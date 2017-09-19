@@ -50,7 +50,7 @@ class EditDeck extends Component {
             history.goBack()
           }
           else {
-            history.push(`/cards/${json.id}`)
+            history.push(`/deck/${json.id}`)
           }
         }
         else {
@@ -110,7 +110,7 @@ class EditDeck extends Component {
   render() {
     const {deck} = this.props
     const {error_msg, errors} = this.state
-    const cancelPath = `/cards/${deck.id}`
+    const cancelPath = `/deck/${deck.id}`
     
     return (
       <div>

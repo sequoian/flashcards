@@ -108,7 +108,7 @@ const DeckList = ({decks, error}) => (
 const DeckListItem = ({deck}) => (
   <div>
     <div>
-      <Link to={`/cards/${deck.id}`}>
+      <Link to={`/deck/${deck.id}`}>
         {deck.title}
       </Link>
     </div>

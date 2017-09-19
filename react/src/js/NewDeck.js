@@ -42,7 +42,7 @@ class NewDeck extends Component {
       })
       .then(json => {
         if (json.success) {
-          this.props.history.replace(`/cards/${json.id}`)
+          this.props.history.replace(`/deck/${json.id}`)
         }
         else {
           this.setState({
