@@ -57,37 +57,67 @@ class DeckListContainer extends Component {
   }
 
   componentDidMount() {
-    this.getUserList()
+    if (Auth.isUserAuthenticated()) {
+      this.getUserList()
+    }
   }
 
   render() {
     const {decks, error} = this.state
-    return (
-      <DeckList
-        decks={decks}
-        error={error}
-      />
-    ) 
+    if (Auth.isUserAuthenticated()) {
+      return (
+        <div>
+          <Header />
+          <DeckList
+            decks={decks}
+            error={error}
+          />
+        </div>
+      ) 
+    }
+    else {
+      return (
+        <div>
+          <Header />
+          <NoUser />
+        </div>
+      )
+    }
+    
   }
 }
 
+const Header = () => (
+  <h3>My Flashcards</h3>
+)
+
 const DeckList = ({decks, error}) => (
   <div>
-    <Link to={'/new'}>Create New Deck</Link>
-    <br />
-    <Link to={'/browse'}>Browse Public Decks</Link>
-    <h3>My Flashcard Decks</h3>
     <div>{error}</div>
     <ul className="deck-list">
       {decks.map(deck => (
         <li key={deck.id}>
-          <Link to={`/deck/${deck.id}`}>
-            {deck.title}
-          </Link>
+          <DeckItem
+            title={deck.title}
+            id={deck.id}
+          />
         </li>
         ))}  
     </ul>
   </div>
-);
+)
+
+const DeckItem = ({title, id}) => (
+  <Link to={`/deck/${id}`}>
+    {title}
+  </Link>
+)
+
+const NoUser = () => (
+  <div>
+    You must <Link to='/signup'>sign up</Link> for an account or <Link to='/login'>log in</Link> to
+    view your flashcards.
+  </div>
+)
 
 export default DeckListContainer;

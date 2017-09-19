@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../css/App.css';
 import {Route, Switch, withRouter} from 'react-router-dom';
-import Home from './Home'
 import DeckPage from './DeckPage';
 import NewDeck from './NewDeck';
 import Auth from './Auth';
@@ -11,6 +10,7 @@ import Signup from './Signup'
 import UserProfile from './UserProfile'
 import UserPage from './UserPage'
 import Browse from './Browse'
+import DeckList from './DeckList'
 
 class App extends Component {
   constructor(props) {
@@ -79,7 +79,8 @@ class App extends Component {
           logout={this.logOut}
         />
         <Switch>
-          <Route exact path='/' component={Home} />
+          <Route exact path='/' component={Browse} />
+          <Route path='/my-cards' component={DeckList} />
           <Route path='/deck/:id' component={DeckPage} />
           <Route path='/new' component={NewDeck} />
           <Route 
@@ -95,7 +96,6 @@ class App extends Component {
             render={() => <UserProfile user={user} />} 
           />
           <Route path='/user/:id' component={UserPage} />
-          <Route path='/browse' component={Browse} />
         </Switch>
       </div>
     )  

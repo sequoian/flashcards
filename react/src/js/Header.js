@@ -3,14 +3,19 @@ import {Link} from 'react-router-dom';
 
 const Header = ({user, logout}) => (
   <div className="header">
-    <Link
-      to="/"
-      className="logo"
-    >
-      Flashcards
-    </Link>
+    <Nav />
     {user ? <UserDisplay user={user} logout={logout} /> : <GuestDisplay />}
   </div>
+)
+
+const Nav = () => (
+  <nav>
+    <ul>
+      <li><Link to="/">Browse</Link></li>
+      <li><Link to="/my-cards">My Flashcards</Link></li>  
+      <li><Link to="/new">Create Flashcards</Link></li>
+    </ul>
+  </nav>
 )
 
 const UserDisplay = ({user, logout}) => (
@@ -26,7 +31,7 @@ const UserDisplay = ({user, logout}) => (
 )
 
 const GuestDisplay = () => (
-  <span>Please <Link to="/signup">sign up</Link> or <Link to="/login">log in</Link></span>
+  <span><Link to="/signup">Sign Up</Link> | <Link to="/login">Log In</Link></span>
 )
 
 export default Header;
