@@ -118,6 +118,9 @@ class EditDeck extends Component {
           cancelPath={cancelPath}
         />
         <button onClick={this.deleteDeck} className='deleteBtn'>Delete</button>
+        <UserWarning
+          is_author={deck.is_author}
+        />
         <DeckForm 
           id={deck.id}
           title={deck.title}
@@ -143,6 +146,26 @@ const Header = ({cancelPath}) => {
       <h2>Edit Deck</h2>
     </div>
   )
+}
+
+const UserWarning = ({is_author}) => {
+  if (!Auth.isUserAuthenticated()) {
+    return (
+      <div className="warning">
+        Warning: You must be logged in to edit flashcard decks.
+      </div>
+    )
+  }
+  else if (!is_author) {
+    return (
+      <div className="warning">
+        Warning: Only the author of a flashcard deck can edit it.
+      </div>
+    )
+  }
+  else {
+    return null
+  }
 }
 
 export default withRouter(EditDeck);
