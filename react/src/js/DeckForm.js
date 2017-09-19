@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react'
+import {BackLinkHistory} from './HistoryLink'
+import LabeledInput from './LabeledInput'
 
 class DeckFormContainer extends Component {
   constructor(props) {
@@ -8,8 +9,7 @@ class DeckFormContainer extends Component {
       id: props.id || null,
       title: props.title || '', 
       is_public: props.is_public || false,
-      // TODO: make new cards DRY
-      cards: props.cards || [{id: null, front: '', back: '', delete: false, key: Date.now()}]
+      cards: props.cards || []
     }
     this.addCard = this.addCard.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -18,6 +18,24 @@ class DeckFormContainer extends Component {
     this.handlePublicChange = this.handlePublicChange.bind(this)
     this.removeCard = this.removeCard.bind(this);
     this.moveCard = this.moveCard.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.cards) {
+      this.setState(prevState => {
+        const cards = prevState.cards.map(card => {
+          card.delete = false
+          card.key = card.id
+          return card
+        })
+        return {
+          cards: cards
+        }
+      })
+    }
+    else {
+      this.addCard()
+    }
   }
 
   onSubmit() {
@@ -130,14 +148,13 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
     <div className="errors">
       {error_msg}
     </div>
-    <div className="errors">
-      {errors.title}
-    </div>
-    <input 
-      type="text" 
-      placeholder="Title" 
+    <LabeledInput
+      type="text"
       value={title}
-      onChange={handleTitleChange} 
+      name="title"
+      label="Title"
+      onChange={handleTitleChange}
+      error={errors.title}
     />
     <div>
       <input
@@ -149,9 +166,11 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
         onChange={handlePublicChange}
       />
       <label htmlFor="is-public">
-        deck is public?
+        deck is public (other users can access it, and it will appear on the Browse page)
       </label>
     </div>
+    <hr />
+    <div>Cards</div>
     {cards.map((card, idx) => (
       <CardInput
         key={card.key}
@@ -174,7 +193,10 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
       onClick={onSubmit}
     >Submit
     </button>
-    <Link to={cancelPath}>Cancel</Link>
+    <BackLinkHistory 
+      to={cancelPath}
+      value="Cancel"  
+    />
   </form>
 )
 

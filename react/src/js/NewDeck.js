@@ -42,7 +42,7 @@ class NewDeck extends Component {
       })
       .then(json => {
         if (json.success) {
-          this.props.history.replace(`/cards/${json.id}`)
+          this.props.history.replace(`/deck/${json.id}`)
         }
         else {
           this.setState({
@@ -66,6 +66,7 @@ class NewDeck extends Component {
     return (
       <div>
         <h2>New Deck</h2>
+        {!Auth.isUserAuthenticated() ? <NoUserWarning /> : null}
         <DeckForm 
           onSubmit={this.addDeck}
           cancelPath={cancelPath}
@@ -76,5 +77,11 @@ class NewDeck extends Component {
     )
   }
 }
+
+const NoUserWarning = () => (
+  <div className="warning">
+    Warning: You must be logged in to create a new flashcard deck.
+  </div>
+)
 
 export default withRouter(NewDeck);

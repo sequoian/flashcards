@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Link, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import Auth from './Auth'
 import LabeledInput from './LabeledInput'
 
@@ -59,7 +59,7 @@ class LoginContainer extends Component {
         if (json.success) {
           Auth.authenticateUser(json.payload.token)
           this.props.loginUser()
-          this.props.history.replace('/')
+          this.props.history.replace('/my-cards')
         }
         else if (json.errors) {
           this.setState({
@@ -106,7 +106,6 @@ class LoginContainer extends Component {
 
 const Login = ({email, password, handleChange, handleSubmit, errors, error_msg}) => (
   <div>
-    <Link to={`/`}>Back</Link>
     <h2>Log In</h2>
     <form>
       <div className="errors">

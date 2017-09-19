@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
-import {formatDate} from './Utility'
-import HistoryLink from './HistoryLink'
+import {formatDateRelative} from './Utility'
 
 
 class BrowseContainer extends Component {
@@ -109,20 +108,21 @@ const DeckList = ({decks, error}) => (
 const DeckListItem = ({deck}) => (
   <div>
     <div>
-      <HistoryLink to={`/cards/${deck.id}`}>
+      <Link to={`/deck/${deck.id}`}>
         {deck.title}
-      </HistoryLink>
+      </Link>
     </div>
     <div>
       By <Link to={`/user/${deck.author_id}`}>
         {deck.author}
       </Link>
     </div>
+
     <div>
-      Score: {deck.score}
+      Created {formatDateRelative(deck.date_created)}
     </div>
     <div>
-      Created {formatDate(deck.date_created)}
+      {deck.score} points
     </div>
   </div>
 )

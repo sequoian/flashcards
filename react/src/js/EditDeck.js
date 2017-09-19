@@ -1,62 +1,18 @@
-import React, { Component } from 'react';
-import DeckForm from './DeckForm';
-import {withRouter} from 'react-router-dom';
+import React, { Component } from 'react'
+import DeckForm from './DeckForm'
+import {withRouter} from 'react-router-dom'
 import Auth from './Auth'
+import {BackLinkHistory} from './HistoryLink'
 
 class EditDeck extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deck: null,
       errors: {},
-      error_msg: null,
-      fetch_result: null
+      error_msg: null
     }
     this.updateDeck = this.updateDeck.bind(this);
     this.deleteDeck = this.deleteDeck.bind(this);
-  }
-
-  componentDidMount() {
-    // fetch deck from database
-    fetch(`/api/deck/${this.props.match.params.id}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `bearer ${Auth.getToken()}`
-      }
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response.status)
-        }
-        else {
-          return response.json()
-        }
-      })
-      .then(json => {
-        // set delete status and key for cards
-        json.cards.forEach((card, idx) => {
-          card.delete = false;
-          card.key = idx;
-        })
-        
-        this.setState({
-          deck: json
-        })
-      }).catch(e => {
-        let msg 
-        const error = e.message
-
-        if (error === '403') {
-          msg = 'You do not have permission to view this deck'
-        }
-        else if (error === '404') {
-          msg = 'This deck could not be found'
-        }
-        else {
-          msg = 'Something went wrong on our end and we could not retrieve the deck'
-        }
-        this.setState({fetch_result: msg})
-      })
   }
 
   // API Update
@@ -87,8 +43,15 @@ class EditDeck extends Component {
         }  
       })
       .then(json => {
+        const {history, location} = this.props
         if (json.success) {
-          this.props.history.replace(`/cards/${json.id}`)
+          this.props.updateDeck()
+          if (location.state && location.state.hasOwnProperty('from')) {
+            history.goBack()
+          }
+          else {
+            history.push(`/deck/${json.id}`)
+          }
         }
         else {
           this.setState({
@@ -145,29 +108,63 @@ class EditDeck extends Component {
   }
 
   render() {
-    const {deck, fetch_result} = this.state;
-    const cancelPath = deck ? `/cards/${deck.id}` : '/'
+    const {deck} = this.props
+    const {error_msg, errors} = this.state
+    const cancelPath = `/deck/${deck.id}`
+    
     return (
       <div>
-        <h2>Edit Deck</h2>
-        {deck ?
-        <div>
-          <button onClick={this.deleteDeck} className='deleteBtn'>Delete</button>
-          <DeckForm 
-            id={deck.id}
-            title={deck.title}
-            is_public={deck.is_public}
-            cards={deck.cards}
-            onSubmit={this.updateDeck}
-            cancelPath={cancelPath}
-            errors={this.state.errors}
-            error_msg={this.state.error_msg}
-          />
-        </div>
-        : fetch_result
-      }
+        <Header 
+          cancelPath={cancelPath}
+        />
+        <button onClick={this.deleteDeck} className='deleteBtn'>Delete</button>
+        <UserWarning
+          is_author={deck.is_author}
+        />
+        <DeckForm 
+          id={deck.id}
+          title={deck.title}
+          is_public={deck.is_public}
+          cards={deck.cards}
+          onSubmit={this.updateDeck}
+          cancelPath={cancelPath}
+          errors={errors}
+          error_msg={error_msg}
+        />
       </div>
     )
+  }
+}
+
+const Header = ({cancelPath}) => {
+  return (
+    <div>
+      <BackLinkHistory 
+        to={cancelPath}
+        value="Back to deck"  
+      />
+      <h2>Edit Deck</h2>
+    </div>
+  )
+}
+
+const UserWarning = ({is_author}) => {
+  if (!Auth.isUserAuthenticated()) {
+    return (
+      <div className="warning">
+        Warning: You must be logged in to edit flashcard decks.
+      </div>
+    )
+  }
+  else if (!is_author) {
+    return (
+      <div className="warning">
+        Warning: Only the author of a flashcard deck can edit it.
+      </div>
+    )
+  }
+  else {
+    return null
   }
 }
 

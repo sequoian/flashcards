@@ -50,6 +50,7 @@ const getDeck = function(req, res, next) {
   sql.getDeck(db, deck_id)
     .then(deck => {
       if (deck.is_public || deck.author_id === user_id) {
+        deck.is_author = deck.author_id === user_id
         res.status(200).json(deck)
       }
       else {

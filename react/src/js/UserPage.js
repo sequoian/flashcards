@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {formatDate} from './Utility'
 import {Link} from 'react-router-dom'
-import HistoryLink from './HistoryLink'
 
 class UserPageContainer extends Component {
   constructor(props) {
@@ -72,9 +71,9 @@ const UserPage = ({name, joined, decks}) => (
         <ul className="deck-list">
           {decks.map(deck => (
             <li key={deck.id}>
-              <HistoryLink to={`/cards/${deck.id}`}>
+              <Link to={`/deck/${deck.id}`}>
                 {deck.title}
-              </HistoryLink>
+              </Link>
             </li>
             ))}  
         </ul>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Link, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import Auth from './Auth'
 import LabeledInput from './LabeledInput'
 
@@ -65,7 +65,7 @@ class SignupContainer extends Component {
             Auth.authenticateUser(json.payload.token)
             this.props.loginUser()
           }    
-          this.props.history.replace('/')
+          this.props.history.replace('/my-cards')
         }
         else {
           this.setState({
@@ -108,7 +108,6 @@ class SignupContainer extends Component {
 
 const Signup = ({name, email, password, confirm, handleChange, handleSubmit, errors, error_msg}) => (
   <div>
-    <Link to={`/`}>Back</Link>
     <h2>Sign Up</h2>
     <form>
       <div className="errors">

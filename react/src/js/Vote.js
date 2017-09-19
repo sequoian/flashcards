@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Auth from './Auth'
 
-class VoteContainer extends Component {
+class Vote extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -10,7 +10,8 @@ class VoteContainer extends Component {
       user_vote: null,
       error: null
     }
-    this.vote = this.vote.bind(this)
+    this.upvote = this.upvote.bind(this)
+    this.downvote = this.downvote.bind(this)
   }
 
   componentDidMount() {
@@ -32,7 +33,8 @@ class VoteContainer extends Component {
         this.setState({
           upvotes: json.upvotes,
           downvotes: json.downvotes,
-          user_vote: json.user_vote
+          user_vote: json.user_vote,
+          error: null
         })
       }).catch(e => {
         this.setState({
@@ -41,9 +43,15 @@ class VoteContainer extends Component {
       })
   }
 
-  vote(choice) {
-    const vote = choice === 'up' ? 1 : -1
+  upvote() {
+    this.vote(1)
+  }
 
+  downvote() {
+    this.vote(-1)
+  }
+
+  vote(choice) {
     fetch(`/api/cast-vote/${this.props.deck_id}`, 
     {
       method: 'POST',
@@ -52,7 +60,7 @@ class VoteContainer extends Component {
         'Content-Type': 'application/json',
         'Authorization': `bearer ${Auth.getToken()}`
       },
-      body: JSON.stringify({vote: vote})
+      body: JSON.stringify({vote: choice})
     })
       .then(response => {
         if (response.status > 400) {
@@ -92,38 +100,58 @@ class VoteContainer extends Component {
   render() {
     const {upvotes, downvotes, user_vote, error} = this.state
     return (
-      <Vote
-        upvotes={upvotes}
-        downvotes={downvotes}
-        user_vote={user_vote}
-        vote={this.vote}
-        error={error}
-      />
+      <div>
+        <ErrorDisplay error={error} />
+        <VoteControls
+          user_vote={user_vote}
+          upvote={this.upvote}
+          downvote={this.downvote}
+        />
+        <PointDisplay 
+          upvotes={upvotes}
+          downvotes={downvotes}
+        />
+      </div>
     )
   }
 }
 
-const Vote = ({upvotes, downvotes, user_vote, vote, error}) => (
-  <form>
-    <h5>Vote</h5>
-    <div className="errors">{error}</div>
-    <div>Score: {upvotes - downvotes} (Good: {upvotes}, Bad: {downvotes})</div>
+const ErrorDisplay = ({error}) => (
+  <div className="errors">{error}</div>
+)
+
+const VoteControls = ({user_vote, upvote, downvote}) => (
+  <div>
     <button
       className={user_vote === 'up' ? "vote-btn voted" : "vote-btn"}
       type="button"
-      onClick={() => vote('up')}
+      onClick={upvote}
     >
       Good
     </button>
     <button
       className={user_vote === 'down' ? "vote-btn voted" : "vote-btn"}
       type="button"
-      onClick={() => vote('down')}
+      onClick={downvote}
     >
       Bad
     </button>
-
-  </form>
+  </div>
 )
 
-export default VoteContainer
+const PointDisplay = ({upvotes, downvotes}) => {
+  const percentage = Math.floor(upvotes / (upvotes + downvotes) * 100)
+  return (
+    <div>
+      <div>Score: {upvotes - downvotes}</div>
+      <div>
+        {!isNaN(percentage) ?
+        `${percentage} % positive of ${upvotes + downvotes} votes`
+        : 'No votes'
+        }
+      </div>
+    </div>
+  )
+}
+
+export default Vote
