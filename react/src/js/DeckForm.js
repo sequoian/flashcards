@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
 import {BackLinkHistory} from './HistoryLink'
 import LabeledInput from './LabeledInput'
+import RaisedButton from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
+import Checkbox from 'material-ui/Checkbox'
+import FlatButton from 'material-ui/FlatButton'
+import IconButton from 'material-ui/IconButton'
+import ArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up'
+import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down'
+import Add from 'material-ui/svg-icons/content/add'
+import Remove from 'material-ui/svg-icons/navigation/close'
+import {red500} from 'material-ui/styles/colors'
 
 class DeckFormContainer extends Component {
   constructor(props) {
@@ -148,26 +158,22 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
     <div className="errors">
       {error_msg}
     </div>
-    <LabeledInput
-      type="text"
-      value={title}
+    <TextField
       name="title"
-      label="Title"
+      floatingLabelText="Title"
+      value={title}
       onChange={handleTitleChange}
-      error={errors.title}
+      errorText={errors.title}
     />
+    <br />
     <div>
-      <input
-        type="checkbox"
-        id="is-public"
+      <Checkbox
+        label="deck is public (other users can access it, and it will appear on the Browse page)"
         name="is-public"
         value={is_public}
         checked={is_public}
-        onChange={handlePublicChange}
+        onCheck={handlePublicChange}
       />
-      <label htmlFor="is-public">
-        deck is public (other users can access it, and it will appear on the Browse page)
-      </label>
     </div>
     <hr />
     <div>Cards</div>
@@ -182,17 +188,17 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
         error={errors.cards ? errors.cards[card.key] : null}
       />
     ))}
-    <button 
-      type="button" 
+    <FlatButton
+      label="Add Card"
       onClick={addCard}
-      className='cardBtn'>
-      Add Card
-    </button>
-    <button 
-      type="button" 
+      icon={<Add />}
+    />
+    <br />
+    <RaisedButton
+      label="Submit"
       onClick={onSubmit}
-    >Submit
-    </button>
+      primary={true}
+    />
     <BackLinkHistory 
       to={cancelPath}
       value="Cancel"  
@@ -205,23 +211,37 @@ const CardInput = ({card, index, handleCardChange, removeCard, moveCard, error})
     <div className="errors">
       {error}
     </div>
+    <IconButton 
+      onClick={() => moveCard(index, 'up')}
+      disableTouchRipple={true}
+    >
+      <ArrowUp />
+    </IconButton>
     <span>{index + 1}</span>
-    <input 
-      type="text" 
-      placeholder="Front" 
-      value={card.front} 
+    <IconButton 
+      onClick={() => moveCard(index, 'down')}
+      disableTouchRipple={true}
+    >
+      <ArrowDown />
+    </IconButton>
+    
+    <TextField
+      hintText="Front"
+      value={card.front}
       onChange={(e) => handleCardChange(card.key, 'front', e.target.value)}
     />
-    <input 
-      type="text" 
-      placeholder="Back"
-      value={card.back}  
-      onChange={(e) => handleCardChange(card.key, 'back', e.target.value)} 
+    <TextField
+      hintText="Back"
+      value={card.back}
+      onChange={(e) => handleCardChange(card.key, 'back', e.target.value)}
     />
-    <button type="button" onClick={() => moveCard(index, 'up')}>Up</button>
-    <button type="button" onClick={() => moveCard(index, 'down')}>Down</button>
-    <button type="button" onClick={() => removeCard(card.key)}>remove</button>
-    
+    <IconButton 
+      onClick={() => removeCard(card.key)}
+      tooltip="remove"
+      tooltipPosition="top-center"
+    >
+      <Remove color={red500} />
+    </IconButton>
   </div>
 )
 

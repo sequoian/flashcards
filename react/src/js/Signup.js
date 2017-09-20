@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom'
 import Auth from './Auth'
-import LabeledInput from './LabeledInput'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 

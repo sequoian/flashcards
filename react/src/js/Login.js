@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom'
 import Auth from './Auth'
-import LabeledInput from './LabeledInput'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
@@ -27,11 +26,10 @@ class LoginContainer extends Component {
     window.removeEventListener('keydown', this.handleKeyDown)
   }
 
-  handleChange(event, newValue) {
-    const {id, value} = event.target
-    console.log(event.target, newValue)
+  handleChange(event) {
+    const {name, value} = event.target
     this.setState({
-      [id]: newValue
+      [name]: value
     })
   }
 
@@ -115,7 +113,7 @@ const Login = ({email, password, handleChange, handleSubmit, errors, error_msg})
         {error_msg}
       </div>
       <TextField
-        id="email"
+        name="email"
         type="email"
         floatingLabelText="Email"
         floatingLabelFixed={true}
@@ -125,7 +123,7 @@ const Login = ({email, password, handleChange, handleSubmit, errors, error_msg})
       />
       <br />
       <TextField
-        id="password"
+        name="password"
         type="password"
         floatingLabelText="Password"
         floatingLabelFixed={true}
