@@ -110,7 +110,9 @@ class DeckFormContainer extends Component {
   }
 
   moveCard(idx, direction) {
-    const cards = this.state.cards.slice()  // get copy of array
+    const cards = this.state.cards.filter(card => {
+      return !card.delete
+    })
 
     // calculate swap
     let new_idx = null;
