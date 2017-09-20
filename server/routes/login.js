@@ -36,7 +36,7 @@ const validateForm = function(req, res, next) {
 const login = function(req, res, next) {
   return passport.authenticate('local-login', (error, token, userData) => {
     if (error) {
-      if (error.message === 'No Match') {
+      if (error.message === 'No Match' || error.name === 'QueryResultError') {
         res.status(400).json({
           success: false,
           message: 'Username or password are incorrect',

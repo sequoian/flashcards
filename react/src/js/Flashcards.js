@@ -27,7 +27,7 @@ class Flashcards extends Component {
   }
 
   shuffleDeck(deck_ref) {
-    const deck = Object.assign({}, deck_ref)  // copy deck
+    const deck = JSON.parse(JSON.stringify(deck_ref))  // deep copy
     const cards = deck.cards
     let current_idx = cards.length
     let tmp, random_idx
