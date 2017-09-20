@@ -215,14 +215,12 @@ const CardInput = ({card, index, handleCardChange, removeCard, moveCard, error})
     </div>
     <IconButton 
       onClick={() => moveCard(index, 'up')}
-      disableTouchRipple={true}
     >
       <ArrowUp />
     </IconButton>
     <span>{index + 1}</span>
     <IconButton 
       onClick={() => moveCard(index, 'down')}
-      disableTouchRipple={true}
     >
       <ArrowDown />
     </IconButton>
