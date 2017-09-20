@@ -114,18 +114,11 @@ const Login = ({email, password, handleChange, handleSubmit, errors, error_msg})
       <div className="errors">
         {error_msg}
       </div>
-<<<<<<< HEAD
       <TextField
         id="email"
         type="email"
         floatingLabelText="Email"
         floatingLabelFixed={true}
-=======
-      <LabeledInput
-        name="email"
-        type="email"
-        label="Email"
->>>>>>> master
         value={email}
         onChange={handleChange}
         errorText={errors.email}
