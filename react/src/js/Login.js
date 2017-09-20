@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom'
 import Auth from './Auth'
 import LabeledInput from './LabeledInput'
+import RaisedButton from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
 
 class LoginContainer extends Component {
   constructor(props) {
@@ -25,10 +27,11 @@ class LoginContainer extends Component {
     window.removeEventListener('keydown', this.handleKeyDown)
   }
 
-  handleChange(event) {
-    const {name, value} = event.target
+  handleChange(event, newValue) {
+    const {id, value} = event.target
+    console.log(event.target, newValue)
     this.setState({
-      [name]: value
+      [id]: newValue
     })
   }
 
@@ -111,28 +114,31 @@ const Login = ({email, password, handleChange, handleSubmit, errors, error_msg})
       <div className="errors">
         {error_msg}
       </div>
-      <LabeledInput
-        name="email"
-        type="text"
-        label="Email"
+      <TextField
+        id="email"
+        type="email"
+        floatingLabelText="Email"
+        floatingLabelFixed={true}
         value={email}
         onChange={handleChange}
-        error={errors.email}
+        errorText={errors.email}
       />
-      <LabeledInput
-        name="password"
+      <br />
+      <TextField
+        id="password"
         type="password"
-        label="Password"
+        floatingLabelText="Password"
+        floatingLabelFixed={true}
         value={password}
         onChange={handleChange}
-        error={errors.password}
+        errorText={errors.password}
       />
-      <button
-        type="button"
+      <br />
+      <RaisedButton
+        label="Log In"
+        primary={true}
         onClick={handleSubmit}
-      >
-        Log in
-      </button>
+      />
     </form>
   </div>
 )
