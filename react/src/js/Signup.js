@@ -123,7 +123,7 @@ const Signup = ({name, email, password, confirm, handleChange, handleSubmit, err
       />
       <LabeledInput
         name="email"
-        type="text"
+        type="email"
         label="Email"
         value={email}
         onChange={handleChange}

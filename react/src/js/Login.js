@@ -113,7 +113,7 @@ const Login = ({email, password, handleChange, handleSubmit, errors, error_msg})
       </div>
       <LabeledInput
         name="email"
-        type="text"
+        type="email"
         label="Email"
         value={email}
         onChange={handleChange}
