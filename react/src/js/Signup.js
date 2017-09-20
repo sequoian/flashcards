@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import {withRouter} from 'react-router-dom'
 import Auth from './Auth'
 import LabeledInput from './LabeledInput'
+import RaisedButton from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
 
 class SignupContainer extends Component {
   constructor(props) {
@@ -113,44 +115,50 @@ const Signup = ({name, email, password, confirm, handleChange, handleSubmit, err
       <div className="errors">
         {error_msg}
       </div>
-      <LabeledInput
+      <TextField
         name="name"
-        type="text"
-        label="Name"
+        floatingLabelText="Name"
+        floatingLabelFixed={true}
         value={name}
         onChange={handleChange}
-        error={errors.name}
+        errorText={errors.name}
       />
-      <LabeledInput
+      <br />
+      <TextField
         name="email"
         type="email"
-        label="Email"
+        floatingLabelText="Email"
+        floatingLabelFixed={true}
         value={email}
         onChange={handleChange}
-        error={errors.email}
+        errorText={errors.email}
       />
-      <LabeledInput
+      <br />
+      <TextField
         name="password"
         type="password"
-        label="Password"
+        floatingLabelText="Password"
+        floatingLabelFixed={true}
         value={password}
         onChange={handleChange}
-        error={errors.password}
+        errorText={errors.password}
       />
-      <LabeledInput
+      <br />
+      <TextField
         name="confirm"
         type="password"
-        label="Confirm Password"
+        floatingLabelText="Confirm Password"
+        floatingLabelFixed={true}
         value={confirm}
         onChange={handleChange}
-        error={errors.confirm}
+        errorText={errors.confirm}
       />
-      <button
-        type="button"
+      <br />
+      <RaisedButton
+        label="Sign Up"
+        primary={true}
         onClick={handleSubmit}
-      >
-        Sign Up
-      </button>
+      />
     </form>
   </div>
 )
