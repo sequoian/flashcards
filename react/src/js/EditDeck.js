@@ -3,6 +3,7 @@ import DeckForm from './DeckForm'
 import {withRouter} from 'react-router-dom'
 import Auth from './Auth'
 import {BackLinkHistory} from './HistoryLink'
+import FlatButton from 'material-ui/FlatButton'
 
 class EditDeck extends Component {
   constructor(props) {
@@ -117,7 +118,10 @@ class EditDeck extends Component {
         <Header 
           cancelPath={cancelPath}
         />
-        <button onClick={this.deleteDeck} className='deleteBtn'>Delete</button>
+        <FlatButton
+          label="Delete Deck"
+          onClick={this.deleteDeck}
+        />
         <UserWarning
           is_author={deck.is_author}
         />

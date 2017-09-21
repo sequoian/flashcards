@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import {BackLinkHistory} from './HistoryLink'
+import RaisedButton from 'material-ui/RaisedButton'
+import PrevIcon from 'material-ui/svg-icons/navigation/arrow-back'
+import NextIcon from 'material-ui/svg-icons/navigation/arrow-forward'
 
 class Flashcards extends Component {
   constructor(props) {
@@ -153,9 +156,18 @@ const CardFace = ({face}) => (
 
 const CardControls = ({getPrevious, getNext, flipCard}) => (
   <div>
-    <button onClick={getPrevious}>Previous</button>
-    <button onClick={flipCard}>Flip</button>
-    <button onClick={getNext}>Next</button>
+    <RaisedButton
+      icon={<PrevIcon />}
+      onClick={getPrevious}
+    />
+    <RaisedButton
+      label="Flip"
+      onClick={flipCard}
+    />
+    <RaisedButton
+      icon={<NextIcon />}
+      onClick={getNext}
+    />
   </div>
 )
 

@@ -10,6 +10,7 @@ import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down'
 import Add from 'material-ui/svg-icons/content/add'
 import Remove from 'material-ui/svg-icons/navigation/close'
 import {red500} from 'material-ui/styles/colors'
+import InfoIcon from 'material-ui/svg-icons/action/info-outline'
 
 class DeckFormContainer extends Component {
   constructor(props) {
@@ -191,12 +192,17 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
     <br />
     <div>
       <Checkbox
-        label="deck is public (other users can access it, and it will appear on the Browse page)"
+        label="deck is public"
         name="is-public"
         value={is_public}
         checked={is_public}
         onCheck={handlePublicChange}
       />
+      <IconButton 
+        tooltip="If your deck is public, other users will be able to discover and use it."
+      >
+        <InfoIcon />
+      </IconButton>
     </div>
     <hr />
     <div>Cards</div>
@@ -258,8 +264,6 @@ const CardInput = ({card, index, handleCardChange, removeCard, moveCard, error})
     />
     <IconButton 
       onClick={() => removeCard(card.key)}
-      tooltip="remove"
-      tooltipPosition="top-center"
     >
       <Remove color={red500} />
     </IconButton>
