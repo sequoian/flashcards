@@ -108,18 +108,40 @@ class DeckFormContainer extends Component {
     })
   }
 
-  moveCard(idx, direction) {
-    const cards = this.state.cards.filter(card => {
-      return !card.delete
-    })
+  moveCard(key, direction) {
+    const cards = this.state.cards.slice()
+    const idx = cards.findIndex(card => card.key === key)
 
     // calculate swap
     let new_idx = null;
+    let temp_idx = idx
     if (direction === 'up') {
-      new_idx = idx > 0 ? idx - 1 : 0;
+      while(new_idx === null) {
+        temp_idx -= 1
+        if (temp_idx <= 0) {
+          new_idx = 0
+        }
+        else if (cards[temp_idx].delete) {
+          continue
+        }
+        else {
+          new_idx = temp_idx
+        }
+      }
     }
     else {
-      new_idx = idx < cards.length - 1 ? idx + 1 : cards.length - 1
+      while(!new_idx) {
+        temp_idx += 1
+        if (temp_idx >= cards.length - 1) {
+          new_idx = cards.length - 1
+        }
+        else if (cards[temp_idx].delete) {
+          continue
+        }
+        else {
+          new_idx = temp_idx
+        }
+      }
     }
 
     // swap
@@ -213,13 +235,13 @@ const CardInput = ({card, index, handleCardChange, removeCard, moveCard, error})
       {error}
     </div>
     <IconButton 
-      onClick={() => moveCard(index, 'up')}
+      onClick={() => moveCard(card.key, 'up')}
     >
       <ArrowUp />
     </IconButton>
     <span>{index + 1}</span>
     <IconButton 
-      onClick={() => moveCard(index, 'down')}
+      onClick={() => moveCard(card.key, 'down')}
     >
       <ArrowDown />
     </IconButton>
