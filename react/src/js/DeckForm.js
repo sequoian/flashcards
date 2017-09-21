@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {BackLinkHistory} from './HistoryLink'
-import LabeledInput from './LabeledInput'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import Checkbox from 'material-ui/Checkbox'

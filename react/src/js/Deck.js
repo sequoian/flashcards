@@ -3,6 +3,8 @@ import Vote from './Vote'
 import {Link, withRouter} from 'react-router-dom'
 import HistoryLink from './HistoryLink'
 import {formatDate} from './Utility'
+import Checkbox from 'material-ui/Checkbox'
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 
 const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
   <div>
@@ -71,41 +73,33 @@ const Options = ({children}) => (
 
 const ShuffleOption = ({shuffle, handleChange}) => (
   <div>
-    <input
-      type="checkbox"
-      id="is-public"
+    <Checkbox
+      label="Shuffle Deck"
       name="is-public"
       value={shuffle}
+      onCheck={handleChange}
       checked={shuffle}
-      onChange={handleChange}
     />
-    <label htmlFor="is-public">
-      Shuffle Deck
-    </label>
   </div>
 )
 
 const FacingOption = ({facing, handleChange}) => (
   <div>
     <div>Default Card Face</div>
-    <label>
-      <input
-        type="radio"
+    <RadioButtonGroup
+      defaultSelected="front"
+      valueSelected={facing}
+      onChange={handleChange}
+    >
+      <RadioButton
         value="front"
-        checked={facing === 'front'}
-        onChange={handleChange}
+        label="Front"
       />
-      Front
-    </label>
-    <label>
-      <input
-        type="radio"
+      <RadioButton
         value="back"
-        checked={facing === 'back'}
-        onChange={handleChange}
+        label="Back"
       />
-      Back
-    </label>
+    </RadioButtonGroup>
   </div>
 )
 

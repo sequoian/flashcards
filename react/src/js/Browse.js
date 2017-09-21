@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 import {formatDateRelative} from './Utility'
 
-
 class BrowseContainer extends Component {
   constructor(props) {
     super(props)

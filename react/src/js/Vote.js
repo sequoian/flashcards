@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 import Auth from './Auth'
+import UpvoteIcon from 'material-ui/svg-icons/action/thumb-up'
+import DownvoteIcon from 'material-ui/svg-icons/action/thumb-down'
+import IconButton from 'material-ui/IconButton'
 
 class Vote extends Component {
   constructor(props) {
@@ -122,20 +125,20 @@ const ErrorDisplay = ({error}) => (
 
 const VoteControls = ({user_vote, upvote, downvote}) => (
   <div>
-    <button
-      className={user_vote === 'up' ? "vote-btn voted" : "vote-btn"}
-      type="button"
+    <IconButton
       onClick={upvote}
     >
-      Good
-    </button>
-    <button
-      className={user_vote === 'down' ? "vote-btn voted" : "vote-btn"}
-      type="button"
+      <UpvoteIcon
+        color={user_vote === 'up' ? "#0a6d98" : "#000"}
+      />
+    </IconButton>
+    <IconButton
       onClick={downvote}
     >
-      Bad
-    </button>
+      <DownvoteIcon 
+        color={user_vote === 'down' ? "#0a6d98" : "#000"}
+      />
+    </IconButton>
   </div>
 )
 
