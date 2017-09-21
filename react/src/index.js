@@ -2,9 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './js/App';
 import registerServiceWorker from './registerServiceWorker';
-import './css/index.css';
 import {BrowserRouter} from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+
+import './css/reset.css';
+import './css/App.css'
+import './css/Header.css'
 
 ReactDOM.render((
   <BrowserRouter>

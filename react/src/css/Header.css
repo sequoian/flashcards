@@ -1,0 +1,22 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header nav ul {
+  display: flex;
+  align-items: stretch;
+}
+
+.header nav a {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  text-align: center;
+}
+
+.header ul li {
+  width: 100%;
+  font-size: 16px;
+}

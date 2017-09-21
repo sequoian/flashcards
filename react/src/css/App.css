@@ -1,6 +1,19 @@
-.app {
-  margin: 5px;
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+
+html {
+  font-family: 'Roboto', sans-serif;
 }
+
+.app {
+  max-width: 960px;
+  margin: auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* old stuff */
 
 .logo {
   display: inline-block;

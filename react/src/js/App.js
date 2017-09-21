@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../css/App.css';
 import {Route, Switch, withRouter} from 'react-router-dom';
 import DeckPage from './DeckPage';
 import NewDeck from './NewDeck';

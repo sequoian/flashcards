@@ -131,7 +131,7 @@ class DeckFormContainer extends Component {
       }
     }
     else {
-      while(!new_idx) {
+      while(new_idx === null) {
         temp_idx += 1
         if (temp_idx >= cards.length - 1) {
           new_idx = cards.length - 1
@@ -199,7 +199,7 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
         onCheck={handlePublicChange}
       />
       <IconButton 
-        tooltip="If your deck is public, other users will be able to discover and use it."
+        tooltip="Other people will be able to discover and use it."
       >
         <InfoIcon />
       </IconButton>

@@ -4,7 +4,7 @@ import IconButton from 'material-ui/IconButton'
 import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
-import Person from 'material-ui/svg-icons/social/person'
+import PersonIcon from 'material-ui/svg-icons/social/person'
 import Divider from 'material-ui/Divider'
 
 const Header = ({user, logout}) => (
@@ -17,9 +17,9 @@ const Header = ({user, logout}) => (
 const Nav = () => (
   <nav>
     <ul>
-      <li><Link to="/">Browse</Link></li>
-      <li><Link to="/my-cards">My Flashcards</Link></li>  
-      <li><Link to="/new">Create Flashcards</Link></li>
+      <Link to="/"><li>Browse</li></Link>
+      <Link to="/my-cards"><li>My Flashcards</li></Link>
+      <Link to="/new"><li>Create Flashcards</li></Link>
     </ul>
   </nav>
 )
@@ -30,13 +30,6 @@ const UserDisplay = ({user, logout}) => (
       logout={logout}
       user={user}
     />
-    {/* <span><Link to={`/profile`}>{user.name}</Link> is logged in</span>
-    <button
-      type="button"
-      onClick={logout}
-    >
-      Log Out
-    </button> */}
   </span>
 )
 
@@ -70,8 +63,10 @@ class UserPopover extends Component {
       <div>
         <IconButton
           onClick={this.handleTouchTap}
+          iconStyle={{width: 46, height: 46}}
+          style={{width: 48, height: 48, padding: 2}}
         >
-          <Person />
+          <PersonIcon />
         </IconButton>
         <Popover
           open={this.state.open}
@@ -80,9 +75,23 @@ class UserPopover extends Component {
           targetOrigin={{"horizontal":"right","vertical":"top"}}
           onRequestClose={this.handleRequestClose}
         >
-          <Menu>
-            <div>
-              {this.props.user.name} is logged in
+          <Menu
+            style={{'max-width': '100vw'}}
+          >
+            <div
+              style={{
+                padding: 20,
+                'font-size': 16
+              }}
+            >
+              <span
+                style={{
+                  'font-size': 20,
+                  'font-weight': 'bold'
+                }}
+              >
+                {this.props.user.name}
+              </span> is logged in
             </div>
             <Divider />
             <MenuItem
