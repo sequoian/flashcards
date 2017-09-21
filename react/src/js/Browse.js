@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 import {formatDateRelative} from './Utility'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
 
 class BrowseContainer extends Component {
   constructor(props) {
@@ -47,8 +49,7 @@ class BrowseContainer extends Component {
       }) 
   }
 
-  changeSorting(event) {
-    const value = event.target.value
+  changeSorting(event, index, value) {
     this.storeSorting(value)
     this.setState({
       sorting: value
@@ -128,16 +129,28 @@ const DeckListItem = ({deck}) => (
 
 const Sorting = ({sorting, handleChange}) => (
   <div>
-    {'Sort: '} 
-    <select
+    <SelectField
       value={sorting}
       onChange={handleChange}
+      floatingLabelText="Sort decks"
     >
-      <option value='date_desc'>By date created (newest)</option>
-      <option value='date_asc'>By date created (oldest)</option> 
-      <option value='score_desc'>By score (highest)</option>
-      <option value='score_asc'>By score (lowest)</option>
-    </select>
+      <MenuItem
+        value='date_desc'
+        primaryText="By newest"
+      />
+      <MenuItem
+        value='date_asc'
+        primaryText="By oldest"
+      />
+      <MenuItem
+        value='score_desc'
+        primaryText="By highest score"
+      />
+      <MenuItem
+        value='score_asc'
+        primaryText="By lowest score"
+      />
+    </SelectField>
   </div>
 )
 
