@@ -85,7 +85,7 @@ class BrowseContainer extends Component {
 
 const BrowsePage = ({children}) => (
   <div>
-    <h2>Browse Public Decks</h2>
+    <h1>Browse Public Decks</h1>
     {children}
   </div>
 )
@@ -93,7 +93,7 @@ const BrowsePage = ({children}) => (
 const DeckList = ({decks, error}) => (
   <div>
     <div className="errors">{error}</div>
-    <ul className="deck-list">
+    <ul className="browse-list">
       {decks.map(deck => (
         <li key={deck.id}>
           <DeckListItem
@@ -106,23 +106,24 @@ const DeckList = ({decks, error}) => (
 )
 
 const DeckListItem = ({deck}) => (
-  <div>
+  <div className="browse-list-item">
     <div>
       <Link to={`/deck/${deck.id}`}>
         {deck.title}
       </Link>
     </div>
-    <div>
-      By <Link to={`/user/${deck.author_id}`}>
-        {deck.author}
-      </Link>
-    </div>
-
-    <div>
-      Created {formatDateRelative(deck.date_created)}
-    </div>
-    <div>
-      {deck.score} points
+    <div className="list-item-info">
+      <span>
+        By <Link to={`/user/${deck.author_id}`}>
+          {deck.author}
+        </Link>
+      </span>
+      <span>
+        Created {formatDateRelative(deck.date_created)}
+      </span>
+      <span>
+        {deck.score} points
+      </span>
     </div>
   </div>
 )
@@ -133,6 +134,9 @@ const Sorting = ({sorting, handleChange}) => (
       value={sorting}
       onChange={handleChange}
       floatingLabelText="Sort decks"
+      style={{
+        'margin-bottom': 40
+      }}
     >
       <MenuItem
         value='date_desc'

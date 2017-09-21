@@ -8,6 +8,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import './css/reset.css';
 import './css/App.css'
 import './css/Header.css'
+import './css/Browse.css'
 
 ReactDOM.render((
   <BrowserRouter>
