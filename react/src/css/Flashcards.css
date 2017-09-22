@@ -1,0 +1,31 @@
+.flashcards {
+  width: 100%;
+  max-width: 600px;
+}
+
+.flashcards header {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 75vh;
+  max-height: 400px;
+  box-shadow: 0px 0px 31px -8px rgba(0,0,0,0.5);
+}
+
+.card-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-controls {
+  display: flex;
+  justify-content: space-between;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 10px;
+}

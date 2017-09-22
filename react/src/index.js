@@ -9,6 +9,7 @@ import './css/reset.css';
 import './css/App.css'
 import './css/Header.css'
 import './css/Browse.css'
+import './css/Flashcards.css'
 
 ReactDOM.render((
   <BrowserRouter>

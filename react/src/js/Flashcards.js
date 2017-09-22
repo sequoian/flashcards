@@ -106,10 +106,10 @@ class Flashcards extends Component {
     const activeCard = deck.cards[activeCardIndex]
 
     return (
-      <div>
+      <div className="flashcards">
         <Header
           title={deck.title}
-        />
+        />   
         <CardInfo
           deck_length={deck.cards.length}
           index={activeCardIndex}
@@ -128,23 +128,25 @@ class Flashcards extends Component {
   }
 }
 
-const Header = withRouter(({title, match}) => {
+const Header = ({title, match}) => (
+  <header>{title}</header>
+)
+
+const Back = withRouter(({match}) => {
   const id = match.url.split('/')[2]
   return (
-    <div>
-      <h2>{title}</h2>
-      <BackLinkHistory 
-        to={`/deck/${id}`}
-        value="Back"  
-      />
-    </div>
+    <BackLinkHistory 
+      to={`/deck/${id}`}
+      value="Back"  
+    />
   )
 })
 
 const CardInfo = ({index, deck_length, side}) => (
-  <div>
-    <div>{index + 1}/{deck_length}</div>
+  <div className="card-info">
+    <Back />
     <div>{side ? 'Front' : 'Back'}</div>
+    <div>{index + 1}/{deck_length}</div>
   </div>
 )
 
@@ -155,7 +157,7 @@ const CardFace = ({face}) => (
 )
 
 const CardControls = ({getPrevious, getNext, flipCard}) => (
-  <div>
+  <div className="card-controls">
     <RaisedButton
       icon={<PrevIcon />}
       onClick={getPrevious}
