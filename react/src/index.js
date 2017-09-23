@@ -10,6 +10,8 @@ import './css/App.css'
 import './css/Header.css'
 import './css/Browse.css'
 import './css/Flashcards.css'
+import './css/Deck.css'
+import './css/Vote.css'
 
 ReactDOM.render((
   <BrowserRouter>

@@ -11,12 +11,12 @@ import {withRouter, Link} from 'react-router-dom';
  * the next routed component.
  * Allows the next route to know the previous route.
  */
-const HistoryLink = withRouter(({to, children, location}) => {
+const HistoryLink = withRouter(({to, children, location, className}) => {
   const link = {
     pathname: to,
     state: {from: location.pathname}
   }
-  return <Link to={link}>{children}</Link>
+  return <Link className={className} to={link}>{children}</Link>
 })
 
 /**

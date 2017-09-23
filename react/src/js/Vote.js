@@ -124,19 +124,19 @@ const ErrorDisplay = ({error}) => (
 )
 
 const VoteControls = ({user_vote, upvote, downvote}) => (
-  <div>
+  <div className="vote-controls">
     <IconButton
       onClick={upvote}
     >
       <UpvoteIcon
-        color={user_vote === 'up' ? "#0a6d98" : "#000"}
+        color={user_vote === 'up' ? "#00bcd4" : "#000"}
       />
     </IconButton>
     <IconButton
       onClick={downvote}
     >
       <DownvoteIcon 
-        color={user_vote === 'down' ? "#0a6d98" : "#000"}
+        color={user_vote === 'down' ? "#00bcd4" : "#000"}
       />
     </IconButton>
   </div>
@@ -145,8 +145,8 @@ const VoteControls = ({user_vote, upvote, downvote}) => (
 const PointDisplay = ({upvotes, downvotes}) => {
   const percentage = Math.floor(upvotes / (upvotes + downvotes) * 100)
   return (
-    <div>
-      <div>Score: {upvotes - downvotes}</div>
+    <div className="points">
+      <div>{upvotes - downvotes} points</div>
       <div>
         {!isNaN(percentage) ?
         `${percentage} % positive of ${upvotes + downvotes} votes`

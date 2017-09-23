@@ -7,13 +7,12 @@ import Checkbox from 'material-ui/Checkbox'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 
 const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
-  <div>
+  <div className="deck">
     <Header
       title={deck.title}
       author={deck.author}
       author_id={deck.author_id}
     />
-    <EnterEdit />
 
     {deck.cards.length > 0 
       ?
@@ -28,8 +27,9 @@ const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
             facing={facing}
             handleChange={changeFacing}
           />
+          <Hints/>
         </Options>
-        <Hints />
+        <hr />
       </div> 
       :
       <NoCards id={deck.id} />
@@ -38,6 +38,7 @@ const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
     <Vote 
       deck_id={deck.id}
     />
+    <hr />
     <DeckInfo
       is_public={deck.is_public}
       deck_length={deck.cards.length}
@@ -48,16 +49,17 @@ const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
 )
 
 const Header = ({title, author, author_id}) => (
-  <div>
-    <h2>{title}</h2>
+  <header>
+    <h1>{title}</h1>
     <div>
       By <Link to={`/user/${author_id}`}>{author}</Link>
     </div>
-  </div>
+    <EnterEdit />
+  </header>
 )
 
 const EnterFlashcards = withRouter(({match}) => {
-  return <HistoryLink to={`${match.url}/flashcards`}>Start</HistoryLink>
+  return <HistoryLink className="start-btn" to={`${match.url}/flashcards`}>Start</HistoryLink>
 })
 
 const EnterEdit = withRouter(({match}) => {
@@ -66,7 +68,7 @@ const EnterEdit = withRouter(({match}) => {
 
 const Options = ({children}) => (
   <form>
-    <div>Options</div>
+    <h2>Options</h2>
     {children}
   </form>
 )
@@ -104,15 +106,14 @@ const FacingOption = ({facing, handleChange}) => (
 )
 
 const Hints = () => (
-  <div>
-    Hint: You can use the keyboard to navigate the flashcards.  Use the left and right arrow keys 
-    to go to the previous and next flashcard, respectively.  Use the up or down arrow keys to 
-    flip the flashcard.
+  <div className="hint">
+    Hint: You can use the arrow keys to navigate the flashcards.
   </div>
 )
 
 const DeckInfo = ({is_public, deck_length, date_created, last_edited}) => (
   <div>
+    <h2>Deck Info</h2>
     <div>{is_public ? 'Public Deck' : 'Private Deck'}</div>
     <div>{deck_length} cards</div>
     <div>Created {formatDate(date_created)}</div>
