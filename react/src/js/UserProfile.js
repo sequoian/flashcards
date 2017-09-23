@@ -40,7 +40,7 @@ const UserProfile = ({name, email, joined}) => (
     <div>User: {name}</div>
     <div>Email: {email}</div>
     <div>Member since {formatDate(joined)}</div>
-    <hr className="profile-hr" />
+    <hr className="my-hr" />
     <h2>Change Password</h2>
     <ChangePassword />
   </div>

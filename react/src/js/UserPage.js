@@ -62,12 +62,13 @@ class UserPageContainer extends Component {
 
 const UserPage = ({name, joined, decks}) => (
   <div>
-    <h2>{name}</h2>
+    <h1>{name}</h1>
     <div>Member since {formatDate(joined)}</div>
+    <hr className="my-hr" />
     {
       decks.length > 0 ?
       <div>
-        <h4>Public Decks</h4>
+        <h2>Public Decks</h2>
         <ul className="deck-list">
           {decks.map(deck => (
             <li key={deck.id}>

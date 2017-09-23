@@ -117,11 +117,9 @@ class EditDeck extends Component {
       <div>
         <Header 
           cancelPath={cancelPath}
+          delete_deck={this.deleteDeck}
         />
-        <FlatButton
-          label="Delete Deck"
-          onClick={this.deleteDeck}
-        />
+        
         <UserWarning
           is_author={deck.is_author}
         />
@@ -140,14 +138,26 @@ class EditDeck extends Component {
   }
 }
 
-const Header = ({cancelPath}) => {
+const Header = ({cancelPath, delete_deck}) => {
   return (
     <div>
       <BackLinkHistory 
         to={cancelPath}
-        value="Back to deck"  
+        value="Back to deck"
+        className="edit-back"  
       />
-      <h2>Edit Deck</h2>
+      <div className="edit-header">
+        <h1>Edit Deck</h1>
+        <FlatButton
+          label="Delete Deck"
+          onClick={delete_deck}
+          backgroundColor="#ff6c6c"
+          hoverColor="#d02f2f"
+          style={{
+            color: "white"
+          }}
+        />
+      </div>
     </div>
   )
 }

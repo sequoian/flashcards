@@ -13,7 +13,7 @@ import './css/Flashcards.css'
 import './css/Deck.css'
 import './css/Vote.css'
 import './css/DeckForm.css'
-import './css/Profile.css'
+import './css/DeckList.css'
 
 ReactDOM.render((
   <BrowserRouter>

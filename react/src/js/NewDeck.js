@@ -65,7 +65,7 @@ class NewDeck extends Component {
     const cancelPath = '/'
     return (
       <div>
-        <h2>New Deck</h2>
+        <h1>New Deck</h1>
         {!Auth.isUserAuthenticated() ? <NoUserWarning /> : null}
         <DeckForm 
           onSubmit={this.addDeck}

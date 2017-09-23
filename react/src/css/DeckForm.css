@@ -39,3 +39,13 @@
 .deck-submit a {
   padding: 0 25px;
 }
+
+.edit-back {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.edit-header {
+  display: flex;
+  justify-content: space-between;
+}

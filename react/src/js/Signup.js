@@ -109,7 +109,7 @@ class SignupContainer extends Component {
 
 const Signup = ({name, email, password, confirm, handleChange, handleSubmit, errors, error_msg}) => (
   <div>
-    <h2>Sign Up</h2>
+    <h1>Sign Up</h1>
     <form>
       <div className="errors">
         {error_msg}
@@ -157,6 +157,7 @@ const Signup = ({name, email, password, confirm, handleChange, handleSubmit, err
         label="Sign Up"
         primary={true}
         onClick={handleSubmit}
+        style={{margin: '25px 0'}}
       />
     </form>
   </div>

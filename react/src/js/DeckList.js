@@ -88,7 +88,7 @@ class DeckListContainer extends Component {
 }
 
 const Header = () => (
-  <h3>My Flashcards</h3>
+  <h1>My Flashcards</h1>
 )
 
 const DeckList = ({decks, error}) => (
