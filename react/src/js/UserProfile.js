@@ -36,12 +36,12 @@ class UserProfileContainer extends Component {
 
 const UserProfile = ({name, email, joined}) => (
   <div>
-    
+    <h1>Profile</h1>
     <div>User: {name}</div>
     <div>Email: {email}</div>
     <div>Member since {formatDate(joined)}</div>
-    <hr />
-    <h3>Change Password</h3>
+    <hr className="profile-hr" />
+    <h2>Change Password</h2>
     <ChangePassword />
   </div>
 )

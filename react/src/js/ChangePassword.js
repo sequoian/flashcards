@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Auth from './Auth'
-import LabeledInput from './LabeledInput'
+import RaisedButton from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
 
 class ChangePasswordContainer extends Component {
   constructor(props) {
@@ -104,36 +105,41 @@ const ChangePassword = ({old_password, password, confirm, errors, error_msg, han
     <div className="success">
       {success_msg}
     </div>
-    <LabeledInput
+    <TextField
       name="old_password"
       type="password"
-      label="Old Password"
+      floatingLabelText="Old Password"
+      floatingLabelFixed={true}
       value={old_password}
       onChange={handleChange}
-      error={errors.old_password}
+      errorText={errors.old_password}
     />
-    <LabeledInput
+    <br />
+    <TextField
       name="password"
       type="password"
-      label="New Password"
+      floatingLabelText="New Password"
+      floatingLabelFixed={true}
       value={password}
       onChange={handleChange}
-      error={errors.password}
+      errorText={errors.password}
     />
-    <LabeledInput
+    <br />
+    <TextField
       name="confirm"
       type="password"
-      label="Confirm Password"
+      floatingLabelText="Confirm Password"
+      floatingLabelFixed={true}
       value={confirm}
       onChange={handleChange}
-      error={errors.confirm}
+      errorText={errors.confirm}
     />
-    <button
-      type="button"
+    <br />
+    <RaisedButton
       onClick={handleSubmit}
-    >
-      Submit
-    </button>
+      label="Submit"
+      primary={true}
+    />
   </form>
 )
 
