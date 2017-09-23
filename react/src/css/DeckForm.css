@@ -1,0 +1,41 @@
+.card-input {
+  display: table;
+  margin: 15px 0;
+  width: 100%
+}
+
+.card-input > div {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.card-input .errors {
+  display: block;
+}
+
+.card-idx {
+  text-align: center;
+}
+
+.card-idx,
+.remove-card {
+  width: 48px;
+}
+
+.card-side-input {
+  width: 50% !important;
+}
+
+@media screen and (max-width: 635px){
+  .card-side-input {
+    width: 100% !important;
+  }
+}
+
+.deck-submit {
+  margin: 25px 0;
+}
+
+.deck-submit a {
+  padding: 0 25px;
+}

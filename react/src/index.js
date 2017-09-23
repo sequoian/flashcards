@@ -12,6 +12,7 @@ import './css/Browse.css'
 import './css/Flashcards.css'
 import './css/Deck.css'
 import './css/Vote.css'
+import './css/DeckForm.css'
 
 ReactDOM.render((
   <BrowserRouter>

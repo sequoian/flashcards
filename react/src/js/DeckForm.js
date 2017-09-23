@@ -10,7 +10,6 @@ import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down'
 import Add from 'material-ui/svg-icons/content/add'
 import Remove from 'material-ui/svg-icons/navigation/close'
 import {red500} from 'material-ui/styles/colors'
-import InfoIcon from 'material-ui/svg-icons/action/info-outline'
 
 class DeckFormContainer extends Component {
   constructor(props) {
@@ -192,20 +191,13 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
     <br />
     <div>
       <Checkbox
-        label="deck is public"
+        label="deck is public (other people will be able to discover and use this deck)"
         name="is-public"
         value={is_public}
         checked={is_public}
         onCheck={handlePublicChange}
       />
-      <IconButton 
-        tooltip="Other people will be able to discover and use it."
-      >
-        <InfoIcon />
-      </IconButton>
     </div>
-    <hr />
-    <div>Cards</div>
     {cards.map((card, idx) => (
       <CardInput
         key={card.key}
@@ -222,16 +214,17 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
       onClick={addCard}
       icon={<Add />}
     />
-    <br />
-    <RaisedButton
-      label="Submit"
-      onClick={onSubmit}
-      primary={true}
-    />
-    <BackLinkHistory 
-      to={cancelPath}
-      value="Cancel"  
-    />
+    <div className="deck-submit">
+      <RaisedButton
+        label="Submit"
+        onClick={onSubmit}
+        primary={true}
+      />
+      <BackLinkHistory 
+        to={cancelPath}
+        value="Cancel"  
+      />
+    </div>
   </form>
 )
 
@@ -240,33 +233,40 @@ const CardInput = ({card, index, handleCardChange, removeCard, moveCard, error})
     <div className="errors">
       {error}
     </div>
-    <IconButton 
-      onClick={() => moveCard(card.key, 'up')}
-    >
-      <ArrowUp />
-    </IconButton>
-    <span>{index + 1}</span>
-    <IconButton 
-      onClick={() => moveCard(card.key, 'down')}
-    >
-      <ArrowDown />
-    </IconButton>
-    
-    <TextField
-      hintText="Front"
-      value={card.front}
-      onChange={(e) => handleCardChange(card.key, 'front', e.target.value)}
-    />
-    <TextField
-      hintText="Back"
-      value={card.back}
-      onChange={(e) => handleCardChange(card.key, 'back', e.target.value)}
-    />
-    <IconButton 
-      onClick={() => removeCard(card.key)}
-    >
-      <Remove color={red500} />
-    </IconButton>
+    <div className="card-idx">
+      <IconButton 
+        onClick={() => moveCard(card.key, 'up')}
+      >
+        <ArrowUp />
+      </IconButton>
+      <div>{index + 1}</div>
+      <IconButton 
+        onClick={() => moveCard(card.key, 'down')}
+      >
+        <ArrowDown />
+      </IconButton>
+    </div> 
+    <div>
+      <TextField
+        hintText="Front"
+        value={card.front}
+        onChange={(e) => handleCardChange(card.key, 'front', e.target.value)}
+        className="card-side-input"
+      />
+      <TextField
+        hintText="Back"
+        value={card.back}
+        onChange={(e) => handleCardChange(card.key, 'back', e.target.value)}
+        className="card-side-input"
+      />
+    </div>
+    <div className="remove-card">
+      <IconButton 
+        onClick={() => removeCard(card.key)}
+      >
+        <Remove color={red500} />
+      </IconButton>
+    </div>
   </div>
 )
 
