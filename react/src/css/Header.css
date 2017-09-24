@@ -11,14 +11,9 @@
   color: white;
 }
 
-.header nav {
-  width: 50%;
-}
-
 .header nav ul {
   display: flex;
   align-items: stretch;
-  
 }
 
 .header a {
@@ -47,3 +42,16 @@
   padding-left: 0;
 }
 
+.mobile-nav {
+  display: none;
+}
+
+@media screen and (max-width: 639px) {
+  .header nav {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: block;
+  }
+}

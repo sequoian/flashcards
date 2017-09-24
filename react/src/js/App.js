@@ -77,7 +77,7 @@ class App extends Component {
           user={this.state.user}
           logout={this.logOut}
         />
-        <div className='container'>
+        <div className='main container'>
           <Switch>
             <Route exact path='/' component={Browse} />
             <Route path='/my-cards' component={DeckList} />
