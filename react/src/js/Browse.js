@@ -107,7 +107,7 @@ const DeckList = ({decks, error}) => (
 
 const DeckListItem = ({deck}) => (
   <div className="browse-list-item">
-    <div>
+    <div className="list-item-title">
       <Link to={`/deck/${deck.id}`}>
         {deck.title}
       </Link>
@@ -118,6 +118,7 @@ const DeckListItem = ({deck}) => (
           {deck.author}
         </Link>
       </span>
+      <br />
       <span>
         Created {formatDateRelative(deck.date_created)}
       </span>
@@ -134,9 +135,6 @@ const Sorting = ({sorting, handleChange}) => (
       value={sorting}
       onChange={handleChange}
       floatingLabelText="Sort decks"
-      style={{
-        'margin-bottom': 40
-      }}
     >
       <MenuItem
         value='date_desc'
