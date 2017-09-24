@@ -33,7 +33,7 @@ const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
       </div> 
       :
       <div>
-        <NoCards id={deck.id} />
+        <NoCards deck_id={deck.id} />
         <hr />
       </div>
     }
@@ -157,7 +157,7 @@ const DeckInfo = ({is_public, deck_length, date_created, last_edited}) => (
 const NoCards = ({deck_id}) => (
   <div>
     There are currently no cards in this deck.  If you are the deck author, please add 
-    some cards by <Link to={`/edit/${deck_id}`}>editing it</Link>.
+    some cards by <Link to={`/deck/${deck_id}/edit`}>editing it</Link>.
   </div>
 )
 
