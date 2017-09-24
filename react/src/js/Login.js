@@ -65,7 +65,7 @@ class LoginContainer extends Component {
         else if (json.errors) {
           this.setState({
             errors: json.errors,
-            error_msg: json.message
+            error_msg: 'Please fix the errors below'
           })
         }
         else {

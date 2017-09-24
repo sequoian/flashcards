@@ -57,7 +57,7 @@ class EditDeck extends Component {
         else {
           this.setState({
             errors: json.errors,
-            error_msg: json.message
+            error_msg: 'Please fix the errors below'
           })
         }
       })

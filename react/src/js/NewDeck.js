@@ -47,7 +47,7 @@ class NewDeck extends Component {
         else {
           this.setState({
             errors: json.errors,
-            error_msg: json.message
+            error_msg: 'Please fix the errors below'
           })
         }
       })
@@ -65,7 +65,7 @@ class NewDeck extends Component {
     const cancelPath = '/'
     return (
       <div>
-        <h1>New Deck</h1>
+        <h1>Create Flashcards</h1>
         {!Auth.isUserAuthenticated() ? <NoUserWarning /> : null}
         <DeckForm 
           onSubmit={this.addDeck}
