@@ -14,6 +14,7 @@ import './css/Deck.css'
 import './css/Vote.css'
 import './css/DeckForm.css'
 import './css/DeckList.css'
+import './css/User.css'
 
 ReactDOM.render((
   <BrowserRouter>
