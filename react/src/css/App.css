@@ -8,17 +8,18 @@
 
 html {
   font-family: 'Roboto', sans-serif;
+  letter-spacing: .3px;
 }
 
-.app {
+.container {
   max-width: 960px;
   margin: auto;
   
 }
 
-@media screen and (max-width: 979px) {
-  .app {
-    padding: 0 5px;
+@media screen and (max-width: 1100px) {
+  .container {
+    padding: 0 10px;
   }
 }
 

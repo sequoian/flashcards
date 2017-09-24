@@ -8,9 +8,11 @@ import PersonIcon from 'material-ui/svg-icons/social/person'
 import Divider from 'material-ui/Divider'
 
 const Header = ({user, logout}) => (
-  <div className="header">
-    <Nav />
-    {user ? <UserDisplay user={user} logout={logout} /> : <GuestDisplay />}
+  <div className="header-bar">
+    <div className="header container">
+      <Nav />
+      {user ? <UserDisplay user={user} logout={logout} /> : <GuestDisplay />}
+    </div>
   </div>
 )
 
@@ -63,8 +65,8 @@ class UserPopover extends Component {
       <div>
         <IconButton
           onClick={this.handleTouchTap}
-          iconStyle={{width: 46, height: 46}}
-          style={{width: 48, height: 48, padding: 2}}
+          iconStyle={{width: 45, height: 45, color: 'white'}}
+          style={{height: '100%', padding: 2}}
         >
           <PersonIcon />
         </IconButton>

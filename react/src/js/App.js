@@ -77,25 +77,27 @@ class App extends Component {
           user={this.state.user}
           logout={this.logOut}
         />
-        <Switch>
-          <Route exact path='/' component={Browse} />
-          <Route path='/my-cards' component={DeckList} />
-          <Route path='/deck/:id' component={DeckPage} />
-          <Route path='/new' component={NewDeck} />
-          <Route 
-            path='/login' 
-            render={() => <Login loginUser={this.logIn} />} 
-          />
-          <Route 
-            path='/signup' 
-            render={() => <Signup loginUser={this.logIn} />} 
-          />
-          <Route 
-            path='/profile' 
-            render={() => <UserProfile user={user} />} 
-          />
-          <Route path='/user/:id' component={UserPage} />
-        </Switch>
+        <div className='container'>
+          <Switch>
+            <Route exact path='/' component={Browse} />
+            <Route path='/my-cards' component={DeckList} />
+            <Route path='/deck/:id' component={DeckPage} />
+            <Route path='/new' component={NewDeck} />
+            <Route 
+              path='/login' 
+              render={() => <Login loginUser={this.logIn} />} 
+            />
+            <Route 
+              path='/signup' 
+              render={() => <Signup loginUser={this.logIn} />} 
+            />
+            <Route 
+              path='/profile' 
+              render={() => <UserProfile user={user} />} 
+            />
+            <Route path='/user/:id' component={UserPage} />
+          </Switch>
+        </div>
       </div>
     )  
   }
