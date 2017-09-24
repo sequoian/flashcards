@@ -32,19 +32,23 @@ const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
         <hr />
       </div> 
       :
-      <NoCards id={deck.id} />
+      <div>
+        <NoCards id={deck.id} />
+        <hr />
+      </div>
     }
     
-    <Vote 
-      deck_id={deck.id}
-    />
-    <hr />
     <DeckInfo
       is_public={deck.is_public}
       deck_length={deck.cards.length}
       date_created={deck.date_created}
       last_edited={deck.last_updated}
     />
+    <hr />
+    <Vote 
+      deck_id={deck.id}
+    />
+
   </div>
 )
 
@@ -59,15 +63,29 @@ const Header = ({title, author, author_id}) => (
 )
 
 const EnterFlashcards = withRouter(({match}) => {
-  return <HistoryLink className="start-btn" to={`${match.url}/flashcards`}>Start</HistoryLink>
+  return (
+  <HistoryLink 
+    className="start-btn" 
+    to={`${match.url}/flashcards`}
+  >
+    Start
+  </HistoryLink>
+  )
 })
 
 const EnterEdit = withRouter(({match}) => {
-  return <HistoryLink to={`${match.url}/edit`}>Edit</HistoryLink>
+  return (
+    <HistoryLink 
+      to={`${match.url}/edit`}
+      className="edit-btn"
+    >
+      Edit
+    </HistoryLink>
+  )
 })
 
 const Options = ({children}) => (
-  <form>
+  <form className="options">
     <h2>Options</h2>
     {children}
   </form>
@@ -85,9 +103,15 @@ const ShuffleOption = ({shuffle, handleChange}) => (
   </div>
 )
 
+const radio_styles = {
+  display: 'inline-block',
+  paddingRight: '30px',
+  width: 'auto'
+}
+
 const FacingOption = ({facing, handleChange}) => (
   <div>
-    <div>Default Card Face</div>
+    <h3>Default Card Face</h3>
     <RadioButtonGroup
       defaultSelected="front"
       valueSelected={facing}
@@ -96,23 +120,32 @@ const FacingOption = ({facing, handleChange}) => (
       <RadioButton
         value="front"
         label="Front"
+        style={radio_styles}
       />
       <RadioButton
         value="back"
         label="Back"
+        style={radio_styles}
       />
     </RadioButtonGroup>
   </div>
 )
 
-const Hints = () => (
-  <div className="hint">
-    Hint: You can use the arrow keys to navigate the flashcards.
-  </div>
-)
+const Hints = () => {
+  if ('ontouchstart' in window || navigator.maxTouchPoints) {
+    return null
+  }
+  else {
+    return (
+      <div className="hint">
+        Hint: You can use the arrow keys to navigate the flashcards.
+      </div>
+    )
+  }
+}
 
 const DeckInfo = ({is_public, deck_length, date_created, last_edited}) => (
-  <div>
+  <div className="deck-info">
     <h2>Deck Info</h2>
     <div>{is_public ? 'Public Deck' : 'Private Deck'}</div>
     <div>{deck_length} cards</div>

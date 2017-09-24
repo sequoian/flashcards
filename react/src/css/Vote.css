@@ -2,3 +2,12 @@
 .vote-controls {
   display: inline-block;
 }
+
+.vote-header {
+  font-size: 14px;
+  padding: 5px 10px;
+}
+
+.points {
+  padding-left: 15px;
+}

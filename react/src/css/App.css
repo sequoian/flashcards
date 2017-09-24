@@ -14,7 +14,6 @@ html {
 .container {
   max-width: 960px;
   margin: auto;
-  
 }
 
 @media screen and (max-width: 1100px) {
@@ -25,8 +24,8 @@ html {
 
 h1 {
   font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 15px;
 }
 
 h2 {
@@ -37,6 +36,7 @@ h2 {
 
 a {
   text-decoration: none;
+  color: #00bcd4;
 }
 
 a:hover {
@@ -63,6 +63,3 @@ a:hover {
   color: green;
 }
 
-form {
-  margin: 10px 0;
-}

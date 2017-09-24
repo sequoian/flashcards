@@ -104,6 +104,7 @@ class Vote extends Component {
     const {upvotes, downvotes, user_vote, error} = this.state
     return (
       <div>
+        <div className="vote-header">Rate this deck</div>
         <ErrorDisplay error={error} />
         <VoteControls
           user_vote={user_vote}
