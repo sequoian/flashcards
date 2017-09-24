@@ -13,9 +13,18 @@ class Validation {
     // make sure there are no blank sides in the cards
     const card_errors = {}
     deck.cards.forEach(card => {
-      const card_is_blank = (card.front.trim() === '' || card.back.trim() === '') && !card.delete
-      if (card_is_blank) {
-        card_errors[card.key] = 'Card contains a blank side'
+      const blank_message = 'Side cannot be blank'
+      const front_is_blank = card.front.trim() === '' && !card.delete
+      const back_is_blank = card.back.trim() === '' && !card.delete
+      const side_errors = {}
+      if (front_is_blank) {
+        side_errors.front = blank_message
+      }
+      if (back_is_blank) {
+        side_errors.back = blank_message
+      }
+      if (Object.keys(side_errors).length !== 0) {
+        card_errors[card.key] = side_errors
       }
     })
     if (Object.keys(card_errors).length !== 0) {

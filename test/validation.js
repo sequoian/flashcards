@@ -49,14 +49,16 @@ describe('Validation', () => {
 
     it('should not allow blank cards, unless they are to be deleted', () => {
       const deck = deepClone(test_deck)
+      deck.cards[0].key = 0
+      deck.cards[1].key = 1
       deck.cards[0].front = ''
-      assert.nestedProperty(validation.validateDeck(deck), 'cards.0')
+      assert.nestedProperty(validation.validateDeck(deck), 'cards.0.front')
       deck.cards[0].front = ' '
-      assert.nestedProperty(validation.validateDeck(deck), 'cards.0')
+      assert.nestedProperty(validation.validateDeck(deck), 'cards.0.front')
       deck.cards[1].back = ''
-      assert.nestedProperty(validation.validateDeck(deck), 'cards.1')
+      assert.nestedProperty(validation.validateDeck(deck), 'cards.1.back')
       deck.cards[1].back = ' '
-      assert.nestedProperty(validation.validateDeck(deck), 'cards.1')
+      assert.nestedProperty(validation.validateDeck(deck), 'cards.1.back')
       deck.cards[0].delete = true
       assert.notNestedProperty(validation.validateDeck(deck), 'cards.0')
       deck.cards[1].delete = true

@@ -3,7 +3,6 @@ import {BackLinkHistory} from './HistoryLink'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import Checkbox from 'material-ui/Checkbox'
-import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
 import ArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up'
 import ArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down'
@@ -184,11 +183,15 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
     <TextField
       name="title"
       floatingLabelText="Title"
+      floatingLabelFixed={true}
       value={title}
       onChange={handleTitleChange}
       errorText={errors.title}
+      style={{
+        display: 'block',
+        marginBottom: 10
+      }}
     />
-    <br />
     <div>
       <Checkbox
         label="deck is public (other people will be able to discover and use this deck)"
@@ -198,22 +201,24 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
         onCheck={handlePublicChange}
       />
     </div>
-    {cards.map((card, idx) => (
-      <CardInput
-        key={card.key}
-        card={card}
-        index={idx}
-        handleCardChange={handleCardChange}
-        removeCard={removeCard}
-        moveCard={moveCard}
-        error={errors.cards ? errors.cards[card.key] : null}
+    <div className="cards">
+      {cards.map((card, idx) => (
+        <CardInput
+          key={card.key}
+          card={card}
+          index={idx}
+          handleCardChange={handleCardChange}
+          removeCard={removeCard}
+          moveCard={moveCard}
+          error={errors.cards ? errors.cards[card.key] : null}
+        />
+      ))}
+      <RaisedButton
+        label="Add Card"
+        onClick={addCard}
+        icon={<Add />}
       />
-    ))}
-    <FlatButton
-      label="Add Card"
-      onClick={addCard}
-      icon={<Add />}
-    />
+    </div>
     <div className="deck-submit">
       <RaisedButton
         label="Submit"
@@ -230,9 +235,6 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
 
 const CardInput = ({card, index, handleCardChange, removeCard, moveCard, error}) => (
   <div className="card-input">
-    <div className="errors">
-      {error}
-    </div>
     <div className="card-idx">
       <IconButton 
         onClick={() => moveCard(card.key, 'up')}
@@ -252,12 +254,14 @@ const CardInput = ({card, index, handleCardChange, removeCard, moveCard, error})
         value={card.front}
         onChange={(e) => handleCardChange(card.key, 'front', e.target.value)}
         className="card-side-input"
+        errorText={error ? error.front : null}
       />
       <TextField
         hintText="Back"
         value={card.back}
         onChange={(e) => handleCardChange(card.key, 'back', e.target.value)}
         className="card-side-input"
+        errorText={error ? error.back : null}
       />
     </div>
     <div className="remove-card">

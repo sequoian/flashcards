@@ -1,6 +1,5 @@
 .card-input {
   display: table;
-  margin: 15px 0;
   width: 100%
 }
 
@@ -48,4 +47,8 @@
 .edit-header {
   display: flex;
   justify-content: space-between;
+}
+
+.cards {
+  margin-top: 20px;
 }
