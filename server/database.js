@@ -23,7 +23,7 @@ exports.getUserDecks = function(db, user_id) {
   return db.query(`
     SELECT d.id, d.title, u.name AS author FROM 
     decks d INNER JOIN users u ON (d.author = u.id) WHERE d.author = $1
-    ORDER BY d.id ASC
+    ORDER BY d.title ASC
   `, user_id)
 }
 
@@ -195,7 +195,7 @@ exports.getUserPublicDecks = function(db, user_id) {
     SELECT d.id, d.title, u.name AS author FROM 
     decks d INNER JOIN users u ON (d.author = u.id) 
     WHERE d.author = $1 AND d.is_public = true
-    ORDER BY d.id ASC
+    ORDER BY d.title ASC
   `, user_id)
 }
 
