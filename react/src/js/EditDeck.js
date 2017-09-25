@@ -93,7 +93,7 @@ class EditDeck extends Component {
           }
         })
         .then(json => {
-          this.props.history.replace('/');
+          this.props.history.replace('/my-cards');
         })
         .catch(e => {
           if (e.message === '401') {
