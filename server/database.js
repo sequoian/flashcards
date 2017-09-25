@@ -20,7 +20,7 @@ exports.connectToDatabase = function() {
 }
 
 exports.getUserDecks = function(db, user_id) {
-  return db.query(`
+  return db.any(`
     SELECT d.id, d.title, u.name AS author FROM 
     decks d INNER JOIN users u ON (d.author = u.id) WHERE d.author = $1
     ORDER BY d.title ASC
@@ -28,7 +28,7 @@ exports.getUserDecks = function(db, user_id) {
 }
 
 exports.getDeck = function(db, deck_id) {
-  return db.tx(t => {
+  return db.task('get-deck', t => {
     let result = null
     return t.one(`
       SELECT d.id, d.title, d.date_created, d.last_updated, d.is_public, u.name AS author, d.author AS author_id
@@ -36,7 +36,7 @@ exports.getDeck = function(db, deck_id) {
     `, deck_id)
       .then((deck) => {
         result = deck
-        return t.query(`
+        return t.any(`
           SELECT id, front, back FROM cards 
           WHERE deck_id = $1 ORDER BY placement ASC
         `, deck_id)
@@ -55,7 +55,7 @@ exports.deleteDeck = function(db, deck_id) {
 }
 
 exports.updateDeck = function(db, deck) {
-  return db.tx(t => {
+  return db.tx('update-deck', t => {
     // update decks table
     return t.none(`
       UPDATE decks SET title = $1, last_updated = CURRENT_TIMESTAMP, is_public = $3
@@ -90,7 +90,7 @@ exports.updateDeck = function(db, deck) {
 
 exports.addDeck = function(db, deck, user_id) {
   let deck_id = null
-  return db.tx(t => {
+  return db.tx('add-deck', t => {
     // add deck
     return t.one(`
       INSERT INTO decks (title, author, is_public)
@@ -200,7 +200,7 @@ exports.getUserPublicDecks = function(db, user_id) {
 }
 
 exports.getDeckVotes = function(db, deck_id) {
-  return db.query(`
+  return db.any(`
     SELECT vote FROM deck_votes WHERE deck_id = $1
   `, deck_id)
 }
@@ -244,7 +244,7 @@ exports.getPublicDecks = function(db, sorting) {
   else if (sorting === 'date_desc') order_by = 'ORDER BY d.date_created DESC';
   else order_by = 'ORDER BY d.date_created ASC';
 
-  return db.query(`
+  return db.any(`
     SELECT d.id, 
       d.title, 
       u.name AS author, 
