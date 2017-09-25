@@ -152,7 +152,7 @@ const CardInfo = ({index, deck_length, side}) => (
 
 const CardFace = ({face}) => (
   <div className="card">
-    {face}
+    <span>{face}</span>
   </div>
 )
 
