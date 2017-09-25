@@ -10,6 +10,7 @@ import UserProfile from './UserProfile'
 import UserPage from './UserPage'
 import Browse from './Browse'
 import DeckList from './DeckList'
+import {checkLocalStorage} from './Utility'
 
 class App extends Component {
   constructor(props) {
@@ -22,6 +23,8 @@ class App extends Component {
   }
 
   componentDidMount() {
+    checkLocalStorage()
+
     if (Auth.isUserAuthenticated()) {
       this.logIn()
     }

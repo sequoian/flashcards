@@ -6,7 +6,10 @@ const passport = require('passport');
 const passportStrategies = require('./passport-strats');
 const app = express();
 const PORT = process.env.PORT || 5000;
+const helmet = require('helmet')
 
+// header security
+app.use(helmet())
 
 // Parse POST data
 app.use(bodyParser.urlencoded({
