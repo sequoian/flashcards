@@ -75,8 +75,9 @@ class EditDeck extends Component {
   }
 
   deleteDeck() {
+    const deck_id = this.props.match.url.split('/')[2]
     if (window.confirm('Are you sure you want to delete this deck?')) {
-      fetch(`/api/deck/${this.props.match.params.id}`,
+      fetch(`/api/deck/${deck_id}`,
       {
         method: 'DELETE',
         headers: {
