@@ -8,7 +8,8 @@ class NewDeck extends Component {
     super(props);
     this.state = {
       errors: {},
-      error_msg: null
+      error_msg: null,
+      submitting: false
     }
     this.addDeck = this.addDeck.bind(this);
   }
@@ -20,6 +21,12 @@ class NewDeck extends Component {
       cards: cards,
       is_public: is_public
     }
+
+    if (this.state.submitting) {
+      return null
+    }
+
+    this.setState({submitting: true})
 
     fetch('/api/add-deck',
     {
@@ -37,8 +44,7 @@ class NewDeck extends Component {
         }
         else {
           return response.json()
-        }
-        
+        }  
       })
       .then(json => {
         if (json.success) {
@@ -50,6 +56,7 @@ class NewDeck extends Component {
             error_msg: 'Please fix the errors below'
           })
         }
+        this.setState({submitting: false})
       })
       .catch(e => {
         if (e.message === '401') {
@@ -58,6 +65,7 @@ class NewDeck extends Component {
         else {
           this.setState({error_msg: 'Something went wrong on our end.'})
         }
+        this.setState({submitting: false})
       })
   }
 
@@ -72,6 +80,7 @@ class NewDeck extends Component {
           cancelPath={cancelPath}
           errors={this.state.errors}
           error_msg={this.state.error_msg}
+          disable_submit={this.state.submitting}
         />
       </div>
     )

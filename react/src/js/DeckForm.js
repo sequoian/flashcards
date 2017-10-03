@@ -169,13 +169,14 @@ class DeckFormContainer extends Component {
         errors={this.props.errors}
         error_msg={this.props.error_msg}
         handlePublicChange={this.handlePublicChange}
+        disable_submit={this.props.disable_submit}
       />
     )
   }
 }
 
 const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handleTitleChange, handleCardChange, 
-  cancelPath, moveCard, errors, error_msg, handlePublicChange}) => (
+  cancelPath, moveCard, errors, error_msg, handlePublicChange, disable_submit}) => (
   <form>
     <div className="errors">
       {error_msg}
@@ -224,6 +225,7 @@ const DeckForm = ({title, is_public, cards, addCard, onSubmit, removeCard, handl
         label="Submit"
         onClick={onSubmit}
         primary={true}
+        disabled={disable_submit}
       />
       <BackLinkHistory 
         to={cancelPath}
