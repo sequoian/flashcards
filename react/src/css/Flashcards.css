@@ -10,13 +10,20 @@
 }
 
 .card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: table;
+  text-align: center;
   font-size: 20px;
   height: 60vh;
   max-height: 400px;
   box-shadow: 0px 0px 31px -8px rgba(0,0,0,0.5);
+  width: 100%;
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+.card span {
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .card-info {
