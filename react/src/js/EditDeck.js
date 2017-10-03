@@ -10,7 +10,8 @@ class EditDeck extends Component {
     super(props);
     this.state = {
       errors: {},
-      error_msg: null
+      error_msg: null,
+      submitting: false
     }
     this.updateDeck = this.updateDeck.bind(this);
     this.deleteDeck = this.deleteDeck.bind(this);
@@ -18,6 +19,12 @@ class EditDeck extends Component {
 
   // API Update
   updateDeck(id, title, cards, is_public) {
+    if (this.state.submitting) {
+      return null
+    }
+
+    this.setState({submitting: true})
+    
     const deck = {
       id: id,
       title: title,
@@ -60,6 +67,7 @@ class EditDeck extends Component {
             error_msg: 'Please fix the errors below'
           })
         }
+        this.setState({submitting: false})
       })
       .catch(e => {
         if (e.message === '401') {
@@ -70,7 +78,8 @@ class EditDeck extends Component {
         }
         else {
           this.setState({error_msg: 'Something went wrong on our end.'})
-        }       
+        }
+        this.setState({submitting: false})    
       })
   }
 
@@ -111,7 +120,7 @@ class EditDeck extends Component {
 
   render() {
     const {deck} = this.props
-    const {error_msg, errors} = this.state
+    const {error_msg, errors, submitting} = this.state
     const cancelPath = `/deck/${deck.id}`
     
     return (
@@ -133,6 +142,7 @@ class EditDeck extends Component {
           cancelPath={cancelPath}
           errors={errors}
           error_msg={error_msg}
+          disable_submit={submitting}
         />
       </div>
     )

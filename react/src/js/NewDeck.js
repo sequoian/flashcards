@@ -15,18 +15,18 @@ class NewDeck extends Component {
   }
 
   addDeck(id, title, cards, is_public) {
+    if (this.state.submitting) {
+      return null
+    }
+
+    this.setState({submitting: true})
+    
     const deck = {
       id: id,
       title: title,
       cards: cards,
       is_public: is_public
     }
-
-    if (this.state.submitting) {
-      return null
-    }
-
-    this.setState({submitting: true})
 
     fetch('/api/add-deck',
     {
