@@ -105,26 +105,32 @@ class Flashcards extends Component {
     const {deck, activeCardIndex, showingFront} = this.state
     const activeCard = deck.cards[activeCardIndex]
 
-    return (
-      <div className="flashcards">
-        <Header
-          title={deck.title}
-        />   
-        <CardInfo
-          deck_length={deck.cards.length}
-          index={activeCardIndex}
-          side={showingFront}
-        />
-        <CardFace
-          face={showingFront ? activeCard.front : activeCard.back}
-        />
-        <CardControls 
-          getNext={this.nextCard}
-          getPrevious={this.previousCard}
-          flipCard={this.flipCard}
-        />
-      </div>
-    )
+    if (deck.cards.length > 0) {
+      return (
+        <div className="flashcards">
+          <Header
+            title={deck.title}
+          />   
+          <CardInfo
+            deck_length={deck.cards.length}
+            index={activeCardIndex}
+            side={showingFront}
+          />
+          <CardFace
+            face={showingFront ? activeCard.front : activeCard.back}
+          />
+          <CardControls 
+            getNext={this.nextCard}
+            getPrevious={this.previousCard}
+            flipCard={this.flipCard}
+          />
+        </div>
+      )
+    }
+    else {
+      return <div>You do not have any cards in this deck!</div>
+    }
+    
   }
 }
 

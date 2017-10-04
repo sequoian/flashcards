@@ -23,11 +23,11 @@ class DeckPage extends Component {
   }
 
   componentDidMount() {
+    this.setState({fetching: true})
     this.fetchDeck()
   }
 
-  fetchDeck() {
-    this.setState({fetching: true})
+  fetchDeck() { 
     fetch(`/api/deck/${this.props.match.params.id}`, {
       method: 'GET',
       headers: {
@@ -60,6 +60,7 @@ class DeckPage extends Component {
         else {
           msg = 'Something went wrong on our end and we could not retrieve the deck'
         }
+
         this.setState({
           error: msg,
           fetching: false
@@ -101,7 +102,7 @@ class DeckPage extends Component {
       return <Error error={error} />
     }
     else {
-      return null
+      return <div />
     }
   }
 
@@ -119,7 +120,7 @@ class DeckPage extends Component {
       return <Error error={error} />
     }
     else {
-      return null
+      return <div />
     }
   }
 
@@ -140,7 +141,7 @@ class DeckPage extends Component {
       return <Error error={error} />
     }
     else {
-      return null
+      return <div />
     }
   }
 
