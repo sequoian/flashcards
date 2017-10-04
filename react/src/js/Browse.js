@@ -3,6 +3,7 @@ import {Link, withRouter} from 'react-router-dom'
 import {formatDateRelative} from './Utility'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
+import CircularProgress from 'material-ui/CircularProgress'
 
 class BrowseContainer extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class BrowseContainer extends Component {
     this.state = {
       decks: [],
       sorting: this.getSorting() || 'date_desc',
-      error: null
+      error: null,
+      fetching: false
     }
     this.changeSorting = this.changeSorting.bind(this)
   }
@@ -27,6 +29,7 @@ class BrowseContainer extends Component {
   }
 
   getPublicDecks() {
+    this.setState({fetching: true})
     fetch(`/api/public-decks/${this.state.sorting}`, {method: 'GET'})
       .then(response => {
         if (!response.ok) {
@@ -39,12 +42,14 @@ class BrowseContainer extends Component {
       .then(json => {
         this.setState({
           decks: json,
-          error: null
+          error: null,
+          fetching: false
         })
       })
       .catch(error => {
         this.setState({
-          error: 'Something went wrong on our end and we could not retrieve any decks'
+          error: 'Something went wrong on our end and we could not retrieve any decks',
+          fetching: false
         })
       }) 
   }
@@ -65,7 +70,7 @@ class BrowseContainer extends Component {
   }
 
   render() {
-    const {decks, sorting, error} = this.state
+    const {decks, sorting, error, fetching} = this.state
     return (
       <div>
         <BrowsePage>
@@ -73,6 +78,10 @@ class BrowseContainer extends Component {
             sorting={sorting}
             handleChange={this.changeSorting}
           />
+          {fetching ? 
+          <CircularProgress 
+            className="circ-progress"
+          /> : null}
           <DeckList
             decks={decks}
             error={error}

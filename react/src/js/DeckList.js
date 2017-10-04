@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import Auth from './Auth'
+import CircularProgress from 'material-ui/CircularProgress'
 
 class DeckListContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       decks: [],
-      error: null
+      error: null,
+      fetching: false
     }
   }
 
   getUserList() {
     // fetch list from database
+    this.setState({fetching: true})
     fetch('/api/deck-list', {
       method: 'GET',
       headers: {
@@ -39,7 +42,7 @@ class DeckListContainer extends Component {
             error: 'You do not have any flashcard decks at the moment'
           })
         }
-        
+        this.setState({fetching: false})
       }).catch(e => {
         let msg
         const error = e.message
@@ -51,7 +54,8 @@ class DeckListContainer extends Component {
           msg = 'Something went wrong on our end and we could not retrieve your flashcard decks'
         }
         this.setState({
-          error: msg
+          error: msg,
+          fetching: false
         })
       })
   }
@@ -63,11 +67,15 @@ class DeckListContainer extends Component {
   }
 
   render() {
-    const {decks, error} = this.state
+    const {decks, error, fetching} = this.state
     if (Auth.isUserAuthenticated()) {
       return (
         <div>
           <Header />
+          {fetching ? 
+          <CircularProgress 
+            className="circ-progress"
+          /> : null}
           <DeckList
             decks={decks}
             error={error}

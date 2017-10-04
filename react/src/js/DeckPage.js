@@ -4,6 +4,7 @@ import Flashcards from './Flashcards'
 import EditDeck from './EditDeck'
 import Auth from './Auth'
 import {Route, Switch, withRouter} from 'react-router-dom'
+import CircularProgress from 'material-ui/CircularProgress'
 
 class DeckPage extends Component {
   constructor(props) {
@@ -13,7 +14,8 @@ class DeckPage extends Component {
       error: null,
       shuffle: false,
       facing: 'front',
-      page: 'deck'
+      page: 'deck',
+      fetching: false
     }
     this.changeFacing = this.changeFacing.bind(this)
     this.changeShuffle = this.changeShuffle.bind(this)
@@ -25,6 +27,7 @@ class DeckPage extends Component {
   }
 
   fetchDeck() {
+    this.setState({fetching: true})
     fetch(`/api/deck/${this.props.match.params.id}`, {
       method: 'GET',
       headers: {
@@ -41,7 +44,8 @@ class DeckPage extends Component {
       })
       .then(json => {
         this.setState({
-          deck: json
+          deck: json,
+          fetching: false
         })
       }).catch(e => {
         let msg
@@ -56,7 +60,10 @@ class DeckPage extends Component {
         else {
           msg = 'Something went wrong on our end and we could not retrieve the deck'
         }
-        this.setState({error: msg})
+        this.setState({
+          error: msg,
+          fetching: false
+        })
       })
   }
 
@@ -139,21 +146,28 @@ class DeckPage extends Component {
 
   render() {
     const {match} = this.props
+    const {fetching} = this.state
     return (
-      <Switch>
-        <Route
-          exact path={`${match.url}`}
-          render={() => this.renderDeck()}
-        />
-        <Route
-          path={`${match.url}/flashcards`}
-          render={() => this.renderFlashcards()}
-        />
-        <Route
-          path={`${match.url}/edit`}
-          render={() => this.renderEdit()}
-        />
-      </Switch>
+      <div>
+        {fetching ? 
+        <CircularProgress 
+          className="circ-progress"
+        /> : null}
+        <Switch>
+          <Route
+            exact path={`${match.url}`}
+            render={() => this.renderDeck()}
+          />
+          <Route
+            path={`${match.url}/flashcards`}
+            render={() => this.renderFlashcards()}
+          />
+          <Route
+            path={`${match.url}/edit`}
+            render={() => this.renderEdit()}
+          />
+        </Switch>
+      </div>
     )
   }    
 }
