@@ -13,7 +13,8 @@ class SignupContainer extends Component {
       password: '',
       confirm: '',
       errors: [],
-      error_msg: null
+      error_msg: null,
+      submitting: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.submit = this.submit.bind(this)
@@ -36,6 +37,12 @@ class SignupContainer extends Component {
   }
 
   submit() {
+    if (this.state.submitting) {
+      return null
+    }
+
+    this.setState({submitting: true})
+
     const {name, email, password, confirm} = this.state
     
     fetch('/auth/signup',
@@ -73,10 +80,14 @@ class SignupContainer extends Component {
             errors: json.errors,
             error_msg: 'Please fix the errors below'
           })
-        }  
+        }
+        this.setState({submitting: false})  
       })
       .catch(error => {
-        this.setState({error_msg: 'Something went wrong on our end.'})
+        this.setState({
+          error_msg: 'Something went wrong on our end.',
+          submitting: false
+        })
       })
   }
 
@@ -91,7 +102,7 @@ class SignupContainer extends Component {
   }
 
   render() {
-    const {name, email, password, confirm, errors, error_msg} = this.state
+    const {name, email, password, confirm, errors, error_msg, submitting} = this.state
     return (
       <Signup
         name={name}
@@ -102,12 +113,13 @@ class SignupContainer extends Component {
         handleSubmit={this.submit}
         errors={errors}
         error_msg={error_msg}
+        disable_submit={submitting}
       />
     )
   }
 }
 
-const Signup = ({name, email, password, confirm, handleChange, handleSubmit, errors, error_msg}) => (
+const Signup = ({name, email, password, confirm, handleChange, handleSubmit, errors, error_msg, disable_submit}) => (
   <div>
     <h1>Sign Up</h1>
     <form>
@@ -158,6 +170,7 @@ const Signup = ({name, email, password, confirm, handleChange, handleSubmit, err
         primary={true}
         onClick={handleSubmit}
         style={{margin: '25px 0'}}
+        disabled={disable_submit}
       />
     </form>
   </div>

@@ -11,7 +11,8 @@ class LoginContainer extends Component {
       email: '',
       password: '',
       errors: {},
-      error_msg: null
+      error_msg: null,
+      submitting: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.login = this.login.bind(this)
@@ -34,6 +35,12 @@ class LoginContainer extends Component {
   }
 
   login() {
+    if (this.state.submitting) {
+      return null
+    }
+
+    this.setState({submitting: true})
+
     const {email, password} = this.state
 
     fetch('/auth/login',
@@ -73,10 +80,14 @@ class LoginContainer extends Component {
             errors: {},
             error_msg: json.message
           })
-        }  
+        }
+        this.setState({submitting: false})  
       })
       .catch(error => {
-        this.setState({error_msg: 'Something went wrong on our end.'})
+        this.setState({
+          error_msg: 'Something went wrong on our end.',
+          submitting: false
+        })
       })
   }
 
@@ -91,7 +102,7 @@ class LoginContainer extends Component {
   }
 
   render() {
-    const {email, password, errors, error_msg} = this.state
+    const {email, password, errors, error_msg, submitting} = this.state
     return (
       <Login
         email={email}
@@ -100,12 +111,13 @@ class LoginContainer extends Component {
         handleSubmit={this.login}
         errors={errors}
         error_msg={error_msg}
+        disable_submit={submitting}
       />
     )
   }
 }
 
-const Login = ({email, password, handleChange, handleSubmit, errors, error_msg}) => (
+const Login = ({email, password, handleChange, handleSubmit, errors, error_msg, disable_submit}) => (
   <div>
     <h1>Log In</h1>
     <form>
@@ -137,6 +149,7 @@ const Login = ({email, password, handleChange, handleSubmit, errors, error_msg})
         primary={true}
         onClick={handleSubmit}
         style={{margin: '25px 0'}}
+        disabled={disable_submit}
       />
     </form>
   </div>

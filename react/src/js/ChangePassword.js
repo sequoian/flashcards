@@ -12,7 +12,8 @@ class ChangePasswordContainer extends Component {
       confirm: '',
       errors: {},
       error_msg: null,
-      success_msg: null
+      success_msg: null,
+      submitting: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -26,6 +27,12 @@ class ChangePasswordContainer extends Component {
   }
 
   handleSubmit() {
+    if (this.state.submitting) {
+      return null
+    }
+
+    this.setState({submitting: true})
+
     const {password, confirm, old_password} = this.state
 
     fetch('/auth/change-password',
@@ -67,6 +74,7 @@ class ChangePasswordContainer extends Component {
             error_msg: json.message,
             success_msg: null
           })
+          this.setState({submitting: false})
         }  
       })
       .catch(error => {
@@ -76,12 +84,12 @@ class ChangePasswordContainer extends Component {
         else {
           this.setState({error_msg: 'Something went wrong on our end.'})
         }
-        
+        this.setState({submitting: false})
       })
   }
 
   render() {
-    const {old_password, password, confirm, errors, error_msg, success_msg} = this.state
+    const {old_password, password, confirm, errors, error_msg, success_msg, submitting} = this.state
     return (
       <ChangePassword 
         old_password={old_password}
@@ -92,12 +100,13 @@ class ChangePasswordContainer extends Component {
         handleChange={this.handleChange}
         handleSubmit={this.handleSubmit}
         success_msg={success_msg}
+        disable_submit={submitting}
       />
     )
   }
 }
 
-const ChangePassword = ({old_password, password, confirm, errors, error_msg, handleChange, handleSubmit, success_msg}) => (
+const ChangePassword = ({old_password, password, confirm, errors, error_msg, handleChange, handleSubmit, success_msg, disable_submit}) => (
   <form>
     <div className="errors">
       {error_msg}
@@ -139,6 +148,7 @@ const ChangePassword = ({old_password, password, confirm, errors, error_msg, han
       onClick={handleSubmit}
       label="Submit"
       primary={true}
+      disabled={disable_submit}
     />
   </form>
 )
