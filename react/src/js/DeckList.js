@@ -116,7 +116,7 @@ const DeckList = ({decks, error}) => (
 )
 
 const DeckItem = ({title, id}) => (
-  <Link to={`/deck/${id}`}>
+  <Link to={`/deck/${id}`} className="utext">
     {title}
   </Link>
 )

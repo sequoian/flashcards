@@ -85,7 +85,7 @@ class UserPopover extends Component {
             <div
               style={{
                 padding: 20,
-                'font-size': 16
+                'font-size': 16,
               }}
             >
               <span

@@ -67,3 +67,7 @@ a:hover {
 .circ-progress {
   margin: 50px auto;
 }
+
+.utext {
+  word-wrap: break-word;
+}

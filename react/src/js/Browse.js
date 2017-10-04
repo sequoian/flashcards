@@ -117,17 +117,16 @@ const DeckList = ({decks, error}) => (
 const DeckListItem = ({deck}) => (
   <div className="browse-list-item">
     <div className="list-item-title">
-      <Link to={`/deck/${deck.id}`}>
+      <Link to={`/deck/${deck.id}`} className="utext">
         {deck.title}
       </Link>
     </div>
     <div className="list-item-info">
-      <span>
-        By <Link to={`/user/${deck.author_id}`}>
+      <div>
+        By <Link to={`/user/${deck.author_id}`} className="utext">
           {deck.author}
         </Link>
-      </span>
-      <br />
+      </div>
       <span>
         Created {formatDateRelative(deck.date_created)}
       </span>

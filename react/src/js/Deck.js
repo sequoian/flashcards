@@ -54,9 +54,9 @@ const Deck = ({deck, shuffle, facing, changeFacing, changeShuffle}) => (
 
 const Header = ({title, author, author_id}) => (
   <header>
-    <h1>{title}</h1>
+    <h1 className="utext">{title}</h1>
     <div>
-      By <Link to={`/user/${author_id}`}>{author}</Link>
+      By <Link to={`/user/${author_id}`} className="utext">{author}</Link>
     </div>
     <EnterEdit />
   </header>

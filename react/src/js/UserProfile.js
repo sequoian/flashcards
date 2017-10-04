@@ -38,8 +38,8 @@ const UserProfile = ({name, email, joined}) => (
   <div>
     <h1>Profile</h1>
     <div className="profile-info">
-      <div>User: {name}</div>
-      <div>Email: {email}</div>
+      <div className="utext">User: {name}</div>
+      <div className="utext">Email: {email}</div>
       <div>Member since {formatDate(joined)}</div>
     </div>
     <hr className="my-hr" />

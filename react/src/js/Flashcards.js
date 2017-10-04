@@ -135,7 +135,7 @@ class Flashcards extends Component {
 }
 
 const Header = ({title, match}) => (
-  <header>{title}</header>
+  <header className="utext">{title}</header>
 )
 
 const Back = withRouter(({match}) => {
